@@ -1,0 +1,121 @@
+﻿@model SistemaOlcar.Models.Producto
+@{
+    ViewBag.Title = "Cambiar Imagen | Producto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Producto</h2>
+<hr />
+@using (Html.BeginForm("UpdateImagen", "Producto", FormMethod.Post, new { enctype = "multipart/form-data", id = "formulario" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.idProducto)
+    @Html.HiddenFor(model => model.fechaCreacion)
+    @Html.HiddenFor(model => model.nombre)
+    @Html.HiddenFor(model => model.estado)
+    @Html.HiddenFor(model => model.idMarca)
+    @Html.HiddenFor(model => model.categoria)
+    @Html.HiddenFor(model => model.idUbicacion)
+    @Html.HiddenFor(model => model.unidadMedida)
+    @Html.HiddenFor(model => model.codigoEAN)
+    @Html.HiddenFor(model => model.costo)
+    @Html.HiddenFor(model => model.costoSinIGV)
+    @Html.HiddenFor(model => model.precioVenta)
+    @Html.HiddenFor(model => model.ganancia)
+    @Html.HiddenFor(model => model.stockMinimo)
+    @Html.HiddenFor(model => model.stockMaximo)
+    @Html.HiddenFor(model => model.fechaCreacion)
+    @Html.HiddenFor(model => model.stock)
+<div class="form-control p-4">
+    <div class="row">
+        <div class="col-md-2"><b>CÓDIGO:</b></div>
+        <div class="col-md-5">
+            @Html.DisplayFor(model => model.idProducto)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2"><b>NOMBRE:</b></div>
+        <div class="col-md-5">
+            @Html.DisplayFor(model => model.nombre)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2"><b>FOTO:</b></div>
+        <div class="col-md-5" align="center">
+            <input type="file" name="FileBase" class="form-control btn-secondary" id="foto" />
+            <!-- La imagen que vamos a usar para previsualizar lo que el usuario selecciona -->
+            @if (Model.imagen != null)
+            {
+                <br />
+                <img style="width:280px;" src="@Url.Action("ConvertirImagen", "Producto", new { id = Model.idProducto })" id="imagenPrevisualizacion" />
+            }
+            else
+            {
+                <br />
+                <img class="rounded border border-secondary border-1" id="imagenPrevisualizacion" style="width: 280px; height: 280px; background-image: url('../../Content/Imagenes/cargar-foto.jpg'); background-repeat:no-repeat; background-size:cover; background-position:center">
+            }
+
+            <br />
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Terminar Edición</button>
+        <a href='@Url.Action("Index")' class="btn btn-danger">Cancelar</a>
+    </div>
+</div>
+}
+
+@section scripts{
+
+    @*<script src="@Url.Content("~/Scripts/Vistas/Producto_Registrar.js")" type="text/javascript"></script>*@
+<script>
+    //----Valida imagen
+    let fileInput = document.querySelector("#foto");
+    fileInput.addEventListener('change', function () {
+
+        var filePath = this.value;
+        var allowedExtensions = /(.jpg|.jpeg|.png)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            swal("Extensión no permitida.", "Utiliza: .jpeg/.jpg/.png", "info");
+            fileInput.value = '';
+            return false;
+        } else {
+            return true;
+        }
+    });
+
+    //-----Previsualizar imagen
+    $imagenPrevisualizacion = document.querySelector("#imagenPrevisualizacion");
+    // Escuchar cuando cambie
+    fileInput.addEventListener("change", () => {
+        // Los archivos seleccionados, pueden ser muchos o uno
+        const archivos = fileInput.files;
+        // Si no hay archivos salimos de la función y quitamos la imagen
+        if (!archivos || !archivos.length) {
+            $imagenPrevisualizacion.src = "";
+            return;
+        }
+        // Ahora tomamos el primer archivo, el cual vamos a previsualizar
+        const primerArchivo = archivos[0];
+        // Lo convertimos a un objeto de tipo objectURL
+        const objectURL = URL.createObjectURL(primerArchivo);
+        // Y a la fuente de la imagen le ponemos el objectURL
+        $imagenPrevisualizacion.src = objectURL;
+    });
+
+    //Preparar para las validaciones
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("formulario").addEventListener('submit', validarFormulario);
+    });
+
+    //Validar antes de submit
+    function validarFormulario(evento) {
+        evento.preventDefault();
+        swal("Correcto", "Se cambió la imagen con éxito.", "success");
+        this.submit();
+    }
+</script>
+}

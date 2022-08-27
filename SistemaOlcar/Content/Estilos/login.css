@@ -1,0 +1,74 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-image: url('../../Content/Imagenes/fondo.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: 'Roboto', sans-serif;
+    color: whitesmoke;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container_form {
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 15px;
+    padding: 40px;
+    /*opacity: 0.9;*/
+}
+
+h2 {
+    text-align: center;
+}
+
+input {
+    display: block;
+    width: 300px;
+    height: 40px;
+    margin-bottom: 20px;
+    padding: 0 15px;
+    font-size: 18px;
+}
+
+img {
+    margin-left: 95px;
+}
+
+.boton {
+    background-color: cornflowerblue; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+input[type=text], input[type=password], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.spanError {
+    color: white;
+    background-color: #d9534f;
+    padding: 4px;
+    border-radius: 3px;
+}

@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Olcar</title>
+    @Styles.Render("~/Content/css")
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <nav id="sidebar" class="sidebar js-sidebar">
+            <div class="sidebar-content js-simplebar">
+                <a class="sidebar-brand" href="index.html">
+                    <span class="align-middle">OLCAR</span>
+                </a>
+
+                <ul class="sidebar-nav">
+                    <li class="sidebar-header">
+                        Perfil
+                    </li>
+
+                    <li class="sidebar-item active">
+                        <a class="sidebar-link" href="index.html">
+                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("Logout", "Acceso")">
+                            <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Cerrar Sesión</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-header">
+                        Logística
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("Index", "Proveedor")">
+                            <i class="align-middle" data-feather="truck"></i> <span class="align-middle">Proveedores</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("Index", "Ubicacion")">
+                            <i class="align-middle" data-feather="map-pin"></i> <span class="align-middle">Ubicaciones</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-header">
+                        Productos
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("Index", "MarcaProducto")">
+                            <i class="align-middle" data-feather="folder"></i> <span class="align-middle">Marcas</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("Index", "Producto")">
+                            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Artículos</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+
+        <div class="main">
+            <nav class="navbar navbar-expand navbar-light navbar-bg">
+                <a class="sidebar-toggle js-sidebar-toggle">
+                    <i class="hamburger align-self-center"></i>
+                </a>
+
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav navbar-align">
+                        <li class="nav-item dropdown">
+                                @*<img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="Charles Hall" />*@
+                            <span class="text-dark">Usuario: @User.Identity.Name</span>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="content">
+                <div class="container-fluid p-0">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/complementos")
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

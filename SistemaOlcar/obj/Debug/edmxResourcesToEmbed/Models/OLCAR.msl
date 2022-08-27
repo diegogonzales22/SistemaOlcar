@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="OLCARModelStoreContainer" CdmEntityContainer="OLCAREntities">
+    <EntitySetMapping Name="MarcaProducto">
+      <EntityTypeMapping TypeName="OLCARModel.MarcaProducto">
+        <MappingFragment StoreEntitySet="MarcaProducto">
+          <ScalarProperty Name="idMarca" ColumnName="idMarca" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="estado" ColumnName="estado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rol">
+      <EntityTypeMapping TypeName="OLCARModel.Rol">
+        <MappingFragment StoreEntitySet="Rol">
+          <ScalarProperty Name="idRol" ColumnName="idRol" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Usuario">
+      <EntityTypeMapping TypeName="OLCARModel.Usuario">
+        <MappingFragment StoreEntitySet="Usuario">
+          <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+          <ScalarProperty Name="usuario1" ColumnName="usuario" />
+          <ScalarProperty Name="contraseña" ColumnName="contraseña" />
+          <ScalarProperty Name="idRol" ColumnName="idRol" />
+          <ScalarProperty Name="estado" ColumnName="estado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Proveedor">
+      <EntityTypeMapping TypeName="OLCARModel.Proveedor">
+        <MappingFragment StoreEntitySet="Proveedor">
+          <ScalarProperty Name="condicionPago" ColumnName="condicionPago" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="telefono" ColumnName="telefono" />
+          <ScalarProperty Name="distrito" ColumnName="distrito" />
+          <ScalarProperty Name="provincia" ColumnName="provincia" />
+          <ScalarProperty Name="departamento" ColumnName="departamento" />
+          <ScalarProperty Name="direccion" ColumnName="direccion" />
+          <ScalarProperty Name="numeroDocumento" ColumnName="numeroDocumento" />
+          <ScalarProperty Name="activo" ColumnName="activo" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ubicacion">
+      <EntityTypeMapping TypeName="OLCARModel.Ubicacion">
+        <MappingFragment StoreEntitySet="Ubicacion">
+          <ScalarProperty Name="estado" ColumnName="estado" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="idUbicacion" ColumnName="idUbicacion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Producto">
+      <EntityTypeMapping TypeName="OLCARModel.Producto">
+        <MappingFragment StoreEntitySet="Producto">
+          <ScalarProperty Name="imagen" ColumnName="imagen" />
+          <ScalarProperty Name="stock" ColumnName="stock" />
+          <ScalarProperty Name="stockMaximo" ColumnName="stockMaximo" />
+          <ScalarProperty Name="stockMinimo" ColumnName="stockMinimo" />
+          <ScalarProperty Name="ganancia" ColumnName="ganancia" />
+          <ScalarProperty Name="precioVenta" ColumnName="precioVenta" />
+          <ScalarProperty Name="costoSinIGV" ColumnName="costoSinIGV" />
+          <ScalarProperty Name="costo" ColumnName="costo" />
+          <ScalarProperty Name="codigoEAN" ColumnName="codigoEAN" />
+          <ScalarProperty Name="unidadMedida" ColumnName="unidadMedida" />
+          <ScalarProperty Name="idUbicacion" ColumnName="idUbicacion" />
+          <ScalarProperty Name="categoria" ColumnName="categoria" />
+          <ScalarProperty Name="idMarca" ColumnName="idMarca" />
+          <ScalarProperty Name="estado" ColumnName="estado" />
+          <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="idProducto" ColumnName="idProducto" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DetalleOrden">
+      <EntityTypeMapping TypeName="OLCARModel.DetalleOrden">
+        <MappingFragment StoreEntitySet="DetalleOrden">
+          <ScalarProperty Name="importeTotal" ColumnName="importeTotal" />
+          <ScalarProperty Name="precioUnidad" ColumnName="precioUnidad" />
+          <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+          <ScalarProperty Name="idProducto" ColumnName="idProducto" />
+          <ScalarProperty Name="idOrden" ColumnName="idOrden" />
+          <ScalarProperty Name="idDetalleOrden" ColumnName="idDetalleOrden" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrdenCompra">
+      <EntityTypeMapping TypeName="OLCARModel.OrdenCompra">
+        <MappingFragment StoreEntitySet="OrdenCompra">
+          <ScalarProperty Name="fechaCaducidad" ColumnName="fechaCaducidad" />
+          <ScalarProperty Name="aprobadoPor" ColumnName="aprobadoPor" />
+          <ScalarProperty Name="fechaAprobacion" ColumnName="fechaAprobacion" />
+          <ScalarProperty Name="costoTotal" ColumnName="costoTotal" />
+          <ScalarProperty Name="totalIGV" ColumnName="totalIGV" />
+          <ScalarProperty Name="totalNeto" ColumnName="totalNeto" />
+          <ScalarProperty Name="situacion" ColumnName="situacion" />
+          <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
+          <ScalarProperty Name="creadoPor" ColumnName="creadoPor" />
+          <ScalarProperty Name="fechaRegistro" ColumnName="fechaRegistro" />
+          <ScalarProperty Name="idOrden" ColumnName="idOrden" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

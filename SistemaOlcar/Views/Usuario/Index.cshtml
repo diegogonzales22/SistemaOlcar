@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewBag.Title = "Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Usuario</h2>
+<hr />
+
+<a onclick="abrirModal(null)" class="btn btn-success">
+    <i style="width:30px; height:30px" data-feather="plus-circle"></i>
+    <span>
+        <strong>Registrar</strong>
+    </span>
+</a>
+<br />
+<br />
+
+<div class="form-control p-4">
+    <table id="tabla" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    CÓDIGO
+                </th>
+                <th>
+                    USUARIO
+                </th>
+                <th>
+                    ROL
+                </th>
+                <th>
+                    ESTADO
+                </th>
+                <th>
+                    ACCIONES
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+@* Crear y Editar un usuario *@
+@Html.Partial("Registrar")
+
+@section scripts{
+
+    <script>
+    //----DataTable-----
+        var tabladata;
+        tabladata = $("#tabla").DataTable({
+            "drawCallback": function (settings) {
+                feather.replace();
+            },
+            "ajax": {
+                "url": '@Url.Action("Listar", "Usuario")',
+                "type": "GET",
+                "dataType": "json"
+            },
+            "columns": [
+                { "data": "idUsuario" },
+                { "data": "usuario" },
+                { "data": "rol" },
+                {
+                    "data": "estado", "render": function (valor) {
+                        if (valor) {
+                            return '<span class="badge bg-success">Activo</span>'
+                        } else {
+                            return '<span class="badge bg-danger">Inactivo</span>'
+                        }
+                    }
+                },
+                {
+                    "data": "idUsuario", "render": function (data) {
+                        return "<a type='button' class='btn btn-primary btn-sm ms-2' onclick='abrirModal(" + data + ")'><i data-feather='edit'></i></a>"
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    //"width": "150px"
+                },
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+            }
+        });
+
+        //--------ABRIR MODAL----------
+        function abrirModal($idUsuario) {
+
+            $("#txtUsuario").val("");
+            $("#txtContrasenia").val("");
+            $("#cboestado").val(1);
+            $("#txtidUsuario").val($idUsuario);
+
+            if ($idUsuario != 0) { //PARA EL EDITAR
+                jQuery.ajax({
+                    url: "@Url.Action("Obtener","Usuario")" + "?idUsuario=" + $idUsuario,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        if (data != null) {
+
+                            $("#txtUsuario").val(data.usuario);
+                            $("#txtContrasenia").val(data.contraseña);
+                            $("#cboestado").val(data.estado == true ? 1 : 0);
+                        }
+
+                    }
+            });
+        } else { //PARA EL REGISTRAR
+                $("#txtUsuario").val("");
+                $("#txtContrasenia").val("");
+                $("#cboestado").val("");
+        }
+
+        $('#FormModal').modal('show');
+
+        }
+
+    </script>
+
+}

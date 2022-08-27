@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="OLCARModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="MarcaProducto">
+    <Key>
+      <PropertyRef Name="idMarca" />
+    </Key>
+    <Property Name="idMarca" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Producto" Relationship="OLCARModel.FK__Producto__idMarc__38996AB5" FromRole="MarcaProducto" ToRole="Producto" />
+  </EntityType>
+  <EntityType Name="Rol">
+    <Key>
+      <PropertyRef Name="idRol" />
+    </Key>
+    <Property Name="idRol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Usuario" Relationship="Self.FK__Usuario__idRol__25869641" FromRole="Rol" ToRole="Usuario" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="idUsuario" />
+    </Key>
+    <Property Name="idUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="usuario1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="contraseña" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="idRol" Type="Int32" Nullable="false" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Rol" Relationship="Self.FK__Usuario__idRol__25869641" FromRole="Usuario" ToRole="Rol" />
+    <NavigationProperty Name="OrdenCompra" Relationship="OLCARModel.FK__OrdenComp__aprob__5FB337D6" FromRole="Usuario" ToRole="OrdenCompra" />
+    <NavigationProperty Name="OrdenCompra1" Relationship="OLCARModel.FK__OrdenComp__cread__5CD6CB2B" FromRole="Usuario" ToRole="OrdenCompra" />
+  </EntityType>
+  <Association Name="FK__Usuario__idRol__25869641">
+    <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rol">
+        <PropertyRef Name="idRol" />
+      </Principal>
+      <Dependent Role="Usuario">
+        <PropertyRef Name="idRol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="OLCAREntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="MarcaProducto" EntityType="Self.MarcaProducto" />
+    <EntitySet Name="Rol" EntityType="Self.Rol" />
+    <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+    <AssociationSet Name="FK__Usuario__idRol__25869641" Association="Self.FK__Usuario__idRol__25869641">
+      <End Role="Rol" EntitySet="Rol" />
+      <End Role="Usuario" EntitySet="Usuario" />
+    </AssociationSet>
+    <EntitySet Name="Proveedor" EntityType="OLCARModel.Proveedor" />
+    <EntitySet Name="Ubicacion" EntityType="OLCARModel.Ubicacion" />
+    <EntitySet Name="Producto" EntityType="OLCARModel.Producto" />
+    <AssociationSet Name="FK__Producto__idMarc__38996AB5" Association="OLCARModel.FK__Producto__idMarc__38996AB5">
+      <End Role="MarcaProducto" EntitySet="MarcaProducto" />
+      <End Role="Producto" EntitySet="Producto" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Producto__idUbic__398D8EEE" Association="OLCARModel.FK__Producto__idUbic__398D8EEE">
+      <End Role="Ubicacion" EntitySet="Ubicacion" />
+      <End Role="Producto" EntitySet="Producto" />
+    </AssociationSet>
+    <EntitySet Name="DetalleOrden" EntityType="OLCARModel.DetalleOrden" />
+    <EntitySet Name="OrdenCompra" EntityType="OLCARModel.OrdenCompra" />
+    <AssociationSet Name="FK__DetalleOr__idOrd__6383C8BA" Association="OLCARModel.FK__DetalleOr__idOrd__6383C8BA">
+      <End Role="OrdenCompra" EntitySet="OrdenCompra" />
+      <End Role="DetalleOrden" EntitySet="DetalleOrden" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DetalleOr__idPro__6477ECF3" Association="OLCARModel.FK__DetalleOr__idPro__6477ECF3">
+      <End Role="Producto" EntitySet="Producto" />
+      <End Role="DetalleOrden" EntitySet="DetalleOrden" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrdenComp__aprob__5FB337D6" Association="OLCARModel.FK__OrdenComp__aprob__5FB337D6">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="OrdenCompra" EntitySet="OrdenCompra" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrdenComp__cread__5CD6CB2B" Association="OLCARModel.FK__OrdenComp__cread__5CD6CB2B">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="OrdenCompra" EntitySet="OrdenCompra" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrdenComp__idPro__5DCAEF64" Association="OLCARModel.FK__OrdenComp__idPro__5DCAEF64">
+      <End Role="Proveedor" EntitySet="Proveedor" />
+      <End Role="OrdenCompra" EntitySet="OrdenCompra" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Proveedor">
+    <Key>
+      <PropertyRef Name="idProveedor" />
+    </Key>
+    <Property Name="idProveedor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="activo" Type="Boolean" Nullable="false" />
+    <Property Name="numeroDocumento" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="direccion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="departamento" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="provincia" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="distrito" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="condicionPago" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="OrdenCompra" Relationship="OLCARModel.FK__OrdenComp__idPro__5DCAEF64" FromRole="Proveedor" ToRole="OrdenCompra" />
+  </EntityType>
+  <EntityType Name="Ubicacion">
+    <Key>
+      <PropertyRef Name="idUbicacion" />
+    </Key>
+    <Property Name="idUbicacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Producto" Relationship="OLCARModel.FK__Producto__idUbic__398D8EEE" FromRole="Ubicacion" ToRole="Producto" />
+  </EntityType>
+  <EntityType Name="Producto">
+    <Key>
+      <PropertyRef Name="idProducto" />
+    </Key>
+    <Property Name="idProducto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="fechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
+    <Property Name="idMarca" Type="Int32" Nullable="false" />
+    <Property Name="categoria" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="idUbicacion" Type="Int32" Nullable="false" />
+    <Property Name="unidadMedida" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="codigoEAN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="costo" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="costoSinIGV" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="precioVenta" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ganancia" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="stockMinimo" Type="Int32" Nullable="false" />
+    <Property Name="stockMaximo" Type="Int32" Nullable="false" />
+    <Property Name="stock" Type="Int64" Nullable="false" />
+    <Property Name="imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <NavigationProperty Name="MarcaProducto" Relationship="OLCARModel.FK__Producto__idMarc__38996AB5" FromRole="Producto" ToRole="MarcaProducto" />
+    <NavigationProperty Name="Ubicacion" Relationship="OLCARModel.FK__Producto__idUbic__398D8EEE" FromRole="Producto" ToRole="Ubicacion" />
+    <NavigationProperty Name="DetalleOrden" Relationship="OLCARModel.FK__DetalleOr__idPro__6477ECF3" FromRole="Producto" ToRole="DetalleOrden" />
+  </EntityType>
+  <Association Name="FK__Producto__idMarc__38996AB5">
+    <End Type="OLCARModel.MarcaProducto" Role="MarcaProducto" Multiplicity="1" />
+    <End Type="OLCARModel.Producto" Role="Producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MarcaProducto">
+        <PropertyRef Name="idMarca" />
+      </Principal>
+      <Dependent Role="Producto">
+        <PropertyRef Name="idMarca" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Producto__idUbic__398D8EEE">
+    <End Type="OLCARModel.Ubicacion" Role="Ubicacion" Multiplicity="1" />
+    <End Type="OLCARModel.Producto" Role="Producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ubicacion">
+        <PropertyRef Name="idUbicacion" />
+      </Principal>
+      <Dependent Role="Producto">
+        <PropertyRef Name="idUbicacion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="DetalleOrden">
+    <Key>
+      <PropertyRef Name="idDetalleOrden" />
+    </Key>
+    <Property Name="idDetalleOrden" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idOrden" Type="Int32" Nullable="false" />
+    <Property Name="idProducto" Type="Int32" Nullable="false" />
+    <Property Name="cantidad" Type="Int32" Nullable="false" />
+    <Property Name="precioUnidad" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="importeTotal" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <NavigationProperty Name="OrdenCompra" Relationship="OLCARModel.FK__DetalleOr__idOrd__6383C8BA" FromRole="DetalleOrden" ToRole="OrdenCompra" />
+    <NavigationProperty Name="Producto" Relationship="OLCARModel.FK__DetalleOr__idPro__6477ECF3" FromRole="DetalleOrden" ToRole="Producto" />
+  </EntityType>
+  <EntityType Name="OrdenCompra">
+    <Key>
+      <PropertyRef Name="idOrden" />
+    </Key>
+    <Property Name="idOrden" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fechaRegistro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="creadoPor" Type="Int32" Nullable="false" />
+    <Property Name="idProveedor" Type="Int32" Nullable="false" />
+    <Property Name="situacion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="totalNeto" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="totalIGV" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="costoTotal" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+    <Property Name="fechaAprobacion" Type="DateTime" Precision="3" />
+    <Property Name="aprobadoPor" Type="Int32" />
+    <Property Name="fechaCaducidad" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="DetalleOrden" Relationship="OLCARModel.FK__DetalleOr__idOrd__6383C8BA" FromRole="OrdenCompra" ToRole="DetalleOrden" />
+    <NavigationProperty Name="Usuario" Relationship="OLCARModel.FK__OrdenComp__aprob__5FB337D6" FromRole="OrdenCompra" ToRole="Usuario" />
+    <NavigationProperty Name="Usuario1" Relationship="OLCARModel.FK__OrdenComp__cread__5CD6CB2B" FromRole="OrdenCompra" ToRole="Usuario" />
+    <NavigationProperty Name="Proveedor" Relationship="OLCARModel.FK__OrdenComp__idPro__5DCAEF64" FromRole="OrdenCompra" ToRole="Proveedor" />
+  </EntityType>
+  <Association Name="FK__DetalleOr__idOrd__6383C8BA">
+    <End Type="OLCARModel.OrdenCompra" Role="OrdenCompra" Multiplicity="1" />
+    <End Type="OLCARModel.DetalleOrden" Role="DetalleOrden" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrdenCompra">
+        <PropertyRef Name="idOrden" />
+      </Principal>
+      <Dependent Role="DetalleOrden">
+        <PropertyRef Name="idOrden" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DetalleOr__idPro__6477ECF3">
+    <End Type="OLCARModel.Producto" Role="Producto" Multiplicity="1" />
+    <End Type="OLCARModel.DetalleOrden" Role="DetalleOrden" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Producto">
+        <PropertyRef Name="idProducto" />
+      </Principal>
+      <Dependent Role="DetalleOrden">
+        <PropertyRef Name="idProducto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrdenComp__aprob__5FB337D6">
+    <End Type="OLCARModel.Usuario" Role="Usuario" Multiplicity="0..1" />
+    <End Type="OLCARModel.OrdenCompra" Role="OrdenCompra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="idUsuario" />
+      </Principal>
+      <Dependent Role="OrdenCompra">
+        <PropertyRef Name="aprobadoPor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrdenComp__cread__5CD6CB2B">
+    <End Type="OLCARModel.Usuario" Role="Usuario" Multiplicity="1" />
+    <End Type="OLCARModel.OrdenCompra" Role="OrdenCompra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="idUsuario" />
+      </Principal>
+      <Dependent Role="OrdenCompra">
+        <PropertyRef Name="creadoPor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrdenComp__idPro__5DCAEF64">
+    <End Type="OLCARModel.Proveedor" Role="Proveedor" Multiplicity="1" />
+    <End Type="OLCARModel.OrdenCompra" Role="OrdenCompra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Proveedor">
+        <PropertyRef Name="idProveedor" />
+      </Principal>
+      <Dependent Role="OrdenCompra">
+        <PropertyRef Name="idProveedor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

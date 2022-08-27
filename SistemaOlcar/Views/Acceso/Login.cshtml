@@ -1,0 +1,52 @@
+﻿@model SistemaOlcar.Models.Usuario
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE-edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar Sesión</title>
+    <link rel="icon" href="#" />
+    <link href="~/Content/Estilos/login.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="container_form">
+            <img src="~/Content/Imagenes/perfil.png" width="110" height="110" />
+            <h2>BIENVENIDO</h2>
+            <hr />
+            @if (TempData["error"] != null)
+            {   
+                <br />
+                <center>
+                    <span class="spanError">@TempData["error"]</span>
+                </center>
+                <br />
+             }
+            <form activo="@Url.Action("Login","Acceso")" method="post">
+                <div class="form-group">
+                    @*Usuario*@
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.usuario1, new { htmlAttributes = new { @class = "form-control", placeholder = "Usuario" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @*Contraseña*@
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.contraseña, new { htmlAttributes = new { @class = "form-control", type = "password", placeholder = "Contraseña" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="INGRESAR" class="boton" />
+                </div>
+            </form>
+        </div>
+        </div>
+</body>
+</html>

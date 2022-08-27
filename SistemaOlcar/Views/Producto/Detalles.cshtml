@@ -1,0 +1,151 @@
+﻿@model SistemaOlcar.Models.Producto
+
+@{
+    ViewBag.Title = "Detalles del Producto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Producto</h2>
+
+<div>
+    <h4>CÓDIGO: @Html.DisplayFor(model => model.idProducto)</h4>
+    <hr />
+    <h4>General</h4>
+    <div class="container form-control p-4">
+        <div class="row align-items-start">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-md-4">Fecha de Creación:</div>
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.fechaCreacion)
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">Nombre:</div>
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.nombre)
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">Marca:</div>
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.MarcaProducto.nombre)
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">Categoría:</div>
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.categoria)
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">Unidad de Medida:</div>
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.unidadMedida)
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">Código EAN:</div>
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.codigoEAN)
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">Ubicación:</div>
+                    <div class="col-md-7">
+                        @Html.DisplayFor(model => model.Ubicacion.descripcion)
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">Estado:</div>
+                    <div class="col-md-7">
+                        @if (Model.estado == true)
+                        {
+                            <label>Activo</label>
+                        }
+                        else
+                        {
+                            <label>Inactivo</label>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    @if (Model.imagen != null)
+                    {
+                        <img class="rounded border border-dark border-0" src="@Url.Action("ConvertirImagen", "Producto", new { id = Model.idProducto })" style="width: 310px; height: 310px;">
+                        @*<img style="width:240px;" src="@Url.Action("ConvertirImagen", "Producto", new { id = Model.idProducto })" />*@
+                    }
+                </div>
+            </div><br />
+        </div>
+    </div>
+    <div class="">
+        <br />
+        <hr />
+        <h4>Precios</h4>
+        <div class="form-control p-4">
+            <div class="row">
+                <div class="col-md-3">Precio Compra con IGV (S/.):</div>
+                <div class="col-md-2">
+                    @Html.DisplayFor(model => model.costo)
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">Precio Compra Sin IGV (S/.):</div>
+                <div class="col-md-2">
+                    @Html.DisplayFor(model => model.costoSinIGV)
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">Precio Venta (S/.):</div>
+                <div class="col-md-2">
+                    @Html.DisplayFor(model => model.precioVenta)
+                </div>
+                <div class="col-md-2  text-end">Ganancia:</div>
+                <div class="col-md-2">
+                    @Html.DisplayFor(model => model.ganancia) %
+                </div>
+            </div>
+        </div>
+        <br />
+        <hr />
+        <h4>Stock</h4>
+        <div class="form-control p-4">
+            <div class="row">
+                <div class="col-md-3">Stock Mínimo:</div>
+                <div class="col-md-2">
+                    @Html.DisplayFor(model => model.stockMinimo)
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">Stock Máximo:</div>
+                <div class="col-md-2">
+                    @Html.DisplayFor(model => model.stockMaximo)
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">Existencias:</div>
+                <div class="col-md-2">
+                    @Html.DisplayFor(model => model.stock)
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <a href='@Url.Action("Index")' class="btn btn-danger">Volver</a>
+        </div>
+    </div>
+</div>

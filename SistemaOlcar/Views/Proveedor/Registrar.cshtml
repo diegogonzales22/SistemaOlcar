@@ -1,0 +1,177 @@
+﻿@model SistemaOlcar.Models.Proveedor
+@{
+    ViewBag.Title = "Registrar Proveedor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.error != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <span class="badge bg-danger">@ViewBag.error</span>
+        </div>
+    </div>
+    <br />
+}
+@if (TempData["exito"] != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <span class="badge bg-success">@TempData["exito"]</span>
+        </div>
+    </div>
+    <br />
+}
+
+<h2>Registrar Proveedor</h2>
+
+@using (Html.BeginForm("Registrar", "Proveedor", FormMethod.Post, new { id = "formulario" }))
+{
+    @Html.AntiForgeryToken()
+
+    <hr />
+    <div class="row">
+        <br /><br />
+        <div class="col-md-2">Nro. de Documento:</div>
+        <div class="col-md-5">
+            @Html.TextBoxFor(x => x.numeroDocumento, "", new { @class = "form-control", @onKeyUp = "pierdeFoco(this)", @onkeypress = "return (event.charCode >= 48 && event.charCode <= 57)" })
+        </div>
+        <div class="col-md-2">
+            <a id="buscar" class="btn btn-success"><i data-feather="search"></i></a>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">Nombre:</div>
+        <div class="col-md-5">
+            @Html.TextBoxFor(x => x.nombre, "", new { @class = "form-control", @readonly = true })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">Dirección:</div>
+        <div class="col-md-5">
+            @Html.TextBoxFor(x => x.direccion, "", new { @class = "form-control", @readonly = true })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">Departamento:</div>
+        <div class="col-md-5">
+            @Html.TextBoxFor(x => x.departamento, "", new { @class = "form-control", @readonly = true })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">Provincia:</div>
+        <div class="col-md-5">
+            @Html.TextBoxFor(x => x.provincia, "", new { @class = "form-control", @readonly = true })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">Distrito:</div>
+        <div class="col-md-5">
+            @Html.TextBoxFor(x => x.distrito, "", new { @class = "form-control", @readonly = true })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">Teléfono:</div>
+        <div class="col-md-5">
+            @Html.TextBoxFor(x => x.telefono, "", new { @class = "form-control", @onKeyUp = "pierdeFoco(this)", @onkeypress = "return (event.charCode >= 48 && event.charCode <= 57)" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">Email:</div>
+        <div class="col-md-5">
+            @Html.TextBoxFor(x => x.email, "", new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">Condición de Pago:</div>
+        <div class="col-md-5">
+            @Html.DropDownListFor(model => model.condicionPago, new SelectList(
+                          new[]
+                          {
+                              new { Value = "Contra entrega", Text = "Contra entrega" },
+                              new { Value = "Factura 15 días", Text = "Factura 15 días" },
+                              new { Value = "Factura 30 días", Text = "Factura 30 días" },
+                              new { Value = "Factura 45 días", Text = "Factura 45 días" },
+                              new { Value = "Factura 60 días", Text = "Factura 60 días" },
+                              new { Value = "Factura 90 días", Text = "Factura 90 días" },
+                              new { Value = "Contado 30 días", Text = "Contado 30 días" },
+                              new { Value = "Cheque 30 días", Text = "Cheque 30 días" },
+                              new { Value = "Cheque 60 días", Text = "Cheque 60 días" },
+                              new { Value = "Consignación", Text = "Consignación" },
+                              new { Value = "Otros", Text = "Otros" }
+                          },
+                          "Value",
+                          "Text",
+                          Model
+                      ), null, htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">Estado:</div>
+        <div class="col-md-5">
+            @Html.DropDownListFor(model => model.activo, new SelectList(
+                    new[]
+                    {
+                        new { Value = "true", Text = "Activo" },
+                        new { Value = "false", Text = "Inactivo" },
+                    },
+                    "Value",
+                    "Text",
+                    Model
+                ), null, htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <a href='@Url.Action("Index")' class="btn btn-secondary">Volver</a>
+    </div>
+
+}
+
+@section Scripts {
+
+    <script>
+
+        //Buscar RUC con API
+        $('#buscar').click(function () {
+            ruc = $('#numeroDocumento').val();
+            $.ajax({
+                url: "@Url.Action("Obtener", "Proveedor")?="+ruc,
+                type: "POST",
+                data: "ruc=" + ruc,
+                dataType: "json",
+                statusCode: {
+                    500: function () {
+                        swal("", "No se encontró el RUC que busca", "info");
+                        limpiarCampos();
+                    }
+                },
+                success: function (p) {
+                    if (p.numeroDocumento == ruc) {
+                        $("#nombre").val(p.nombre);
+                        $("#direccion").val(p.direccion);
+                        $("#departamento").val(p.departamento);
+                        $("#provincia").val(p.provincia);
+                        $("#distrito").val(p.distrito);
+                    }
+                    else {
+                        console.log("No existe");
+                    }
+                }
+            });
+        });
+
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Vistas/Proveedor_Registrar.js")" type="text/javascript"></script>
+}

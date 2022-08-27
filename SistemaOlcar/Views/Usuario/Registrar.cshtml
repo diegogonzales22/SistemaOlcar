@@ -1,0 +1,42 @@
+﻿<!-- Modal -->
+<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h3 class="modal-title text-white" id="exampleModalLabel">Usuario</h3>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <input type="hidden" id="txtidUsuario" />
+                        <div class="form-group">
+                            <label for="cboestado">Estado:</label>
+                            <select id="cboestado" class="form-select">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtUsuario">Usuario:</label>
+                            <input type="text" class="form-control" id="txtUsuario">
+                        </div>
+                        <div class="form-group">
+                            <label for="txtContrasenia">Contraseña:</label>
+                            <input type="password" class="form-control" id="txtContrasenia">
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="Guardar()">Guardar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

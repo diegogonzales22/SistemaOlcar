@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="OLCARModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="DetalleOrden">
+    <Key>
+      <PropertyRef Name="idDetalleOrden" />
+    </Key>
+    <Property Name="idDetalleOrden" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="idOrden" Type="int" Nullable="false" />
+    <Property Name="idProducto" Type="int" Nullable="false" />
+    <Property Name="cantidad" Type="int" Nullable="false" />
+    <Property Name="precioUnidad" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="importeTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MarcaProducto">
+    <Key>
+      <PropertyRef Name="idMarca" />
+    </Key>
+    <Property Name="idMarca" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="estado" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrdenCompra">
+    <Key>
+      <PropertyRef Name="idOrden" />
+    </Key>
+    <Property Name="idOrden" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fechaRegistro" Type="datetime" Nullable="false" />
+    <Property Name="creadoPor" Type="int" Nullable="false" />
+    <Property Name="idProveedor" Type="int" Nullable="false" />
+    <Property Name="situacion" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="totalNeto" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="totalIGV" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="costoTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="fechaAprobacion" Type="datetime" />
+    <Property Name="aprobadoPor" Type="int" />
+    <Property Name="fechaCaducidad" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Producto">
+    <Key>
+      <PropertyRef Name="idProducto" />
+    </Key>
+    <Property Name="idProducto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="250" Nullable="false" />
+    <Property Name="fechaCreacion" Type="datetime" Nullable="false" />
+    <Property Name="estado" Type="bit" Nullable="false" />
+    <Property Name="idMarca" Type="int" Nullable="false" />
+    <Property Name="categoria" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="idUbicacion" Type="int" Nullable="false" />
+    <Property Name="unidadMedida" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="codigoEAN" Type="varchar" MaxLength="50" />
+    <Property Name="costo" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="costoSinIGV" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="precioVenta" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="ganancia" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="stockMinimo" Type="int" Nullable="false" />
+    <Property Name="stockMaximo" Type="int" Nullable="false" />
+    <Property Name="stock" Type="bigint" Nullable="false" />
+    <Property Name="imagen" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Proveedor">
+    <Key>
+      <PropertyRef Name="idProveedor" />
+    </Key>
+    <Property Name="idProveedor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="activo" Type="bit" Nullable="false" />
+    <Property Name="numeroDocumento" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="direccion" Type="varchar" MaxLength="100" />
+    <Property Name="departamento" Type="varchar" MaxLength="100" />
+    <Property Name="provincia" Type="varchar" MaxLength="100" />
+    <Property Name="distrito" Type="varchar" MaxLength="100" />
+    <Property Name="telefono" Type="varchar" MaxLength="50" />
+    <Property Name="email" Type="varchar" MaxLength="100" />
+    <Property Name="condicionPago" Type="varchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Rol">
+    <Key>
+      <PropertyRef Name="idRol" />
+    </Key>
+    <Property Name="idRol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ubicacion">
+    <Key>
+      <PropertyRef Name="idUbicacion" />
+    </Key>
+    <Property Name="idUbicacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="descripcion" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="estado" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="idUsuario" />
+    </Key>
+    <Property Name="idUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="usuario" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="contraseña" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="idRol" Type="int" Nullable="false" />
+    <Property Name="estado" Type="bit" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__DetalleOr__idOrd__6383C8BA">
+    <End Role="OrdenCompra" Type="Self.OrdenCompra" Multiplicity="1" />
+    <End Role="DetalleOrden" Type="Self.DetalleOrden" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrdenCompra">
+        <PropertyRef Name="idOrden" />
+      </Principal>
+      <Dependent Role="DetalleOrden">
+        <PropertyRef Name="idOrden" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DetalleOr__idPro__6477ECF3">
+    <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+    <End Role="DetalleOrden" Type="Self.DetalleOrden" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Producto">
+        <PropertyRef Name="idProducto" />
+      </Principal>
+      <Dependent Role="DetalleOrden">
+        <PropertyRef Name="idProducto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrdenComp__aprob__5FB337D6">
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+    <End Role="OrdenCompra" Type="Self.OrdenCompra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="idUsuario" />
+      </Principal>
+      <Dependent Role="OrdenCompra">
+        <PropertyRef Name="aprobadoPor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrdenComp__cread__5CD6CB2B">
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+    <End Role="OrdenCompra" Type="Self.OrdenCompra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="idUsuario" />
+      </Principal>
+      <Dependent Role="OrdenCompra">
+        <PropertyRef Name="creadoPor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrdenComp__idPro__5DCAEF64">
+    <End Role="Proveedor" Type="Self.Proveedor" Multiplicity="1" />
+    <End Role="OrdenCompra" Type="Self.OrdenCompra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Proveedor">
+        <PropertyRef Name="idProveedor" />
+      </Principal>
+      <Dependent Role="OrdenCompra">
+        <PropertyRef Name="idProveedor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Producto__idMarc__38996AB5">
+    <End Role="MarcaProducto" Type="Self.MarcaProducto" Multiplicity="1" />
+    <End Role="Producto" Type="Self.Producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MarcaProducto">
+        <PropertyRef Name="idMarca" />
+      </Principal>
+      <Dependent Role="Producto">
+        <PropertyRef Name="idMarca" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Producto__idUbic__398D8EEE">
+    <End Role="Ubicacion" Type="Self.Ubicacion" Multiplicity="1" />
+    <End Role="Producto" Type="Self.Producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ubicacion">
+        <PropertyRef Name="idUbicacion" />
+      </Principal>
+      <Dependent Role="Producto">
+        <PropertyRef Name="idUbicacion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Usuario__idRol__25869641">
+    <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rol">
+        <PropertyRef Name="idRol" />
+      </Principal>
+      <Dependent Role="Usuario">
+        <PropertyRef Name="idRol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="OLCARModelStoreContainer">
+    <EntitySet Name="DetalleOrden" EntityType="Self.DetalleOrden" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MarcaProducto" EntityType="Self.MarcaProducto" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrdenCompra" EntityType="Self.OrdenCompra" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Proveedor" EntityType="Self.Proveedor" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ubicacion" EntityType="Self.Ubicacion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__DetalleOr__idOrd__6383C8BA" Association="Self.FK__DetalleOr__idOrd__6383C8BA">
+      <End Role="OrdenCompra" EntitySet="OrdenCompra" />
+      <End Role="DetalleOrden" EntitySet="DetalleOrden" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DetalleOr__idPro__6477ECF3" Association="Self.FK__DetalleOr__idPro__6477ECF3">
+      <End Role="Producto" EntitySet="Producto" />
+      <End Role="DetalleOrden" EntitySet="DetalleOrden" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrdenComp__aprob__5FB337D6" Association="Self.FK__OrdenComp__aprob__5FB337D6">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="OrdenCompra" EntitySet="OrdenCompra" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrdenComp__cread__5CD6CB2B" Association="Self.FK__OrdenComp__cread__5CD6CB2B">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="OrdenCompra" EntitySet="OrdenCompra" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrdenComp__idPro__5DCAEF64" Association="Self.FK__OrdenComp__idPro__5DCAEF64">
+      <End Role="Proveedor" EntitySet="Proveedor" />
+      <End Role="OrdenCompra" EntitySet="OrdenCompra" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Producto__idMarc__38996AB5" Association="Self.FK__Producto__idMarc__38996AB5">
+      <End Role="MarcaProducto" EntitySet="MarcaProducto" />
+      <End Role="Producto" EntitySet="Producto" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Producto__idUbic__398D8EEE" Association="Self.FK__Producto__idUbic__398D8EEE">
+      <End Role="Ubicacion" EntitySet="Ubicacion" />
+      <End Role="Producto" EntitySet="Producto" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Usuario__idRol__25869641" Association="Self.FK__Usuario__idRol__25869641">
+      <End Role="Rol" EntitySet="Rol" />
+      <End Role="Usuario" EntitySet="Usuario" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,152 @@
+﻿@model SistemaOlcar.Models.OrdenCompra
+@{
+    ViewBag.Title = "Detalles de Órden de Compra";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Órden de Compra</h2>
+<h4>Nro. de Orden: @Html.DisplayFor(model => model.idOrden)</h4>
+<hr />
+<div class="form-control p-3">
+    <div class="row">
+        <div class="col-md-2">
+            <label for="txtFecha"><b>Fecha de Registro:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.fechaRegistro)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <label for="txtFecha"><b>Fecha de Expiración:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.fechaCaducidad)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <label for="txtFecha"><b>Creado por:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.Usuario1.usuario1)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <label for="txtFecha"><b>Situación:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.situacion)
+        </div>
+    </div>
+    <br />
+    @if (Model.fechaAprobacion != null && Model.situacion == "Aprobada")
+    {
+        <div class="row">
+            <div class="col-md-2">
+                <label for="txtFecha"><b>Fecha de Aprobación:</b></label>
+            </div>
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.fechaAprobacion)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-2">
+                <label for="txtFecha"><b>Aprobado por:</b></label>
+            </div>
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Usuario.usuario1)
+            </div>
+        </div>
+        <br />
+    }
+    <div class="row">
+        <div class="col-md-2">
+            <label for="cboProveedor"><b>Proveedor:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.Proveedor.nombre)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <label for="cboCondicion"><b>Condición de Pago:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.Proveedor.condicionPago)
+        </div>
+    </div>
+    <br />
+    @if (Model.observacion != null) {
+        <div class="row">
+            <div class="col-md-2">
+                <label for="cboCondicion"><b>Observación:</b></label>
+            </div>
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.observacion)
+            </div>
+        </div>
+        <br />
+    }
+    <div id="divConceptos">
+        <table class="table" id="tablaDetalle">
+            <thead>
+                <tr>
+                    <th class="table-dark">Item</th>
+                    <th class="table-dark">Código</th>
+                    <th class="table-dark">Nombre</th>
+                    <th class="table-dark">Cantidad</th>
+                    <th class="table-dark">Valor Venta S/.</th>
+                    <th class="table-dark">Descuento %</th>
+                    <th class="table-dark">Total S/.</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{var num = 1;}
+                @foreach (var item in Model.DetalleOrden)
+                {
+                    <tr>
+                        <td>@num</td>
+                        <td>@item.idProducto</td>
+                        <td>@item.Producto.nombre</td>
+                        <td>@item.cantidad</td>
+                        <td>@item.precioUnidad</td>
+                        <td>@item.descuento</td>
+                        <td>@item.importeTotal</td>
+                    </tr>
+                    num++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-md-1">
+            <label for="txtNeto"><strong>Neto S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.totalNeto)
+        </div>
+        <div class="col-md-1">
+            <label for="txtIGV"><strong>IGV S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.totalIGV)
+        </div>
+        <div class="col-md-1">
+            <label for="txtTotal"><strong>Total S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.costoTotal)
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href='@Url.Action("Index")' class="btn btn-primary">Volver</a>
+</div>

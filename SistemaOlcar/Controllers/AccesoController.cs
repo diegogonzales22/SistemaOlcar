@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using SistemaOlcar.Helpers;
 
 
 namespace SistemaOlcar.Controllers
@@ -20,11 +21,15 @@ namespace SistemaOlcar.Controllers
         [HttpPost]
         public ActionResult Login(string usuario1, string contraseña)
         {
+
             using (OLCAREntities db = new OLCAREntities())
             {
+                string pass = Encrypt.EncriptarMD5(contraseña);
+
                 var oUser = (from d in db.Usuario
-                             where d.usuario1 == usuario1.Trim() && d.contraseña == contraseña.Trim()
+                             where d.usuario1 == usuario1.Trim() && d.contraseña == pass
                              select d).FirstOrDefault();
+
                 if (oUser != null)
                 {
                     if (oUser.estado == false)

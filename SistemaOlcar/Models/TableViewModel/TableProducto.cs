@@ -14,5 +14,7 @@ namespace SistemaOlcar.Models.TableViewModel
         public string marca { get; set; }
         public long stock { get; set; }
         public bool estado { get; set; }
+        public int stockMinimo { get; set; }
+        public int stockMaximo { get; set; }
     }
 }

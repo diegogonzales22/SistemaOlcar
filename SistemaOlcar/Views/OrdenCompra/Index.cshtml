@@ -40,52 +40,55 @@
         var tabladata;
         tabladata = $("#tabla").DataTable({
             order: [[0, 'desc']],
-                "ajax": {
-                    "url": '@Url.Action("Listar", "OrdenCompra")',
-                    "type": "GET",
-                    "dataType": "json"
+            "drawCallback": function (settings) {
+                feather.replace();
+            },
+            "ajax": {
+                "url": '@Url.Action("Listar", "OrdenCompra")',
+                "type": "GET",
+                "dataType": "json"
+            },
+            "columns": [
+                { "data": "idOrden" },
+                { "data": "fechaRegistro" },
+                { "data": "proveedor" },
+                {
+                    "data": "costoTotal", "render": function (data, type, row) {
+                        // esto es lo que se va a renderizar como html
+                        return `S/. ${row.costoTotal}`;
+                    }
                 },
-                "columns": [
-                    { "data": "idOrden" },
-                    { "data": "fechaRegistro" },
-                    { "data": "proveedor" },
-                    {
-                        "data": "costoTotal", "render": function (data, type, row) {
-                            // esto es lo que se va a renderizar como html
-                            return `S/. ${row.costoTotal}`;
-                        }
-                    },
-                    {
-                        "data": "situacion", "render": function (valor) {
-                            if (valor == 'Generada') {
-                                return '<span class="badge bg-secondary">Generada</span>'
-                            } else if (valor == 'Aprobada') {
-                                return '<span class="badge bg-success">Aprobada</span>'
-                            } else if (valor == 'Denegada') {
-                                return '<span class="badge bg-danger">Denegada</span>'
-                            } else if (valor == "Surtida") {
+                {
+                    "data": "situacion", "render": function (valor) {
+                        if (valor == 'Por Aprobar') {
+                            return '<span class="badge bg-secondary">Por Aprobar</span>'
+                        } else if (valor == 'Aprobada') {
+                            return '<span class="badge bg-success">Aprobada</span>'
+                        } else if (valor == 'Denegada') {
+                            return '<span class="badge bg-danger">Denegada</span>'
+                        } else if (valor == "Surtida") {
 
-                            }
                         }
+                    }
+                },
+                {
+                    "data": "idOrden", "render": function (data) {
+                        return "<a type='button' class='btn btn-primary btn-sm ms-2' href='@Url.Action("Detalles","OrdenCompra")?id=" + data + "'><i data-feather='eye'></i></a>" +
+                            "<a type='button' class='btn btn-success btn-sm ms-2' onclick='Imprimir(" + data + ")'><i data-feather='printer'></i></a>" +
+                            "<a type='button' class='btn btn-secondary btn-sm ms-2' href='@Url.Action("Editar","OrdenCompra")?id=" + data + "'><i data-feather='edit-2'></i></a>" +
+                            "<a type='button' class='btn btn-danger btn-sm ms-2' href='@Url.Action("Delete","OrdenCompra")?id=" + data + "'><i data-feather='trash'></i></a>"
                     },
-                    {
-                        "data": "idOrden", "render": function (data) {
-                            return "<a type='button' class='btn btn-primary btn-sm ms-2' href='@Url.Action("Details","OrdenCompra")?id=" + data + "'><i class='fas fa-eye'></i></a>" +
-                                "<a type='button' class='btn btn-success btn-sm ms-2' onclick='Imprimir(" + data + ")'><i class='fas fa-download'></i></a>" +
-                                "<a type='button' class='btn btn-secondary btn-sm ms-2' href='@Url.Action("Edit","OrdenCompra")?id=" + data + "'><i class='fas fa-pen'></i></a>" +
-                                "<a type='button' class='btn btn-danger btn-sm ms-2' href='@Url.Action("Delete","OrdenCompra")?id=" + data + "'><i class='fas fa-trash'></i></a>"
-                        },
-                        "orderable": false,
-                        "searchable": false,
-                        //"width": "150px"
-                    },
-                ],
-                "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
-                }
+                    "orderable": false,
+                    "searchable": false,
+                    //"width": "150px"
+                },
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+            }
         });
 
-        @*function Imprimir(id) {
+        function Imprimir(id) {
             var texto = "@Url.Action("Documento", "OrdenCompra")" + "?idOrden=" + id;
 
             // Open the page in a new tab or window
@@ -94,6 +97,6 @@
                 w.print();
             }
 
-        }*@
+        }
     </script>
 }

@@ -18,17 +18,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Usuario">
-      <EntityTypeMapping TypeName="OLCARModel.Usuario">
-        <MappingFragment StoreEntitySet="Usuario">
-          <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
-          <ScalarProperty Name="usuario1" ColumnName="usuario" />
-          <ScalarProperty Name="contraseña" ColumnName="contraseña" />
-          <ScalarProperty Name="idRol" ColumnName="idRol" />
-          <ScalarProperty Name="estado" ColumnName="estado" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Proveedor">
       <EntityTypeMapping TypeName="OLCARModel.Proveedor">
         <MappingFragment StoreEntitySet="Proveedor">
@@ -78,10 +67,22 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Usuario">
+      <EntityTypeMapping TypeName="OLCARModel.Usuario">
+        <MappingFragment StoreEntitySet="Usuario">
+          <ScalarProperty Name="estado" ColumnName="estado" />
+          <ScalarProperty Name="idRol" ColumnName="idRol" />
+          <ScalarProperty Name="contraseña" ColumnName="contraseña" />
+          <ScalarProperty Name="usuario1" ColumnName="usuario" />
+          <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="DetalleOrden">
       <EntityTypeMapping TypeName="OLCARModel.DetalleOrden">
         <MappingFragment StoreEntitySet="DetalleOrden">
           <ScalarProperty Name="importeTotal" ColumnName="importeTotal" />
+          <ScalarProperty Name="descuento" ColumnName="descuento" />
           <ScalarProperty Name="precioUnidad" ColumnName="precioUnidad" />
           <ScalarProperty Name="cantidad" ColumnName="cantidad" />
           <ScalarProperty Name="idProducto" ColumnName="idProducto" />
@@ -93,6 +94,7 @@
     <EntitySetMapping Name="OrdenCompra">
       <EntityTypeMapping TypeName="OLCARModel.OrdenCompra">
         <MappingFragment StoreEntitySet="OrdenCompra">
+          <ScalarProperty Name="observacion" ColumnName="observacion" />
           <ScalarProperty Name="fechaCaducidad" ColumnName="fechaCaducidad" />
           <ScalarProperty Name="aprobadoPor" ColumnName="aprobadoPor" />
           <ScalarProperty Name="fechaAprobacion" ColumnName="fechaAprobacion" />
@@ -107,5 +109,8 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="usp_UpdateCostoNeto" FunctionName="OLCARModel.Store.usp_UpdateCostoNeto" />
+    <FunctionImportMapping FunctionImportName="usp_UpdateCostoTotal" FunctionName="OLCARModel.Store.usp_UpdateCostoTotal" />
+    <FunctionImportMapping FunctionImportName="usp_UpdateIGV" FunctionName="OLCARModel.Store.usp_UpdateIGV" />
   </EntityContainerMapping>
 </Mapping>

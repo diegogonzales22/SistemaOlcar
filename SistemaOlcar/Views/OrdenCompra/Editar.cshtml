@@ -1,0 +1,180 @@
+﻿@model SistemaOlcar.Models.OrdenCompra
+@{
+    ViewBag.Title = "Editar Órden de Compra";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Órden de Compra</h2>
+<h4>Nro. de Orden: @Html.DisplayFor(model => model.idOrden)</h4>
+<hr />
+<div class="form-control p-3">
+    <a href="@Url.Action("UpdateCabecera", "OrdenCompra")?id=@Html.DisplayFor(model => model.idOrden)" class="btn btn-warning">
+        <i style="width:20px; height:20px" data-feather="edit-3"></i>
+        <span>
+            <strong>Editar Cabecera</strong>
+        </span>
+    </a>
+    <br /><br />
+    <div class="row">
+        <div class="col-md-2">
+            <label for="txtFecha"><b>Fecha de Registro:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.fechaRegistro)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <label for="txtFecha"><b>Fecha de Expiración:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.fechaCaducidad)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <label for="txtFecha"><b>Creado por:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.Usuario1.usuario1)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <label for="txtFecha"><b>Situación:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.situacion)
+        </div>
+    </div>
+    <br />
+    @if (Model.fechaAprobacion != null && Model.situacion == "Aprobada")
+    {
+        <div class="row">
+            <div class="col-md-2">
+                <label for="txtFecha"><b>Fecha de Aprobación:</b></label>
+            </div>
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.fechaAprobacion)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-2">
+                <label for="txtFecha"><b>Aprobado por:</b></label>
+            </div>
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Usuario.usuario1)
+            </div>
+        </div>
+        <br />
+    }
+    <div class="row">
+        <div class="col-md-2">
+            <label for="cboProveedor"><b>Proveedor:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.Proveedor.nombre)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <label for="cboCondicion"><b>Condición de Pago:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.Proveedor.condicionPago)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <label for="txtObservacion"><b>Observación:</b></label>
+        </div>
+        <div class="col-md-10">
+            @Html.DisplayFor(model => model.observacion)
+        </div>
+    </div>
+    <br />
+    <div id="divConceptos">
+        <table class="table" id="tablaDetalle">
+            <thead>
+                <tr>
+                    <th class="table-dark">Item</th>
+                    <th class="table-dark">Código</th>
+                    <th class="table-dark">Nombre</th>
+                    <th class="table-dark">Cantidad</th>
+                    <th class="table-dark">Valor Venta S/.</th>
+                    <th class="table-dark">Descuento %</th>
+                    <th class="table-dark">Total S/.</th>
+                    <th class="table-dark"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{var num = 1;}
+                @foreach (var item in Model.DetalleOrden)
+                {
+                <tr>
+                    <td>@num</td>
+                    <td>@item.idProducto</td>
+                    <td>@item.Producto.nombre</td>
+                    <td>@item.cantidad</td>
+                    <td>@item.precioUnidad</td>
+                    <td>@item.descuento</td>
+                    <td>@item.importeTotal</td>
+                    @*<td><a href="@Url.Action("DeleteProducto", "OrdenCompra")?id=@item.idDetalleOrden" class="btn btn-danger btn-sm"><i data-feather='trash-2'></i></a></td>*@
+                    @*<td><input onclick="eliminarProducto(@item.idDetalleOrden);" type="button" class="btn btn-danger btn-sm" value="Eliminar"/></td>*@
+                    <td><a onclick="eliminarProducto(@item.idDetalleOrden)" class="btn btn-danger btn-sm"><i data-feather='trash-2'></i></a></td>
+                </tr>
+                    num++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-md-1">
+            <label for="txtNeto"><strong>Neto S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.totalNeto)
+        </div>
+        <div class="col-md-1">
+            <label for="txtIGV"><strong>IGV S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.totalIGV)
+        </div>
+        <div class="col-md-1">
+            <label for="txtTotal"><strong>Total S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.costoTotal)
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <a href='@Url.Action("Index")' class="btn btn-primary">Volver</a>
+</div>
+
+@section scripts{
+    <script>
+
+        function eliminarProducto(id) {
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("DeleteProducto", "OrdenCompra")/" + id,
+                success: function (data) {
+                    swal("Correcto", "Se eliminó el producto.", "success");
+                    location.reload();
+
+                }
+            });
+        }
+
+    </script>
+}

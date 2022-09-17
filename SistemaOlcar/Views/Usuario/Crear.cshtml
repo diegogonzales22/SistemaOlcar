@@ -1,0 +1,82 @@
+﻿@model SistemaOlcar.Models.Usuario
+@{
+    ViewBag.Title = "Crear Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.error != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <span class="badge bg-danger">@ViewBag.error</span>
+        </div>
+    </div>
+    <br />
+}
+@if (TempData["exito"] != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <span class="badge bg-success">@TempData["exito"]</span>
+        </div>
+    </div>
+    <br />
+}
+
+<h2>Registrar Usuario</h2>
+
+@using (Html.BeginForm("Crear", "Usuario", FormMethod.Post, new { id = "formulario" }))
+{
+    @Html.AntiForgeryToken()
+
+    <hr />
+    <div class="row">
+        <div class="col-md-2">Rol:</div>
+        <div class="col-md-5">
+            @Html.DropDownList("idRol", null, htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <br /><br />
+        <div class="col-md-2">Usuario:</div>
+        <div class="col-md-5">
+            @Html.TextBoxFor(x => x.usuario1, "", new { @class = "form-control", @onkeypress = "return checkAlfaNum(event)" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">Contraseña:</div>
+        <div class="col-md-5">
+            @Html.TextBoxFor(x => x.contraseña, "", new { @class = "form-control", @type = "password" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">Estado:</div>
+        <div class="col-md-5">
+            @Html.DropDownListFor(model => model.estado, new SelectList(
+                    new[]
+                    {
+                        new { Value = "true", Text = "Activo" },
+                        new { Value = "false", Text = "Inactivo" },
+                    },
+                    "Value",
+                    "Text",
+                    Model
+                ), null, htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <a href='@Url.Action("Index")' class="btn btn-secondary">Volver</a>
+    </div>
+
+}
+
+@section scripts{
+
+    <script src="@Url.Content("~/Scripts/Vistas/Usuario_Registrar.js")" type="text/javascript"></script>
+
+}

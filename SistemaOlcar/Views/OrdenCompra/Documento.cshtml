@@ -1,0 +1,186 @@
+﻿@model SistemaOlcar.Models.OrdenCompra
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <!-- Custom Style -->
+    <link href="~/Content/Estilos/orden_compra.css" rel="stylesheet" />">
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/complementos")
+    <title>OLCAR - Órden de Compra</title>
+</head>
+
+<body>
+    <center>
+        <button type="button" class="btn btn-secondary" onclick="javascript:imprime(seleccion);"><i class="fas fa-print"></i> Imprimir</button>
+    </center>
+    <div class="my-5 page" size="A4" id="seleccion">
+        <div class="p-5">
+            <section class="top-content bb d-flex justify-content-between">
+                <div class="logo">
+                    <img src="~/Content/Imagenes/logo_olcar.jpg" class="img-fluid">
+                    <div class="">
+                        <b>RUC: 20562652524</b><br />
+                        <b>DIR: Cl. Esperanza Nro. 150, Miraflores, Lima </b><br />
+                        <b>TEL: (01) 2424916</b>
+                    </div>
+                </div>
+                <div class="top-left">
+                    <div class="graphic-path">
+                        <p>OLCAR S.A.C</p>
+                    </div>
+                    <div class="position-relative">
+                        <p><b>ÓRDEN DE COMPRA Nro. <span>@Html.DisplayFor(model => model.idOrden)</span></b></p>
+                        <p><b>FECHA DE CREACIÓN: </b><span>@Html.DisplayFor(model => model.fechaRegistro)</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="store-user mt-2">
+                <div class="col-12">
+                    <div class="row bb pb-2">
+                        <div class="col-12 p-0">
+                            <div class="row">
+                                <div class="col-md-3"><b>PROVEEDOR:</b></div>
+                                <div class="col-md-9">@Html.DisplayFor(model => model.Proveedor.nombre)</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-3"><b>RUC:</b></div>
+                                <div class="col-md-9">@Html.DisplayFor(model => model.Proveedor.numeroDocumento)</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-3"><b>DIRECCIÓN:</b></div>
+                                <div class="col-lg-9">
+                                    @Html.DisplayFor(model => model.Proveedor.direccion),
+                                    @Html.DisplayFor(model => model.Proveedor.departamento),
+                                    @Html.DisplayFor(model => model.Proveedor.provincia),
+                                    @Html.DisplayFor(model => model.Proveedor.distrito)
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-3"><b>TELÉFONO:</b></div>
+                                <div class="col-md-9">@Html.DisplayFor(model => model.Proveedor.telefono)</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-3"><b>FORMA DE PAGO:</b></div>
+                                <div class="col-md-9">@Html.DisplayFor(model => model.Proveedor.condicionPago)</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-3"><b>SITUACIÓN:</b></div>
+                                <div class="col-md-9">
+                                    @if (Model.situacion == "Denegada")
+                                    {
+                                        <span>ÉSTA ÓRDEN DE COMPRA FUE DENEGADA</span>
+                                    }
+                                    @if (Model.situacion == "Por Aprobar")
+                                    {
+                                        <span>ÉSTA ÓRDEN DE COMPRA AÚN NO SE A APROBADO</span>
+                                    }
+                                    @if (Model.situacion == "Aprobada")
+                                    {
+                                        <p>Situación: <span>@Html.DisplayFor(model => model.situacion)</span></p>
+                                        <p>Fecha de Aprobación: <span>@Html.DisplayFor(model => model.fechaAprobacion)</span></p>
+                                        <p>Aprobado por: <span>Administración</span></p>
+                                    }
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-3"><b>OBSERVACIONES:</b></div>
+                                <div class="col-md-9">@Html.DisplayFor(model => model.observacion)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="product-area mt-0">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td><b>Item</b></td>
+                            <td><b>Cód.</b></td>
+                            <td><b>Producto</b></td>
+                            <td><b>Cantidad</b></td>
+                            <td><b>Costo S/.</b></td>
+                            <td><b>Dcto %</b></td>
+                            <td><b>Total S/.</b></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{var num = 1;}
+                        @foreach (var item in Model.DetalleOrden)
+                        {
+                        <tr>
+                            <td>@num</td>
+                            <td>@item.idProducto</td>
+                            <td>@item.Producto.nombre</td>
+                            <td>@item.cantidad</td>
+                            <td>@item.precioUnidad</td>
+                            <td>@item.descuento</td>
+                            <td>@item.importeTotal</td>
+                        </tr>
+                            num++;
+                        }
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="balance-info">
+                <div class="row">
+                    <div class="col-8"></div>
+                    <div class="col-4">
+                        <table class="table border-0 table-hover">
+                            <tr>
+                                <td>Neto S/.</td>
+                                <td>@Html.DisplayFor(model => model.totalNeto)</td>
+                            </tr>
+                            <tr>
+                                <td>IGV S/.</td>
+                                <td>@Html.DisplayFor(model => model.totalIGV)</td>
+                            </tr>
+                            <tfoot>
+                                <tr>
+                                    <td>Total S/.</td>
+                                    <td>@Html.DisplayFor(model => model.costoTotal)</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <!-- Signature -->
+                        <div class="col-12">
+                            <img src="~/Content/Imagenes/signature.png" class="img-fluid" alt="">
+                            <p class="text-center m-0"> Administración </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <br />
+            <p class="m-0 font-weight-bold"> Condiciones: </p>
+            <p>1. La Factura debe ser entregada adjuntando la copia de la Órden de Compra y la Guía de Remisión.</p>
+            <p>2. Ésta Órden de Compra deberá estar aprobada, sino carecerá de valor.</p>
+            <p>3. El horario de recepción de mercadería es de Lunes a Sábado de 8:00 AM a 6:00 PM </p>
+            <br />
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+        function imprime(imp1) {
+            var printContents = document.getElementById('seleccion').innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+</script>

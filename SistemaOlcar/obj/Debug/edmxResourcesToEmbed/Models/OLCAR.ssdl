@@ -9,6 +9,7 @@
     <Property Name="idProducto" Type="int" Nullable="false" />
     <Property Name="cantidad" Type="int" Nullable="false" />
     <Property Name="precioUnidad" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="descuento" Type="decimal" Precision="18" Scale="2" />
     <Property Name="importeTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
   </EntityType>
   <EntityType Name="MarcaProducto">
@@ -34,6 +35,7 @@
     <Property Name="fechaAprobacion" Type="datetime" />
     <Property Name="aprobadoPor" Type="int" />
     <Property Name="fechaCaducidad" Type="datetime" Nullable="false" />
+    <Property Name="observacion" Type="text" />
   </EntityType>
   <EntityType Name="Producto">
     <Key>
@@ -94,11 +96,11 @@
     </Key>
     <Property Name="idUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="usuario" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="contraseña" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="contraseña" Type="varchar(max)" Nullable="false" />
     <Property Name="idRol" Type="int" Nullable="false" />
     <Property Name="estado" Type="bit" Nullable="false" />
   </EntityType>
-  <Association Name="FK__DetalleOr__idOrd__6383C8BA">
+  <Association Name="FK__DetalleOr__idOrd__1CBC4616">
     <End Role="OrdenCompra" Type="Self.OrdenCompra" Multiplicity="1" />
     <End Role="DetalleOrden" Type="Self.DetalleOrden" Multiplicity="*" />
     <ReferentialConstraint>
@@ -110,7 +112,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__DetalleOr__idPro__6477ECF3">
+  <Association Name="FK__DetalleOr__idPro__1DB06A4F">
     <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
     <End Role="DetalleOrden" Type="Self.DetalleOrden" Multiplicity="*" />
     <ReferentialConstraint>
@@ -122,7 +124,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__OrdenComp__aprob__5FB337D6">
+  <Association Name="FK__OrdenComp__aprob__18EBB532">
     <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
     <End Role="OrdenCompra" Type="Self.OrdenCompra" Multiplicity="*" />
     <ReferentialConstraint>
@@ -134,7 +136,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__OrdenComp__cread__5CD6CB2B">
+  <Association Name="FK__OrdenComp__cread__160F4887">
     <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
     <End Role="OrdenCompra" Type="Self.OrdenCompra" Multiplicity="*" />
     <ReferentialConstraint>
@@ -146,7 +148,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__OrdenComp__idPro__5DCAEF64">
+  <Association Name="FK__OrdenComp__idPro__17036CC0">
     <End Role="Proveedor" Type="Self.Proveedor" Multiplicity="1" />
     <End Role="OrdenCompra" Type="Self.OrdenCompra" Multiplicity="*" />
     <ReferentialConstraint>
@@ -182,7 +184,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Usuario__idRol__25869641">
+  <Association Name="FK__Usuario__idRol__7A672E12">
     <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
     <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
     <ReferentialConstraint>
@@ -194,6 +196,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="usp_UpdateCostoNeto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idOrden" Type="int" Mode="In" />
+  </Function>
+  <Function Name="usp_UpdateCostoTotal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idOrden" Type="int" Mode="In" />
+  </Function>
+  <Function Name="usp_UpdateIGV" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idOrden" Type="int" Mode="In" />
+  </Function>
   <EntityContainer Name="OLCARModelStoreContainer">
     <EntitySet Name="DetalleOrden" EntityType="Self.DetalleOrden" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MarcaProducto" EntityType="Self.MarcaProducto" Schema="dbo" store:Type="Tables" />
@@ -203,23 +214,23 @@
     <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Ubicacion" EntityType="Self.Ubicacion" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK__DetalleOr__idOrd__6383C8BA" Association="Self.FK__DetalleOr__idOrd__6383C8BA">
+    <AssociationSet Name="FK__DetalleOr__idOrd__1CBC4616" Association="Self.FK__DetalleOr__idOrd__1CBC4616">
       <End Role="OrdenCompra" EntitySet="OrdenCompra" />
       <End Role="DetalleOrden" EntitySet="DetalleOrden" />
     </AssociationSet>
-    <AssociationSet Name="FK__DetalleOr__idPro__6477ECF3" Association="Self.FK__DetalleOr__idPro__6477ECF3">
+    <AssociationSet Name="FK__DetalleOr__idPro__1DB06A4F" Association="Self.FK__DetalleOr__idPro__1DB06A4F">
       <End Role="Producto" EntitySet="Producto" />
       <End Role="DetalleOrden" EntitySet="DetalleOrden" />
     </AssociationSet>
-    <AssociationSet Name="FK__OrdenComp__aprob__5FB337D6" Association="Self.FK__OrdenComp__aprob__5FB337D6">
+    <AssociationSet Name="FK__OrdenComp__aprob__18EBB532" Association="Self.FK__OrdenComp__aprob__18EBB532">
       <End Role="Usuario" EntitySet="Usuario" />
       <End Role="OrdenCompra" EntitySet="OrdenCompra" />
     </AssociationSet>
-    <AssociationSet Name="FK__OrdenComp__cread__5CD6CB2B" Association="Self.FK__OrdenComp__cread__5CD6CB2B">
+    <AssociationSet Name="FK__OrdenComp__cread__160F4887" Association="Self.FK__OrdenComp__cread__160F4887">
       <End Role="Usuario" EntitySet="Usuario" />
       <End Role="OrdenCompra" EntitySet="OrdenCompra" />
     </AssociationSet>
-    <AssociationSet Name="FK__OrdenComp__idPro__5DCAEF64" Association="Self.FK__OrdenComp__idPro__5DCAEF64">
+    <AssociationSet Name="FK__OrdenComp__idPro__17036CC0" Association="Self.FK__OrdenComp__idPro__17036CC0">
       <End Role="Proveedor" EntitySet="Proveedor" />
       <End Role="OrdenCompra" EntitySet="OrdenCompra" />
     </AssociationSet>
@@ -231,7 +242,7 @@
       <End Role="Ubicacion" EntitySet="Ubicacion" />
       <End Role="Producto" EntitySet="Producto" />
     </AssociationSet>
-    <AssociationSet Name="FK__Usuario__idRol__25869641" Association="Self.FK__Usuario__idRol__25869641">
+    <AssociationSet Name="FK__Usuario__idRol__7A672E12" Association="Self.FK__Usuario__idRol__7A672E12">
       <End Role="Rol" EntitySet="Rol" />
       <End Role="Usuario" EntitySet="Usuario" />
     </AssociationSet>

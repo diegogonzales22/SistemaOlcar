@@ -23,7 +23,9 @@ namespace SistemaOlcar
                       "~/Content/DataTables/css/buttons.dataTables.min.css",
                       "~/Content/DataTables/css/jquery.dataTables.min.css",
                       "~/Content/Site.css",
-                      "~/Content/sweetalert.css"));
+                      "~/Content/sweetalert.css",
+                      "~/Content/themes/base/jquery-ui.min.css"
+                      ));
 
             bundles.Add(new Bundle("~/bundles/complementos").Include(
                        "~/Scripts/fontawesome/all.min.js",
@@ -32,7 +34,8 @@ namespace SistemaOlcar
                        "~/Scripts/DataTables/dataTables.buttons.min.js",
                        "~/Scripts/DataTables/dataTables.responsive.js",
                        "~/Scripts/jquery.dataTables.min.js",
-                        "~/Scripts/sweetalert.min.js"
+                        "~/Scripts/sweetalert.min.js",
+                        "~/Scripts/jquery-ui-1.13.2.min.js"
                        //"~/Scripts/select2.min.js"//agregado
                        ));
         }

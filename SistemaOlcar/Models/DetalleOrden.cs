@@ -19,6 +19,7 @@ namespace SistemaOlcar.Models
         public int idProducto { get; set; }
         public int cantidad { get; set; }
         public decimal precioUnidad { get; set; }
+        public Nullable<decimal> descuento { get; set; }
         public decimal importeTotal { get; set; }
     
         public virtual OrdenCompra OrdenCompra { get; set; }

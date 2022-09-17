@@ -87,3 +87,4 @@ C:\Users\Diego J\Desktop\Proyectos\SistemaOlcar\SistemaOlcar\obj\Debug\SistemaOl
 C:\Users\Diego J\Desktop\Proyectos\SistemaOlcar\SistemaOlcar\obj\Debug\SistemaOlcar.csproj.CopyComplete
 C:\Users\Diego J\Desktop\Proyectos\SistemaOlcar\SistemaOlcar\obj\Debug\SistemaOlcar.dll
 C:\Users\Diego J\Desktop\Proyectos\SistemaOlcar\SistemaOlcar\obj\Debug\SistemaOlcar.pdb
+C:\Users\Diego J\Desktop\Proyectos\SistemaOlcar\SistemaOlcar\obj\Debug\SistemaOlcar.csproj.AssemblyReference.cache

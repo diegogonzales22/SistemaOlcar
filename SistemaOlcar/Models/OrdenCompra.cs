@@ -31,6 +31,7 @@ namespace SistemaOlcar.Models
         public Nullable<System.DateTime> fechaAprobacion { get; set; }
         public Nullable<int> aprobadoPor { get; set; }
         public System.DateTime fechaCaducidad { get; set; }
+        public string observacion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetalleOrden> DetalleOrden { get; set; }

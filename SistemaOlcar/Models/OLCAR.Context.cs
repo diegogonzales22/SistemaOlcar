@@ -12,6 +12,8 @@ namespace SistemaOlcar.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class OLCAREntities : DbContext
     {
@@ -27,11 +29,38 @@ namespace SistemaOlcar.Models
     
         public virtual DbSet<MarcaProducto> MarcaProducto { get; set; }
         public virtual DbSet<Rol> Rol { get; set; }
-        public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<Proveedor> Proveedor { get; set; }
         public virtual DbSet<Ubicacion> Ubicacion { get; set; }
         public virtual DbSet<Producto> Producto { get; set; }
+        public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<DetalleOrden> DetalleOrden { get; set; }
         public virtual DbSet<OrdenCompra> OrdenCompra { get; set; }
+    
+        public virtual int usp_UpdateCostoNeto(Nullable<int> idOrden)
+        {
+            var idOrdenParameter = idOrden.HasValue ?
+                new ObjectParameter("idOrden", idOrden) :
+                new ObjectParameter("idOrden", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_UpdateCostoNeto", idOrdenParameter);
+        }
+    
+        public virtual int usp_UpdateCostoTotal(Nullable<int> idOrden)
+        {
+            var idOrdenParameter = idOrden.HasValue ?
+                new ObjectParameter("idOrden", idOrden) :
+                new ObjectParameter("idOrden", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_UpdateCostoTotal", idOrdenParameter);
+        }
+    
+        public virtual int usp_UpdateIGV(Nullable<int> idOrden)
+        {
+            var idOrdenParameter = idOrden.HasValue ?
+                new ObjectParameter("idOrden", idOrden) :
+                new ObjectParameter("idOrden", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_UpdateIGV", idOrdenParameter);
+        }
     }
 }

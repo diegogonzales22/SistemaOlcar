@@ -7,20 +7,20 @@
       <Diagram DiagramId="c25b8ba36dd041ed926d31f04fb7b00c" Name="Diagram1">
         <EntityTypeShape EntityType="OLCARModel.MarcaProducto" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="OLCARModel.Rol" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="OLCARModel.Usuario" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <AssociationConnector Association="OLCARModel.FK__Usuario__idRol__25869641" ManuallyRouted="false" />
         <EntityTypeShape EntityType="OLCARModel.Proveedor" Width="1.5" PointX="3.375" PointY="4.75" />
         <EntityTypeShape EntityType="OLCARModel.Ubicacion" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="OLCARModel.Producto" Width="1.5" PointX="7.625" PointY="1.25" />
         <AssociationConnector Association="OLCARModel.FK__Producto__idMarc__38996AB5" />
         <AssociationConnector Association="OLCARModel.FK__Producto__idUbic__398D8EEE" />
+        <EntityTypeShape EntityType="OLCARModel.Usuario" Width="1.5" PointX="3" PointY="0.75" />
+        <AssociationConnector Association="OLCARModel.FK__Usuario__idRol__7A672E12" />
         <EntityTypeShape EntityType="OLCARModel.DetalleOrden" Width="1.5" PointX="9.875" PointY="5" />
-        <EntityTypeShape EntityType="OLCARModel.OrdenCompra" Width="1.5" PointX="5.625" PointY="7.5" />
-        <AssociationConnector Association="OLCARModel.FK__DetalleOr__idOrd__6383C8BA" />
-        <AssociationConnector Association="OLCARModel.FK__DetalleOr__idPro__6477ECF3" />
-        <AssociationConnector Association="OLCARModel.FK__OrdenComp__aprob__5FB337D6" />
-        <AssociationConnector Association="OLCARModel.FK__OrdenComp__cread__5CD6CB2B" />
-        <AssociationConnector Association="OLCARModel.FK__OrdenComp__idPro__5DCAEF64" />
+        <EntityTypeShape EntityType="OLCARModel.OrdenCompra" Width="1.5" PointX="5.625" PointY="7.375" />
+        <AssociationConnector Association="OLCARModel.FK__DetalleOr__idOrd__1CBC4616" />
+        <AssociationConnector Association="OLCARModel.FK__DetalleOr__idPro__1DB06A4F" />
+        <AssociationConnector Association="OLCARModel.FK__OrdenComp__aprob__18EBB532" />
+        <AssociationConnector Association="OLCARModel.FK__OrdenComp__cread__160F4887" />
+        <AssociationConnector Association="OLCARModel.FK__OrdenComp__idPro__17036CC0" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

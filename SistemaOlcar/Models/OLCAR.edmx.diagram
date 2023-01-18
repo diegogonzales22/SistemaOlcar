@@ -21,6 +21,18 @@
         <AssociationConnector Association="OLCARModel.FK__OrdenComp__aprob__18EBB532" />
         <AssociationConnector Association="OLCARModel.FK__OrdenComp__cread__160F4887" />
         <AssociationConnector Association="OLCARModel.FK__OrdenComp__idPro__17036CC0" />
+        <EntityTypeShape EntityType="OLCARModel.DetalleIngreso" Width="1.5" PointX="12.125" PointY="2.375" />
+        <EntityTypeShape EntityType="OLCARModel.Ingreso" Width="1.5" PointX="9.875" PointY="0.75" />
+        <AssociationConnector Association="OLCARModel.FK__DetalleIn__idIng__3C34F16F" />
+        <AssociationConnector Association="OLCARModel.FK__DetalleIn__idPro__3D2915A8" />
+        <AssociationConnector Association="OLCARModel.FK__Ingreso__creador__37703C52" />
+        <AssociationConnector Association="OLCARModel.FK__Ingreso__idOrden__3864608B" />
+        <AssociationConnector Association="OLCARModel.FK__Ingreso__idProve__395884C4" />
+        <EntityTypeShape EntityType="OLCARModel.DetalleVenta" Width="1.5" PointX="9.875" PointY="9.5" />
+        <EntityTypeShape EntityType="OLCARModel.Venta" Width="1.5" PointX="5.25" PointY="13.25" />
+        <AssociationConnector Association="OLCARModel.FK__DetalleVe__idPro__19AACF41" />
+        <AssociationConnector Association="OLCARModel.FK__DetalleVe__idVen__18B6AB08" />
+        <AssociationConnector Association="OLCARModel.FK__Venta__idUsuario__15DA3E5D" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

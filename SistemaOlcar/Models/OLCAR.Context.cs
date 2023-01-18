@@ -35,6 +35,10 @@ namespace SistemaOlcar.Models
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<DetalleOrden> DetalleOrden { get; set; }
         public virtual DbSet<OrdenCompra> OrdenCompra { get; set; }
+        public virtual DbSet<DetalleIngreso> DetalleIngreso { get; set; }
+        public virtual DbSet<Ingreso> Ingreso { get; set; }
+        public virtual DbSet<DetalleVenta> DetalleVenta { get; set; }
+        public virtual DbSet<Venta> Venta { get; set; }
     
         public virtual int usp_UpdateCostoNeto(Nullable<int> idOrden)
         {
@@ -61,6 +65,59 @@ namespace SistemaOlcar.Models
                 new ObjectParameter("idOrden", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_UpdateIGV", idOrdenParameter);
+        }
+    
+        public virtual int SP_IngresaStock(Nullable<int> idProducto, Nullable<int> cantidad)
+        {
+            var idProductoParameter = idProducto.HasValue ?
+                new ObjectParameter("idProducto", idProducto) :
+                new ObjectParameter("idProducto", typeof(int));
+    
+            var cantidadParameter = cantidad.HasValue ?
+                new ObjectParameter("cantidad", cantidad) :
+                new ObjectParameter("cantidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_IngresaStock", idProductoParameter, cantidadParameter);
+        }
+    
+        public virtual int usp_ActualizarCostoNeto(Nullable<int> idIngreso)
+        {
+            var idIngresoParameter = idIngreso.HasValue ?
+                new ObjectParameter("idIngreso", idIngreso) :
+                new ObjectParameter("idIngreso", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_ActualizarCostoNeto", idIngresoParameter);
+        }
+    
+        public virtual int usp_ActualizarCostoTotal(Nullable<int> idIngreso)
+        {
+            var idIngresoParameter = idIngreso.HasValue ?
+                new ObjectParameter("idIngreso", idIngreso) :
+                new ObjectParameter("idIngreso", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_ActualizarCostoTotal", idIngresoParameter);
+        }
+    
+        public virtual int usp_ActualizarIGV(Nullable<int> idIngreso)
+        {
+            var idIngresoParameter = idIngreso.HasValue ?
+                new ObjectParameter("idIngreso", idIngreso) :
+                new ObjectParameter("idIngreso", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("usp_ActualizarIGV", idIngresoParameter);
+        }
+    
+        public virtual int SP_RestaStock(Nullable<int> idProducto, Nullable<int> cantidad)
+        {
+            var idProductoParameter = idProducto.HasValue ?
+                new ObjectParameter("idProducto", idProducto) :
+                new ObjectParameter("idProducto", typeof(int));
+    
+            var cantidadParameter = cantidad.HasValue ?
+                new ObjectParameter("cantidad", cantidad) :
+                new ObjectParameter("cantidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_RestaStock", idProductoParameter, cantidadParameter);
         }
     }
 }

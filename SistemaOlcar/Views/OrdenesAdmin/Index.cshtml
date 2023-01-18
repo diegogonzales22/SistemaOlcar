@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Aprobar Órdenes de Compra";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Órdenes de Compra</h2>
+<hr />
+<div class="form-control p-4">
+    <table id="tabla" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Nro.</th>
+                <th>FECHA</th>
+                <th>PROVEEDOR</th>
+                <th>IMPORTE</th>
+                <th>SITUACIÓN</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+@section scripts{
+    <script>
+
+        //----DataTable-----
+        var tabladata;
+        tabladata = $("#tabla").DataTable({
+            order: [[0, 'desc']],
+            "drawCallback": function (settings) {
+                feather.replace();
+            },
+            "ajax": {
+                "url": '@Url.Action("Listar", "OrdenCompra")',
+                "type": "GET",
+                "dataType": "json"
+            },
+            "columns": [
+                { "data": "idOrden" },
+                { "data": "fechaRegistro" },
+                { "data": "proveedor" },
+                {
+                    "data": "costoTotal", "render": function (data, type, row) {
+                        // esto es lo que se va a renderizar como html
+                        return `S/. ${row.costoTotal}`;
+                    }
+                },
+                {
+                    "data": "situacion", "render": function (valor) {
+                        if (valor == 'Por Aprobar') {
+                            return '<span class="badge bg-secondary">Por Aprobar</span>'
+                        } else if (valor == 'Aprobada') {
+                            return '<span class="badge bg-success">Aprobada</span>'
+                        } else if (valor == 'Denegada') {
+                            return '<span class="badge bg-danger">Denegada</span>'
+                        } else if (valor == "Surtida") {
+                            return '<span class="badge bg-info">Surtida</span>'
+                        } else if (valor == "Expirada") {
+                            return '<span class="badge bg-dark">Expirada</span>'
+                        }
+                    }
+                },
+                {
+                    "data": "idOrden", "render": function (data) {
+                        return "<a type='button' class='btn btn-primary btn-sm ms-2' href='@Url.Action("Detalles","OrdenesAdmin")?id=" + data + "'><i data-feather='eye'></i></a>" +
+                            "<a type='button' class='btn btn-success btn-sm ms-2' onclick='Imprimir(" + data + ")'><i data-feather='printer'></i></a>"
+                            
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    //"width": "150px"
+                },
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+            }
+        });
+
+        function Imprimir(id) {
+            var texto = "@Url.Action("Documento", "OrdenCompra")" + "?idOrden=" + id;
+
+            // Open the page in a new tab or window
+            var w = window.open(texto);
+            w.onload = function () {
+                w.print();
+            }
+
+        }
+
+    </script>
+}

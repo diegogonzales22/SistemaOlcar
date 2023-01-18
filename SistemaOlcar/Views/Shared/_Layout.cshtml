@@ -15,24 +15,26 @@
                 <a class="sidebar-brand" href="index.html">
                     <span class="align-middle">OLCAR</span>
                 </a>
+                @if (User.Identity.IsAuthenticated)
+                {
+            <ul class="sidebar-nav">
+                <li class="sidebar-header">
+                    Perfil
+                </li>
 
-                <ul class="sidebar-nav">
-                    <li class="sidebar-header">
-                        Perfil
-                    </li>
+                <li class="sidebar-item active">
+                    <a class="sidebar-link" href="index.html">
+                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                    </a>
+                </li>
 
-                    <li class="sidebar-item active">
-                        <a class="sidebar-link" href="index.html">
-                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
-                        </a>
-                    </li>
-
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="@Url.Action("Logout", "Acceso")">
-                            <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Cerrar Sesión</span>
-                        </a>
-                    </li>
-
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="@Url.Action("Logout", "Acceso")">
+                        <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Cerrar Sesión</span>
+                    </a>
+                </li>
+                @if (User.IsInRole("Administrador"))
+                {
                     <li class="sidebar-header">
                         Gestión
                     </li>
@@ -43,6 +45,32 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-header">
+                        Logística
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("Index", "OrdenesAdmin")">
+                            <i class="align-middle" data-feather="file"></i> <span class="align-middle">Órdenes de Compra</span>
+                        </a>
+                    </li>
+                }
+
+                @if (User.IsInRole("Cajero"))
+                {
+                    <li class="sidebar-header">
+                        Venta
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("Registrar", "Venta")">
+                            <i class="align-middle" data-feather="monitor"></i> <span class="align-middle">Registrar Venta</span>
+                        </a>
+                    </li>
+                }
+
+                @if (User.IsInRole("Operario de Almacén"))
+                {
                     <li class="sidebar-header">
                         Logística
                     </li>
@@ -69,6 +97,12 @@
                         </a>
                     </li>
 
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("Index", "Ingreso")">
+                            <i class="align-middle" data-feather="codesandbox"></i> <span class="align-middle">Recepción de Productos</span>
+                        </a>
+                    </li>
+
                     <li class="sidebar-header">
                         Productos
                     </li>
@@ -85,8 +119,19 @@
                         </a>
                     </li>
 
-                </ul>
-            </div>
+                    <li class="sidebar-header">
+                        Reportes del Almacén
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("InventarioxMarca", "ReportesAlmacen")">
+                            <i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Inventario por Marca</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+                }
+                </div>
         </nav>
 
         <div class="main">

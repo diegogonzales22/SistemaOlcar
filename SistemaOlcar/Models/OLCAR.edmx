@@ -5,6 +5,19 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="OLCARModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DetalleIngreso">
+          <Key>
+            <PropertyRef Name="idDetalle" />
+          </Key>
+          <Property Name="idDetalle" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idIngreso" Type="int" />
+          <Property Name="idProducto" Type="int" />
+          <Property Name="fecha" Type="datetime" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="precioUnidad" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="descuento" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="importeTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
         <EntityType Name="DetalleOrden">
           <Key>
             <PropertyRef Name="idDetalleOrden" />
@@ -16,6 +29,35 @@
           <Property Name="precioUnidad" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="descuento" Type="decimal" Precision="18" Scale="2" />
           <Property Name="importeTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DetalleVenta">
+          <Key>
+            <PropertyRef Name="idDetalleVenta" />
+          </Key>
+          <Property Name="idDetalleVenta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idVenta" Type="int" Nullable="false" />
+          <Property Name="fechaRegistro" Type="datetime" Nullable="false" />
+          <Property Name="idProducto" Type="int" Nullable="false" />
+          <Property Name="cantidad" Type="int" Nullable="false" />
+          <Property Name="precioUnidad" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="importeTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ingreso">
+          <Key>
+            <PropertyRef Name="idIngreso" />
+          </Key>
+          <Property Name="idIngreso" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fechaRegistro" Type="datetime" Nullable="false" />
+          <Property Name="creadorPor" Type="int" Nullable="false" />
+          <Property Name="tipoDocumento" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="nroDocumento" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="fechaDocumento" Type="datetime" Nullable="false" />
+          <Property Name="idOrden" Type="int" Nullable="false" />
+          <Property Name="idProveedor" Type="int" Nullable="false" />
+          <Property Name="totalNeto" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="totalIGV" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="costoTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="observacion" Type="text" />
         </EntityType>
         <EntityType Name="MarcaProducto">
           <Key>
@@ -105,6 +147,44 @@
           <Property Name="idRol" Type="int" Nullable="false" />
           <Property Name="estado" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="idVenta" />
+          </Key>
+          <Property Name="idVenta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fechaRegistro" Type="datetime" Nullable="false" />
+          <Property Name="estado" Type="bit" Nullable="false" />
+          <Property Name="idUsuario" Type="int" Nullable="false" />
+          <Property Name="numeroDocumento" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="subTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="igv" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="importeTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__DetalleIn__idIng__3C34F16F">
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="0..1" />
+          <End Role="DetalleIngreso" Type="Self.DetalleIngreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingreso">
+              <PropertyRef Name="idIngreso" />
+            </Principal>
+            <Dependent Role="DetalleIngreso">
+              <PropertyRef Name="idIngreso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleIn__idPro__3D2915A8">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
+          <End Role="DetalleIngreso" Type="Self.DetalleIngreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="idProducto" />
+            </Principal>
+            <Dependent Role="DetalleIngreso">
+              <PropertyRef Name="idProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__DetalleOr__idOrd__1CBC4616">
           <End Role="OrdenCompra" Type="Self.OrdenCompra" Multiplicity="1" />
           <End Role="DetalleOrden" Type="Self.DetalleOrden" Multiplicity="*" />
@@ -126,6 +206,66 @@
             </Principal>
             <Dependent Role="DetalleOrden">
               <PropertyRef Name="idProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleVe__idPro__19AACF41">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="idProducto" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="idProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleVe__idVen__18B6AB08">
+          <End Role="Venta" Type="Self.Venta" Multiplicity="1" />
+          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="idVenta" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="idVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ingreso__creador__37703C52">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="Ingreso">
+              <PropertyRef Name="creadorPor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ingreso__idOrden__3864608B">
+          <End Role="OrdenCompra" Type="Self.OrdenCompra" Multiplicity="1" />
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrdenCompra">
+              <PropertyRef Name="idOrden" />
+            </Principal>
+            <Dependent Role="Ingreso">
+              <PropertyRef Name="idOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ingreso__idProve__395884C4">
+          <End Role="Proveedor" Type="Self.Proveedor" Multiplicity="1" />
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedor">
+              <PropertyRef Name="idProveedor" />
+            </Principal>
+            <Dependent Role="Ingreso">
+              <PropertyRef Name="idProveedor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -201,6 +341,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Venta__idUsuario__15DA3E5D">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="SP_IngresaStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idProducto" Type="int" Mode="In" />
+          <Parameter Name="cantidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SP_RestaStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idProducto" Type="int" Mode="In" />
+          <Parameter Name="cantidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_ActualizarCostoNeto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idIngreso" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_ActualizarCostoTotal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idIngreso" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_ActualizarIGV" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idIngreso" Type="int" Mode="In" />
+        </Function>
         <Function Name="usp_UpdateCostoNeto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="idOrden" Type="int" Mode="In" />
         </Function>
@@ -211,7 +380,10 @@
           <Parameter Name="idOrden" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="OLCARModelStoreContainer">
+          <EntitySet Name="DetalleIngreso" EntityType="Self.DetalleIngreso" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DetalleOrden" EntityType="Self.DetalleOrden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetalleVenta" EntityType="Self.DetalleVenta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ingreso" EntityType="Self.Ingreso" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MarcaProducto" EntityType="Self.MarcaProducto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrdenCompra" EntityType="Self.OrdenCompra" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
@@ -219,6 +391,15 @@
           <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ubicacion" EntityType="Self.Ubicacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Venta" EntityType="Self.Venta" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__DetalleIn__idIng__3C34F16F" Association="Self.FK__DetalleIn__idIng__3C34F16F">
+            <End Role="Ingreso" EntitySet="Ingreso" />
+            <End Role="DetalleIngreso" EntitySet="DetalleIngreso" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleIn__idPro__3D2915A8" Association="Self.FK__DetalleIn__idPro__3D2915A8">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="DetalleIngreso" EntitySet="DetalleIngreso" />
+          </AssociationSet>
           <AssociationSet Name="FK__DetalleOr__idOrd__1CBC4616" Association="Self.FK__DetalleOr__idOrd__1CBC4616">
             <End Role="OrdenCompra" EntitySet="OrdenCompra" />
             <End Role="DetalleOrden" EntitySet="DetalleOrden" />
@@ -226,6 +407,26 @@
           <AssociationSet Name="FK__DetalleOr__idPro__1DB06A4F" Association="Self.FK__DetalleOr__idPro__1DB06A4F">
             <End Role="Producto" EntitySet="Producto" />
             <End Role="DetalleOrden" EntitySet="DetalleOrden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleVe__idPro__19AACF41" Association="Self.FK__DetalleVe__idPro__19AACF41">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleVe__idVen__18B6AB08" Association="Self.FK__DetalleVe__idVen__18B6AB08">
+            <End Role="Venta" EntitySet="Venta" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ingreso__creador__37703C52" Association="Self.FK__Ingreso__creador__37703C52">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Ingreso" EntitySet="Ingreso" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ingreso__idOrden__3864608B" Association="Self.FK__Ingreso__idOrden__3864608B">
+            <End Role="OrdenCompra" EntitySet="OrdenCompra" />
+            <End Role="Ingreso" EntitySet="Ingreso" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ingreso__idProve__395884C4" Association="Self.FK__Ingreso__idProve__395884C4">
+            <End Role="Proveedor" EntitySet="Proveedor" />
+            <End Role="Ingreso" EntitySet="Ingreso" />
           </AssociationSet>
           <AssociationSet Name="FK__OrdenComp__aprob__18EBB532" Association="Self.FK__OrdenComp__aprob__18EBB532">
             <End Role="Usuario" EntitySet="Usuario" />
@@ -250,6 +451,10 @@
           <AssociationSet Name="FK__Usuario__idRol__7A672E12" Association="Self.FK__Usuario__idRol__7A672E12">
             <End Role="Rol" EntitySet="Rol" />
             <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Venta__idUsuario__15DA3E5D" Association="Self.FK__Venta__idUsuario__15DA3E5D">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Venta" EntitySet="Venta" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -315,14 +520,67 @@
             <End Role="OrdenCompra" EntitySet="OrdenCompra" />
           </AssociationSet>
           <FunctionImport Name="usp_UpdateCostoNeto">
-            <Parameter Name="idOrden" Mode="In" Type="Int32" />
+          <Parameter Name="idOrden" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="usp_UpdateCostoTotal">
-            <Parameter Name="idOrden" Mode="In" Type="Int32" />
+          <Parameter Name="idOrden" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="usp_UpdateIGV">
-            <Parameter Name="idOrden" Mode="In" Type="Int32" />
+          <Parameter Name="idOrden" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="DetalleIngreso" EntityType="OLCARModel.DetalleIngreso" />
+          <EntitySet Name="Ingreso" EntityType="OLCARModel.Ingreso" />
+          <AssociationSet Name="FK__DetalleIn__idIng__3C34F16F" Association="OLCARModel.FK__DetalleIn__idIng__3C34F16F">
+            <End Role="Ingreso" EntitySet="Ingreso" />
+            <End Role="DetalleIngreso" EntitySet="DetalleIngreso" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleIn__idPro__3D2915A8" Association="OLCARModel.FK__DetalleIn__idPro__3D2915A8">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="DetalleIngreso" EntitySet="DetalleIngreso" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ingreso__creador__37703C52" Association="OLCARModel.FK__Ingreso__creador__37703C52">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Ingreso" EntitySet="Ingreso" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ingreso__idOrden__3864608B" Association="OLCARModel.FK__Ingreso__idOrden__3864608B">
+            <End Role="OrdenCompra" EntitySet="OrdenCompra" />
+            <End Role="Ingreso" EntitySet="Ingreso" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ingreso__idProve__395884C4" Association="OLCARModel.FK__Ingreso__idProve__395884C4">
+            <End Role="Proveedor" EntitySet="Proveedor" />
+            <End Role="Ingreso" EntitySet="Ingreso" />
+          </AssociationSet>
+          <FunctionImport Name="SP_IngresaStock">
+            <Parameter Name="idProducto" Mode="In" Type="Int32" />
+            <Parameter Name="cantidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_ActualizarCostoNeto">
+          <Parameter Name="idIngreso" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_ActualizarCostoTotal">
+          <Parameter Name="idIngreso" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_ActualizarIGV">
+          <Parameter Name="idIngreso" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_RestaStock">
+            <Parameter Name="idProducto" Mode="In" Type="Int32" />
+            <Parameter Name="cantidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="DetalleVenta" EntityType="OLCARModel.DetalleVenta" />
+          <EntitySet Name="Venta" EntityType="OLCARModel.Venta" />
+          <AssociationSet Name="FK__DetalleVe__idPro__19AACF41" Association="OLCARModel.FK__DetalleVe__idPro__19AACF41">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleVe__idVen__18B6AB08" Association="OLCARModel.FK__DetalleVe__idVen__18B6AB08">
+            <End Role="Venta" EntitySet="Venta" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Venta__idUsuario__15DA3E5D" Association="OLCARModel.FK__Venta__idUsuario__15DA3E5D">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Proveedor">
           <Key>
@@ -340,6 +598,7 @@
           <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="condicionPago" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="OrdenCompra" Relationship="OLCARModel.FK__OrdenComp__idPro__17036CC0" FromRole="Proveedor" ToRole="OrdenCompra" />
+          <NavigationProperty Name="Ingreso" Relationship="OLCARModel.FK__Ingreso__idProve__395884C4" FromRole="Proveedor" ToRole="Ingreso" />
         </EntityType>
         <EntityType Name="Ubicacion">
           <Key>
@@ -374,6 +633,8 @@
           <NavigationProperty Name="MarcaProducto" Relationship="OLCARModel.FK__Producto__idMarc__38996AB5" FromRole="Producto" ToRole="MarcaProducto" />
           <NavigationProperty Name="Ubicacion" Relationship="OLCARModel.FK__Producto__idUbic__398D8EEE" FromRole="Producto" ToRole="Ubicacion" />
           <NavigationProperty Name="DetalleOrden" Relationship="OLCARModel.FK__DetalleOr__idPro__1DB06A4F" FromRole="Producto" ToRole="DetalleOrden" />
+          <NavigationProperty Name="DetalleIngreso" Relationship="OLCARModel.FK__DetalleIn__idPro__3D2915A8" FromRole="Producto" ToRole="DetalleIngreso" />
+          <NavigationProperty Name="DetalleVenta" Relationship="OLCARModel.FK__DetalleVe__idPro__19AACF41" FromRole="Producto" ToRole="DetalleVenta" />
         </EntityType>
         <Association Name="FK__Producto__idMarc__38996AB5">
           <End Type="OLCARModel.MarcaProducto" Role="MarcaProducto" Multiplicity="1" />
@@ -418,6 +679,8 @@
           <NavigationProperty Name="Rol" Relationship="OLCARModel.FK__Usuario__idRol__7A672E12" FromRole="Usuario" ToRole="Rol" />
           <NavigationProperty Name="OrdenCompra" Relationship="OLCARModel.FK__OrdenComp__aprob__18EBB532" FromRole="Usuario" ToRole="OrdenCompra" />
           <NavigationProperty Name="OrdenCompra1" Relationship="OLCARModel.FK__OrdenComp__cread__160F4887" FromRole="Usuario" ToRole="OrdenCompra" />
+          <NavigationProperty Name="Ingreso" Relationship="OLCARModel.FK__Ingreso__creador__37703C52" FromRole="Usuario" ToRole="Ingreso" />
+          <NavigationProperty Name="Venta" Relationship="OLCARModel.FK__Venta__idUsuario__15DA3E5D" FromRole="Usuario" ToRole="Venta" />
         </EntityType>
         <Association Name="FK__Usuario__idRol__7A672E12">
           <End Type="OLCARModel.Rol" Role="Rol" Multiplicity="1" />
@@ -465,6 +728,7 @@
           <NavigationProperty Name="Usuario" Relationship="OLCARModel.FK__OrdenComp__aprob__18EBB532" FromRole="OrdenCompra" ToRole="Usuario" />
           <NavigationProperty Name="Usuario1" Relationship="OLCARModel.FK__OrdenComp__cread__160F4887" FromRole="OrdenCompra" ToRole="Usuario" />
           <NavigationProperty Name="Proveedor" Relationship="OLCARModel.FK__OrdenComp__idPro__17036CC0" FromRole="OrdenCompra" ToRole="Proveedor" />
+          <NavigationProperty Name="Ingreso" Relationship="OLCARModel.FK__Ingreso__idOrden__3864608B" FromRole="OrdenCompra" ToRole="Ingreso" />
         </EntityType>
         <Association Name="FK__DetalleOr__idOrd__1CBC4616">
           <End Type="OLCARModel.OrdenCompra" Role="OrdenCompra" Multiplicity="1" />
@@ -523,6 +787,168 @@
             </Principal>
             <Dependent Role="OrdenCompra">
               <PropertyRef Name="idProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="DetalleIngreso">
+          <Key>
+            <PropertyRef Name="idDetalle" />
+          </Key>
+          <Property Name="idDetalle" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idIngreso" Type="Int32" />
+          <Property Name="idProducto" Type="Int32" />
+          <Property Name="fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="precioUnidad" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="descuento" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="importeTotal" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="Ingreso" Relationship="OLCARModel.FK__DetalleIn__idIng__3C34F16F" FromRole="DetalleIngreso" ToRole="Ingreso" />
+          <NavigationProperty Name="Producto" Relationship="OLCARModel.FK__DetalleIn__idPro__3D2915A8" FromRole="DetalleIngreso" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="Ingreso">
+          <Key>
+            <PropertyRef Name="idIngreso" />
+          </Key>
+          <Property Name="idIngreso" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fechaRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="creadorPor" Type="Int32" Nullable="false" />
+          <Property Name="tipoDocumento" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="nroDocumento" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="fechaDocumento" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="idOrden" Type="Int32" Nullable="false" />
+          <Property Name="idProveedor" Type="Int32" Nullable="false" />
+          <Property Name="totalNeto" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="totalIGV" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="costoTotal" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="observacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="DetalleIngreso" Relationship="OLCARModel.FK__DetalleIn__idIng__3C34F16F" FromRole="Ingreso" ToRole="DetalleIngreso" />
+          <NavigationProperty Name="Usuario" Relationship="OLCARModel.FK__Ingreso__creador__37703C52" FromRole="Ingreso" ToRole="Usuario" />
+          <NavigationProperty Name="OrdenCompra" Relationship="OLCARModel.FK__Ingreso__idOrden__3864608B" FromRole="Ingreso" ToRole="OrdenCompra" />
+          <NavigationProperty Name="Proveedor" Relationship="OLCARModel.FK__Ingreso__idProve__395884C4" FromRole="Ingreso" ToRole="Proveedor" />
+        </EntityType>
+        <Association Name="FK__DetalleIn__idIng__3C34F16F">
+          <End Type="OLCARModel.Ingreso" Role="Ingreso" Multiplicity="0..1" />
+          <End Type="OLCARModel.DetalleIngreso" Role="DetalleIngreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingreso">
+              <PropertyRef Name="idIngreso" />
+            </Principal>
+            <Dependent Role="DetalleIngreso">
+              <PropertyRef Name="idIngreso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleIn__idPro__3D2915A8">
+          <End Type="OLCARModel.Producto" Role="Producto" Multiplicity="0..1" />
+          <End Type="OLCARModel.DetalleIngreso" Role="DetalleIngreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="idProducto" />
+            </Principal>
+            <Dependent Role="DetalleIngreso">
+              <PropertyRef Name="idProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ingreso__creador__37703C52">
+          <End Type="OLCARModel.Usuario" Role="Usuario" Multiplicity="1" />
+          <End Type="OLCARModel.Ingreso" Role="Ingreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="Ingreso">
+              <PropertyRef Name="creadorPor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ingreso__idOrden__3864608B">
+          <End Type="OLCARModel.OrdenCompra" Role="OrdenCompra" Multiplicity="1" />
+          <End Type="OLCARModel.Ingreso" Role="Ingreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrdenCompra">
+              <PropertyRef Name="idOrden" />
+            </Principal>
+            <Dependent Role="Ingreso">
+              <PropertyRef Name="idOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ingreso__idProve__395884C4">
+          <End Type="OLCARModel.Proveedor" Role="Proveedor" Multiplicity="1" />
+          <End Type="OLCARModel.Ingreso" Role="Ingreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedor">
+              <PropertyRef Name="idProveedor" />
+            </Principal>
+            <Dependent Role="Ingreso">
+              <PropertyRef Name="idProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="DetalleVenta">
+          <Key>
+            <PropertyRef Name="idDetalleVenta" />
+          </Key>
+          <Property Name="idDetalleVenta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idVenta" Type="Int32" Nullable="false" />
+          <Property Name="fechaRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="idProducto" Type="Int32" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="precioUnidad" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="importeTotal" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="Producto" Relationship="OLCARModel.FK__DetalleVe__idPro__19AACF41" FromRole="DetalleVenta" ToRole="Producto" />
+          <NavigationProperty Name="Venta" Relationship="OLCARModel.FK__DetalleVe__idVen__18B6AB08" FromRole="DetalleVenta" ToRole="Venta" />
+        </EntityType>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="idVenta" />
+          </Key>
+          <Property Name="idVenta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fechaRegistro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="estado" Type="Boolean" Nullable="false" />
+          <Property Name="idUsuario" Type="Int32" Nullable="false" />
+          <Property Name="numeroDocumento" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="subTotal" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="igv" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="importeTotal" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="DetalleVenta" Relationship="OLCARModel.FK__DetalleVe__idVen__18B6AB08" FromRole="Venta" ToRole="DetalleVenta" />
+          <NavigationProperty Name="Usuario" Relationship="OLCARModel.FK__Venta__idUsuario__15DA3E5D" FromRole="Venta" ToRole="Usuario" />
+        </EntityType>
+        <Association Name="FK__DetalleVe__idPro__19AACF41">
+          <End Type="OLCARModel.Producto" Role="Producto" Multiplicity="1" />
+          <End Type="OLCARModel.DetalleVenta" Role="DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="idProducto" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="idProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleVe__idVen__18B6AB08">
+          <End Type="OLCARModel.Venta" Role="Venta" Multiplicity="1" />
+          <End Type="OLCARModel.DetalleVenta" Role="DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="idVenta" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="idVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Venta__idUsuario__15DA3E5D">
+          <End Type="OLCARModel.Usuario" Role="Usuario" Multiplicity="1" />
+          <End Type="OLCARModel.Venta" Role="Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="idUsuario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -643,6 +1069,71 @@
           <FunctionImportMapping FunctionImportName="usp_UpdateCostoNeto" FunctionName="OLCARModel.Store.usp_UpdateCostoNeto" />
           <FunctionImportMapping FunctionImportName="usp_UpdateCostoTotal" FunctionName="OLCARModel.Store.usp_UpdateCostoTotal" />
           <FunctionImportMapping FunctionImportName="usp_UpdateIGV" FunctionName="OLCARModel.Store.usp_UpdateIGV" />
+          <EntitySetMapping Name="DetalleIngreso">
+            <EntityTypeMapping TypeName="OLCARModel.DetalleIngreso">
+              <MappingFragment StoreEntitySet="DetalleIngreso">
+                <ScalarProperty Name="importeTotal" ColumnName="importeTotal" />
+                <ScalarProperty Name="descuento" ColumnName="descuento" />
+                <ScalarProperty Name="precioUnidad" ColumnName="precioUnidad" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="idProducto" ColumnName="idProducto" />
+                <ScalarProperty Name="idIngreso" ColumnName="idIngreso" />
+                <ScalarProperty Name="idDetalle" ColumnName="idDetalle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ingreso">
+            <EntityTypeMapping TypeName="OLCARModel.Ingreso">
+              <MappingFragment StoreEntitySet="Ingreso">
+                <ScalarProperty Name="observacion" ColumnName="observacion" />
+                <ScalarProperty Name="costoTotal" ColumnName="costoTotal" />
+                <ScalarProperty Name="totalIGV" ColumnName="totalIGV" />
+                <ScalarProperty Name="totalNeto" ColumnName="totalNeto" />
+                <ScalarProperty Name="idProveedor" ColumnName="idProveedor" />
+                <ScalarProperty Name="idOrden" ColumnName="idOrden" />
+                <ScalarProperty Name="fechaDocumento" ColumnName="fechaDocumento" />
+                <ScalarProperty Name="nroDocumento" ColumnName="nroDocumento" />
+                <ScalarProperty Name="tipoDocumento" ColumnName="tipoDocumento" />
+                <ScalarProperty Name="creadorPor" ColumnName="creadorPor" />
+                <ScalarProperty Name="fechaRegistro" ColumnName="fechaRegistro" />
+                <ScalarProperty Name="idIngreso" ColumnName="idIngreso" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_IngresaStock" FunctionName="OLCARModel.Store.SP_IngresaStock" />
+          <FunctionImportMapping FunctionImportName="usp_ActualizarCostoNeto" FunctionName="OLCARModel.Store.usp_ActualizarCostoNeto" />
+          <FunctionImportMapping FunctionImportName="usp_ActualizarCostoTotal" FunctionName="OLCARModel.Store.usp_ActualizarCostoTotal" />
+          <FunctionImportMapping FunctionImportName="usp_ActualizarIGV" FunctionName="OLCARModel.Store.usp_ActualizarIGV" />
+          <FunctionImportMapping FunctionImportName="SP_RestaStock" FunctionName="OLCARModel.Store.SP_RestaStock" />
+          <EntitySetMapping Name="DetalleVenta">
+            <EntityTypeMapping TypeName="OLCARModel.DetalleVenta">
+              <MappingFragment StoreEntitySet="DetalleVenta">
+                <ScalarProperty Name="importeTotal" ColumnName="importeTotal" />
+                <ScalarProperty Name="precioUnidad" ColumnName="precioUnidad" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="idProducto" ColumnName="idProducto" />
+                <ScalarProperty Name="fechaRegistro" ColumnName="fechaRegistro" />
+                <ScalarProperty Name="idVenta" ColumnName="idVenta" />
+                <ScalarProperty Name="idDetalleVenta" ColumnName="idDetalleVenta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Venta">
+            <EntityTypeMapping TypeName="OLCARModel.Venta">
+              <MappingFragment StoreEntitySet="Venta">
+                <ScalarProperty Name="importeTotal" ColumnName="importeTotal" />
+                <ScalarProperty Name="igv" ColumnName="igv" />
+                <ScalarProperty Name="subTotal" ColumnName="subTotal" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="numeroDocumento" ColumnName="numeroDocumento" />
+                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="fechaRegistro" ColumnName="fechaRegistro" />
+                <ScalarProperty Name="idVenta" ColumnName="idVenta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -1,0 +1,182 @@
+﻿@model SistemaOlcar.Models.Ingreso
+@{
+    ViewBag.Title = "Editar Ingreso";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar Recepción de Productos</h2>
+<h4>Nro. de Ingreso: @Html.DisplayFor(model => model.idIngreso)</h4>
+<hr />
+
+@using (Html.BeginForm("UpdateCabecera", "Ingreso", FormMethod.Post, new { id = "formulario" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.idIngreso)
+    @Html.HiddenFor(model => model.creadorPor)
+    @Html.HiddenFor(model => model.fechaRegistro)
+    @Html.HiddenFor(model => model.totalNeto)
+    @Html.HiddenFor(model => model.totalIGV)
+    @Html.HiddenFor(model => model.costoTotal)
+
+    <div class="form-control p-3">
+        <div class="row">
+            <div class="col-md-3"><label><b>Tipo de Documento:</b></label></div>
+            <div class="col-md-7">
+                @Html.DropDownListFor(model => model.tipoDocumento, new SelectList(
+                        new[]
+                        {
+                            new { Value = "FACTURA", Text = "FACTURA" },
+                            new { Value = "BOLETA DE VENTA", Text = "BOLETA DE VENTA" },
+                            new { Value = "NOTA DE CRÉDITO", Text = "NOTA DE CRÉDITO" },
+                            new { Value = "NOTA DE DÉBITO", Text = "NOTA DE DÉBITO" },
+                            new { Value = "VALE", Text = "VALE" },
+                        },
+                        "Value",
+                        "Text",
+                        Model
+                    ), null, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3"><label><b>Nro. de Documento:</b></label></div>
+            <div class="col-md-7">
+                @Html.TextBoxFor(m => m.nroDocumento, "", new { @class = "form-control", @autocomplete = "off", @onKeyPress = "return checkAlfaNumGuion(event)" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3"><label><b>Fecha de Documento:</b></label></div>
+            <div class="col-md-7">
+                @Html.TextBoxFor(m => m.fechaDocumento, "", new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3"><label for="cboProveedor"><b>Proveedor:</b></label></div>
+            <div class="col-md-7">
+                @Html.DropDownList("idProveedor", ViewBag.ListaProveedor as List<SelectListItem>, "", htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <label for="txtOrden"><b>Órden de Compra:</b></label>
+            </div>
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => m.idOrden, "", new { @class = "form-control", @readonly = true })
+                @*<input type="text" class="form-control" id="idOrden" name="idOrden" readonly />*@
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-primary" onclick="ordenesModal()">Agregar Órden</a>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3"><label><b>Observación:</b></label></div>
+            <div class="col-md-7">
+                @Html.TextBoxFor(x => x.observacion, "", new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div>
+            <button type="submit" class="btn btn-success">Terminar Edición</button>
+            <a href="@Url.Action("Editar", "Ingreso")?id=@Html.DisplayFor(model => model.idIngreso)" class="btn btn-danger">Volver</a>
+        </div>
+    </div>
+}
+
+@*Modal ÓRDEN DE COMPRA*@
+<div class="modal fade" id="FormModalOrden" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title text-white" id="exampleModalLabel">Órdenes de compra</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-control p-4">
+                    <table id="tablaOrden" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>No. ÓRDEN</th>
+                                <th>FECHA DE CREACIÓN</th>
+                                <th>FECHA DE APROBACIÓN</th>
+                                <th>PROVEEDOR</th>
+                                <th>IMPORTE</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
+
+        //---MODAL ÓRDENES
+        function ordenesModal() {
+            var tabladata;
+            tabladata = $("#tablaOrden").DataTable({
+                "autoWidth": false,
+                "drawCallback": function (settings) {
+                    feather.replace();
+                },
+                "ajax": {
+                    "url": '@Url.Action("OrdenesAprobadas", "Ingreso")',
+                    "type": "GET",
+                    "dataType": "json"
+                },
+                "columns": [
+                    { "data": "idOrden" },
+                    { "data": "fechaRegistro"},
+                    { "data": "fechaAprobacion" },
+                    { "data": "proveedor" },
+                    { "data": "costoTotal" },
+                    {
+                        "data": "idOrden", "render": function (data) {
+                            return "<a type='button' class='btn btn-primary btn-sm ms-2' onclick='agregarOrdenDesdeModal("+data+")'><i data-feather='check-square'></i></a>"
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "50px"
+                    },
+
+                ],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                },
+                "bDestroy": true
+            });
+
+            $('#FormModalOrden').modal('show');
+        }
+
+        //---AGREGAR ORDEN DESDE MODAL
+        function agregarOrdenDesdeModal(data) {
+            jQuery.ajax({
+                    url: "@Url.Action("ObtenerOrden","Ingreso")" + "?idOrden=" + data,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        if (data != null) {
+                            $("#idOrden").val(data.idOrden);
+                        }
+                    }
+                });
+            $("#FormModalOrden").modal('hide');
+        }
+
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Vistas/Ingreso_Registrar.js")" type="text/javascript"></script>
+}
+

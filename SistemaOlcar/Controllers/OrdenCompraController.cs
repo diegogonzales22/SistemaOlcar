@@ -8,6 +8,8 @@ using SistemaOlcar.Models.TableViewModel;
 using SistemaOlcar.Helpers;
 using System.Net;
 using System.Data.Entity;
+using System.Net.Mail;
+using System.Net.Mime;
 
 namespace SistemaOlcar.Controllers
 {
@@ -40,6 +42,29 @@ namespace SistemaOlcar.Controllers
                                 }).ToList();
             }
             return Json(new { data = oLstOrden }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult HistorialCompras(int id) //Lista historial de compra
+        {
+            List<TableIngreso> oLstIngresos = new List<TableIngreso>();
+            using (OLCAREntities d = new OLCAREntities())
+            {
+                //d.Configuration.ProxyCreationEnabled = false;
+                oLstIngresos = (from p in d.DetalleIngreso
+                                where p.idProducto == id
+                                select new TableIngreso
+                                {
+                                     idIngreso = (int)p.idIngreso,
+                                     fechaRegistro = p.fecha.ToString(),
+                                     producto = p.Producto.nombre,
+                                     cantidad = p.cantidad,
+                                     descuento = p.descuento,
+                                     costoSinIGV = p.precioUnidad,
+                                     costoConIGV = decimal.Round(p.precioUnidad * 1.18m, 2),
+                                     importeTotal = p.importeTotal
+                                 }).ToList();
+            }
+            return Json(new { data = oLstIngresos }, JsonRequestBehavior.AllowGet);
         }
 
         //Obtener Productos como Json
@@ -93,6 +118,21 @@ namespace SistemaOlcar.Controllers
                                 }).ToList();
             }
             return Json(new { data = oLstProducto }, JsonRequestBehavior.AllowGet);
+        }
+
+        //Evaluar y obtener O.C.
+        public JsonResult ObtenerOrden(int id)
+        {
+            OrdenCompra orden = new OrdenCompra();
+
+            using (OLCAREntities db = new OLCAREntities())
+            {
+                db.Configuration.ProxyCreationEnabled = false; //Deshabilita carga diferida
+                orden = (from p in db.OrdenCompra.Where(x => x.idOrden == id)
+                             select p).FirstOrDefault();
+            }
+
+            return Json(orden, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Registrar() //GET Orden de compra
@@ -228,7 +268,78 @@ namespace SistemaOlcar.Controllers
             db.SaveChanges();
             db.usp_UpdateCostoTotal(detalleAEliminar.idOrden); //SP para actualizar costo total
             db.SaveChanges();
-            return Json(new {success = true, message = "Se eliminó con éxito"}, JsonRequestBehavior.AllowGet);
+            return Json(new {success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost] // POST: OrdenCompra/Eliminar Orden/
+        public ActionResult Eliminar(int id)
+        {
+            //Encontramos todos los registros que queremos eliminar
+            var miorden = db.OrdenCompra.SingleOrDefault(a => a.idOrden == id);
+            var detalleAEliminar = miorden.DetalleOrden.Where(t => t.idOrden == id);
+            //Eliminarlos de un sólo golpe
+            db.DetalleOrden.RemoveRange(detalleAEliminar);
+            db.OrdenCompra.Remove(miorden);
+            db.SaveChanges();
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        // GET: OrdenCompra/ EDITAR - Agregar productos a la orden
+        public ActionResult AddProducto(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            OrdenCompra orden = db.OrdenCompra.Find(id);
+            TableOrdenCompra tablaorden = new TableOrdenCompra();
+
+            tablaorden.idOrden = orden.idOrden;
+
+            if (orden == null)
+            {
+                return HttpNotFound();
+            }
+            //ViewBag.idProducto = new SelectList(db.producto, "idProducto", "nombreProducto");
+            return View(tablaorden);
+        }
+
+        [HttpPost]
+        public ActionResult AddProducto(TableOrdenCompra model)
+        {
+            try
+            {
+                using (OLCAREntities db = new OLCAREntities())
+                {
+                    OrdenCompra o = new OrdenCompra();
+
+                    foreach (var oD in model.DetalleOrden)
+                    {
+                        Models.DetalleOrden oDetalle = new Models.DetalleOrden();
+                        decimal precioConDescuento = oD.cantidad * oD.precioUnidad * (oD.descuento / 100);
+                        oDetalle.idProducto = oD.idProducto;
+                        oDetalle.cantidad = oD.cantidad;
+                        oDetalle.precioUnidad = oD.precioUnidad;
+                        oDetalle.descuento = oD.descuento;
+                        oDetalle.importeTotal = oD.cantidad * oD.precioUnidad - (precioConDescuento);
+                        oDetalle.idOrden = model.idOrden;
+                        db.DetalleOrden.Add(oDetalle);
+                    }
+                    db.SaveChanges();
+                    db.usp_UpdateCostoNeto(model.idOrden);
+                    db.SaveChanges();
+                    db.usp_UpdateIGV(model.idOrden);
+                    db.SaveChanges();
+                    db.usp_UpdateCostoTotal(model.idOrden);
+                    db.SaveChanges();
+                }
+                //ViewBag.idProducto = GetProducto(); //Carga Producto
+                return RedirectToAction("Editar", new { id = model.idOrden });
+            }
+            catch (Exception ex)
+            {
+                return View(ex);
+            }
         }
     }
 }

@@ -7,46 +7,66 @@
 <h2>Órden de Compra</h2>
 <h4>Nro. de Orden: @Html.DisplayFor(model => model.idOrden)</h4>
 <hr />
+
 <div class="form-control p-3">
-    <a href="@Url.Action("UpdateCabecera", "OrdenCompra")?id=@Html.DisplayFor(model => model.idOrden)" class="btn btn-warning">
-        <i style="width:20px; height:20px" data-feather="edit-3"></i>
-        <span>
-            <strong>Editar Cabecera</strong>
-        </span>
-    </a>
+    @if (Model.situacion == "Aprobada")
+    {
+        <span class="badge bg-success fs-5">Ésta Órden de Compra ya fue Aprobada. Ya no puede modificarse.</span>
+    }
+    else if (Model.situacion == "Denegada")
+    {
+        <span class="badge bg-danger fs-5">Ésta Órden de Compra fue Denegada. Ya no puede modificarse.</span>
+    }
+    else if (Model.situacion == "Expirada")
+    {
+        <span class="badge bg-primary fs-5">Ésta Órden de Compra Expiró. Ya no puede modificarse.</span>
+    }
+    else if (Model.situacion == "Surtida")
+    {
+        <span class="badge bg-success fs-5">Ésta Órden de Compra ya fue Surtida. Ya no puede modificarse.</span>
+    }
+    else
+    {
+        <a href="@Url.Action("UpdateCabecera", "OrdenCompra")?id=@Html.DisplayFor(model => model.idOrden)" class="btn btn-warning">
+            <i style="width:20px; height:20px" data-feather="edit-3"></i>
+            <span>
+                <strong>Editar Cabecera</strong>
+            </span>
+        </a>
+    }
     <br /><br />
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="txtFecha"><b>Fecha de Registro:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.fechaRegistro)
         </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="txtFecha"><b>Fecha de Expiración:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.fechaCaducidad)
         </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="txtFecha"><b>Creado por:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.Usuario1.usuario1)
         </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="txtFecha"><b>Situación:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.situacion)
         </div>
     </div>
@@ -54,51 +74,58 @@
     @if (Model.fechaAprobacion != null && Model.situacion == "Aprobada")
     {
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label for="txtFecha"><b>Fecha de Aprobación:</b></label>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 @Html.DisplayFor(model => model.fechaAprobacion)
             </div>
         </div>
         <br />
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label for="txtFecha"><b>Aprobado por:</b></label>
             </div>
-            <div class="col-md-10">
-                @Html.DisplayFor(model => model.Usuario.usuario1)
+            <div class="col-md-8">
+                @Html.DisplayFor(model => model.Usuario.usuario1), @Html.DisplayFor(model => model.Usuario.Rol.nombre)
             </div>
         </div>
         <br />
     }
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="cboProveedor"><b>Proveedor:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.Proveedor.nombre)
         </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="cboCondicion"><b>Condición de Pago:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.Proveedor.condicionPago)
         </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="txtObservacion"><b>Observación:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.observacion)
         </div>
     </div>
     <br />
+    <a href="@Url.Action("AddProducto", "OrdenCompra")?id=@Html.DisplayFor(model => model.idOrden)" class="btn btn-success">
+        <i style="width:20px; height:20px" data-feather="plus-circle"></i>
+        <span>
+            <strong>Agregar Productos</strong>
+        </span>
+    </a>
+    <br /><br />
     <div id="divConceptos">
         <table class="table" id="tablaDetalle">
             <thead>
@@ -110,25 +137,29 @@
                     <th class="table-dark">Valor Venta S/.</th>
                     <th class="table-dark">Descuento %</th>
                     <th class="table-dark">Total S/.</th>
-                    <th class="table-dark"></th>
+                    @if (Model.situacion == "Por Aprobar")
+                    {
+                        <th class="table-dark"></th>
+                    }
                 </tr>
             </thead>
             <tbody>
                 @{var num = 1;}
                 @foreach (var item in Model.DetalleOrden)
                 {
-                <tr>
-                    <td>@num</td>
-                    <td>@item.idProducto</td>
-                    <td>@item.Producto.nombre</td>
-                    <td>@item.cantidad</td>
-                    <td>@item.precioUnidad</td>
-                    <td>@item.descuento</td>
-                    <td>@item.importeTotal</td>
-                    @*<td><a href="@Url.Action("DeleteProducto", "OrdenCompra")?id=@item.idDetalleOrden" class="btn btn-danger btn-sm"><i data-feather='trash-2'></i></a></td>*@
-                    @*<td><input onclick="eliminarProducto(@item.idDetalleOrden);" type="button" class="btn btn-danger btn-sm" value="Eliminar"/></td>*@
-                    <td><a onclick="eliminarProducto(@item.idDetalleOrden)" class="btn btn-danger btn-sm"><i data-feather='trash-2'></i></a></td>
-                </tr>
+                    <tr>
+                        <td>@num</td>
+                        <td>@item.idProducto</td>
+                        <td>@item.Producto.nombre</td>
+                        <td>@item.cantidad</td>
+                        <td>@item.precioUnidad</td>
+                        <td>@item.descuento</td>
+                        <td>@item.importeTotal</td>
+                        @if (Model.situacion == "Por Aprobar")
+                        {
+                            <td><a onclick="eliminarProducto(@item.idDetalleOrden)" class="btn btn-danger btn-sm"><i data-feather='trash-2'></i></a></td>
+                        }
+                    </tr>
                     num++;
                 }
             </tbody>

@@ -75,31 +75,83 @@
                                 <div class="col-md-3"><b>FORMA DE PAGO:</b></div>
                                 <div class="col-md-9">@Html.DisplayFor(model => model.Proveedor.condicionPago)</div>
                             </div>
-                            <div class="row mt-2">
-                                <div class="col-md-3"><b>SITUACIÓN:</b></div>
-                                <div class="col-md-9">
-                                    @if (Model.situacion == "Denegada")
-                                    {
-                                        <span>ÉSTA ÓRDEN DE COMPRA FUE DENEGADA</span>
-                                    }
-                                    @if (Model.situacion == "Por Aprobar")
-                                    {
-                                        <span>ÉSTA ÓRDEN DE COMPRA AÚN NO SE A APROBADO</span>
-                                    }
-                                    @if (Model.situacion == "Aprobada")
-                                    {
-                                        <p>Situación: <span>@Html.DisplayFor(model => model.situacion)</span></p>
-                                        <p>Fecha de Aprobación: <span>@Html.DisplayFor(model => model.fechaAprobacion)</span></p>
-                                        <p>Aprobado por: <span>Administración</span></p>
-                                    }
+                            @if (Model.situacion == "Aprobada")
+                            {
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>SITUACIÓN:</b></div>
+                                    <div class="col-md-9">Aprobada</div>
                                 </div>
-                            </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>FECHA APROBACIÓN:</b></div>
+                                    <div class="col-md-9">@Html.DisplayFor(model => model.fechaAprobacion)</div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>APROBADO POR:</b></div>
+                                    <div class="col-md-9">@Html.DisplayFor(model => model.Usuario.usuario1), @Html.DisplayFor(model => model.Usuario.Rol.nombre)</div>
+                                </div>
+                            }
+                            @if (Model.situacion == "Denegada")
+                            {
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>SITUACIÓN:</b></div>
+                                    <div class="col-md-9">Denegada</div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>FECHA DE NEGACIÓN:</b></div>
+                                    <div class="col-md-9">@Html.DisplayFor(model => model.fechaAprobacion)</div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>DENEGADO POR:</b></div>
+                                    <div class="col-md-9">@Html.DisplayFor(model => model.Usuario.usuario1), @Html.DisplayFor(model => model.Usuario.Rol.nombre)</div>
+                                </div>
+                            }
+                            @if (Model.situacion == "Por Aprobar")
+                            {
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>SITUACIÓN:</b></div>
+                                    <div class="col-md-9">Por Aprobar</div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>FECHA EXPIRACIÓN:</b></div>
+                                    <div class="col-md-9">@Html.DisplayFor(model => model.fechaCaducidad)</div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>CREADO POR:</b></div>
+                                    <div class="col-md-9">@Html.DisplayFor(model => model.Usuario1.usuario1)</div>
+                                </div>
+                            }
+                            @if (Model.situacion == "Expirada")
+                            {
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>SITUACIÓN:</b></div>
+                                    <div class="col-md-9">Expirada</div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>FECHA EXPIRACIÓN:</b></div>
+                                    <div class="col-md-9">@Html.DisplayFor(model => model.fechaCaducidad)</div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>CREADO POR:</b></div>
+                                    <div class="col-md-9">@Html.DisplayFor(model => model.Usuario1.usuario1)</div>
+                                </div>
+                            }
+                            @if (Model.situacion == "Surtida")
+                            {
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>SITUACIÓN:</b></div>
+                                    <div class="col-md-9">Surtida</div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3"><b>CREADO POR:</b></div>
+                                    <div class="col-md-9">@Html.DisplayFor(model => model.Usuario1.usuario1)</div>
+                                </div>
+                            }
                             <div class="row mt-2">
                                 <div class="col-md-3"><b>OBSERVACIONES:</b></div>
                                 <div class="col-md-9">@Html.DisplayFor(model => model.observacion)</div>
                             </div>
                         </div>
-                    </div>
+                        </div>
                 </div>
             </section>
             <section class="product-area mt-0">

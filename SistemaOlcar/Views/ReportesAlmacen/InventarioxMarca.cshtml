@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Inventario por Marca";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Inventario por Marca</h2>
+<hr />
+
+<div class="form-control p-4">
+    <table id="tabla" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    CÓDIGO
+                </th>
+                <th>
+                    NOMBRE
+                </th>
+                <th>
+                    
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+@section scripts{
+
+    <script>
+        //----DataTable-----
+        var tabladata;
+        tabladata = $("#tabla").DataTable({
+            "drawCallback": function (settings) {
+                feather.replace();
+            },
+            "ajax": {
+                "url": '@Url.Action("ListarMarcas", "ReportesAlmacen")',
+                "type": "GET",
+                "dataType": "json"
+            },
+            "columns": [
+                { "data": "idMarca" },
+                { "data": "nombre" },
+                {
+                    "data": "idMarca", "render": function (data) {
+                        return "<a type='button' href='@Url.Action("StockxMarca","ReportesAlmacen")?id=" + data + "' class='btn btn-success btn-sm ms-2'><i data-feather='eye'></i></a>"
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "150px"
+                },
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+            }
+        });
+    </script>
+
+}

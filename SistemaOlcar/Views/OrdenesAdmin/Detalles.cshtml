@@ -1,0 +1,243 @@
+﻿@model SistemaOlcar.Models.OrdenCompra
+@{
+    ViewBag.Title = "Detalles de Órden de Compra";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Órden de Compra</h2>
+<h4>Nro. de Orden: @Html.DisplayFor(model => model.idOrden)</h4>
+<hr />
+@if (Model.situacion == "Aprobada")
+{
+    <span class="badge bg-success fs-5">Ésta Órden de Compra fue aprobada</span>
+    <br />
+    <br />
+}
+@if (Model.situacion == "Denegada")
+{
+    <span class="badge bg-danger fs-5">Ésta Órden de Compra fue denegada</span>
+    <br />
+    <br />
+}
+@if (Model.situacion == "Expirada")
+{
+    <span class="badge bg-primary fs-5">Ésta Órden de Compra ya expiró</span>
+    <br />
+    <br />
+}
+@if (Model.situacion == "Surtida")
+{
+    <span class="badge bg-success fs-5">Ésta Órden de Compra ya fue surtida</span>
+    <br />
+    <br />
+}
+<div class="form-control p-3">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="txtFecha"><b>Fecha de Registro:</b></label>
+        </div>
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.fechaRegistro)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <label for="txtFecha"><b>Fecha de Expiración:</b></label>
+        </div>
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.fechaCaducidad)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <label for="txtFecha"><b>Creado por:</b></label>
+        </div>
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.Usuario1.usuario1)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <label for="txtFecha"><b>Situación:</b></label>
+        </div>
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.situacion)
+        </div>
+    </div>
+    <br />
+    @if (Model.fechaAprobacion != null && Model.situacion == "Aprobada")
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <label for="txtFecha"><b>Fecha de Aprobación:</b></label>
+            </div>
+            <div class="col-md-8">
+                @Html.DisplayFor(model => model.fechaAprobacion)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <label for="txtFecha"><b>Aprobado por:</b></label>
+            </div>
+            <div class="col-md-8">
+                @Html.DisplayFor(model => model.Usuario.usuario1), @Html.DisplayFor(model => model.Usuario.Rol.nombre)
+            </div>
+        </div>
+        <br />
+    }
+    @if (Model.fechaAprobacion != null && Model.situacion == "Denegada")
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <label for="txtFecha"><b>Fecha de Denegación:</b></label>
+            </div>
+            <div class="col-md-8">
+                @Html.DisplayFor(model => model.fechaAprobacion)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <label for="txtFecha"><b>Denegado por:</b></label>
+            </div>
+            <div class="col-md-8">
+                @Html.DisplayFor(model => model.Usuario.usuario1),  @Html.DisplayFor(model => model.Usuario.Rol.nombre)
+            </div>
+        </div>
+        <br />
+    }
+    <div class="row">
+        <div class="col-md-3">
+            <label for="cboProveedor"><b>Proveedor:</b></label>
+        </div>
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.Proveedor.nombre)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <label for="cboCondicion"><b>Condición de Pago:</b></label>
+        </div>
+        <div class="col-md-8">
+            @Html.DisplayFor(model => model.Proveedor.condicionPago)
+        </div>
+    </div>
+    <br />
+    @if (Model.observacion != null)
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <label for="cboCondicion"><b>Observación:</b></label>
+            </div>
+            <div class="col-md-8">
+                @Html.DisplayFor(model => model.observacion)
+            </div>
+        </div>
+        <br />
+    }
+    <div id="divConceptos">
+        <table class="table" id="tablaDetalle">
+            <thead>
+                <tr>
+                    <th class="table-dark">Item</th>
+                    <th class="table-dark">Código</th>
+                    <th class="table-dark">Nombre</th>
+                    <th class="table-dark">Cantidad</th>
+                    <th class="table-dark">Valor Venta S/.</th>
+                    <th class="table-dark">Descuento %</th>
+                    <th class="table-dark">Total S/.</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{var num = 1;}
+                @foreach (var item in Model.DetalleOrden)
+                {
+                    <tr>
+                        <td>@num</td>
+                        <td>@item.idProducto</td>
+                        <td>@item.Producto.nombre</td>
+                        <td>@item.cantidad</td>
+                        <td>@item.precioUnidad</td>
+                        <td>@item.descuento</td>
+                        <td>@item.importeTotal</td>
+                    </tr>
+                    num++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-md-1">
+            <label for="txtNeto"><strong>Neto S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.totalNeto)
+        </div>
+        <div class="col-md-1">
+            <label for="txtIGV"><strong>IGV S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.totalIGV)
+        </div>
+        <div class="col-md-1">
+            <label for="txtTotal"><strong>Total S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.costoTotal)
+        </div>
+    </div>
+</div>
+<br />
+@if (Model.situacion == "Aprobada")
+{
+    <a onclick="denegarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-danger">Denegar</a>
+}
+@if (Model.situacion == "Denegada")
+{
+    <a onclick="aprobarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-success">Aprobar</a>
+}
+@if (Model.situacion == "Por Aprobar")
+{
+    <a onclick="aprobarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-success">Aprobar</a>
+    <a onclick="denegarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-danger">Denegar</a>
+}
+<a href='@Url.Action("Index")' class="btn btn-primary">Volver</a>
+
+@section scripts{
+    <script>
+
+        function aprobarOrden(id) {
+            if (confirm("¿Está seguro que quiere aprobar ésta órden de compra?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AprobarOrden", "OrdenesAdmin")/" + id,
+                    success: function (data) {
+                        swal("Correcto", "Se aprobó la órden de compra.", "success");
+                        location.reload();
+                    }
+                });
+            }
+        }
+
+        function denegarOrden(id) {
+            if (confirm("¿Está seguro que quiere denegar ésta órden de compra?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("DenegarOrden", "OrdenesAdmin")/" + id,
+                    success: function (data) {
+                        swal("Correcto", "Se denegó la órden de compra.", "success");
+                        event.preventDefault;
+                        location.reload();
+                    }
+                });
+            }
+        }
+
+    </script>
+}

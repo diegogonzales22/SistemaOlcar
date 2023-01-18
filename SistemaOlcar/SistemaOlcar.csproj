@@ -130,18 +130,32 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccesoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IngresoController.cs" />
     <Compile Include="Controllers\MarcaProductoController.cs" />
     <Compile Include="Controllers\OrdenCompraController.cs" />
+    <Compile Include="Controllers\OrdenesAdminController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\ProveedorController.cs" />
+    <Compile Include="Controllers\ReportesAlmacenController.cs" />
     <Compile Include="Controllers\UbicacionController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Controllers\VentaController.cs" />
+    <Compile Include="Error.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Encrypt.cs" />
     <Compile Include="Helpers\Utilitario.cs" />
+    <Compile Include="Models\DetalleIngreso.cs">
+      <DependentUpon>OLCAR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DetalleOrden.cs">
+      <DependentUpon>OLCAR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DetalleVenta.cs">
+      <DependentUpon>OLCAR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ingreso.cs">
       <DependentUpon>OLCAR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MarcaProducto.cs">
@@ -177,14 +191,20 @@
     <Compile Include="Models\SP_Login_Result.cs">
       <DependentUpon>OLCAR.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TableViewModel\TableGmail.cs" />
+    <Compile Include="Models\TableViewModel\TableIngreso.cs" />
     <Compile Include="Models\TableViewModel\TableMarcaProducto.cs" />
     <Compile Include="Models\TableViewModel\TableOrdenCompra.cs" />
     <Compile Include="Models\TableViewModel\TableProducto.cs" />
     <Compile Include="Models\TableViewModel\TableUsuario.cs" />
+    <Compile Include="Models\TableViewModel\TableVenta.cs" />
     <Compile Include="Models\Ubicacion.cs">
       <DependentUpon>OLCAR.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Usuario.cs">
+      <DependentUpon>OLCAR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Venta.cs">
       <DependentUpon>OLCAR.tt</DependentUpon>
     </Compile>
     <Compile Include="NoAutorizado.cs" />
@@ -566,10 +586,14 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\scripts.js" />
     <Content Include="Scripts\sweetalert.min.js" />
+    <Content Include="Scripts\Vistas\Ingreso_AddProducto.js" />
+    <Content Include="Scripts\Vistas\Ingreso_Registrar.js" />
+    <Content Include="Scripts\Vistas\OrdenCompra_AddProductos.js" />
     <Content Include="Scripts\Vistas\OrdenCompra_Registrar.js" />
     <Content Include="Scripts\Vistas\Producto_Registrar.js" />
     <Content Include="Scripts\Vistas\Proveedor_Registrar.js" />
     <Content Include="Scripts\Vistas\Usuario_Registrar.js" />
+    <Content Include="Scripts\Vistas\Venta_Registrar.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -585,7 +609,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Proveedor\Index.cshtml" />
     <Content Include="Views\Proveedor\Registrar.cshtml" />
-    <Content Include="Views\Proveedor\Detalles.cshtml" />
     <Content Include="Views\Proveedor\Details.cshtml" />
     <Content Include="Views\Proveedor\Editar.cshtml" />
     <Content Include="Views\MarcaProducto\Index.cshtml" />
@@ -609,6 +632,20 @@
     <Content Include="Views\OrdenCompra\Documento.cshtml" />
     <Content Include="Views\OrdenCompra\Editar.cshtml" />
     <Content Include="Views\OrdenCompra\UpdateCabecera.cshtml" />
+    <Content Include="Views\OrdenCompra\EnviarCorreo.cshtml" />
+    <Content Include="Views\Ingreso\Index.cshtml" />
+    <Content Include="Views\Ingreso\Registrar.cshtml" />
+    <Content Include="Views\OrdenesAdmin\Index.cshtml" />
+    <Content Include="Views\OrdenesAdmin\Detalles.cshtml" />
+    <Content Include="Views\Ingreso\Detalle.cshtml" />
+    <Content Include="Views\OrdenCompra\AddProducto.cshtml" />
+    <Content Include="Views\Ingreso\Documento.cshtml" />
+    <Content Include="Views\Ingreso\Editar.cshtml" />
+    <Content Include="Views\Ingreso\UpdateCabecera.cshtml" />
+    <Content Include="Views\Ingreso\AddProducto.cshtml" />
+    <Content Include="Views\ReportesAlmacen\InventarioxMarca.cshtml" />
+    <Content Include="Views\ReportesAlmacen\StockxMarca.cshtml" />
+    <Content Include="Views\Venta\Registrar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

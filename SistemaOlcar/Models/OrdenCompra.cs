@@ -18,6 +18,7 @@ namespace SistemaOlcar.Models
         public OrdenCompra()
         {
             this.DetalleOrden = new HashSet<DetalleOrden>();
+            this.Ingreso = new HashSet<Ingreso>();
         }
     
         public int idOrden { get; set; }
@@ -38,5 +39,7 @@ namespace SistemaOlcar.Models
         public virtual Usuario Usuario { get; set; }
         public virtual Usuario Usuario1 { get; set; }
         public virtual Proveedor Proveedor { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ingreso> Ingreso { get; set; }
     }
 }

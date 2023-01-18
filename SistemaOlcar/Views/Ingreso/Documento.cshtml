@@ -1,0 +1,153 @@
+﻿@model SistemaOlcar.Models.Ingreso
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <!-- Custom Style -->
+    <link href="~/Content/Estilos/orden_compra.css" rel="stylesheet" />">
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/complementos")
+    <title>OLCAR - Recepción de Mercadería</title>
+</head>
+
+<body>
+    <center>
+        <button type="button" class="btn btn-secondary" onclick="javascript:imprime(seleccion);"><i class="fas fa-print"></i> Imprimir</button>
+    </center>
+    <div class="my-5 page" size="A4" id="seleccion">
+        <div class="p-5">
+            <section class="top-content bb d-flex justify-content-between">
+                <div class="logo">
+                    <img src="~/Content/Imagenes/logo_olcar.jpg" class="img-fluid">
+                    <div class="">
+                        <b>Nro. INGRESO: <span>@Html.DisplayFor(model => model.idIngreso)</span></b><br />
+                    </div>
+                </div>
+                <div class="top-left">
+                    <div class="graphic-path">
+                        <p>OLCAR S.A.C</p>
+                    </div>
+                    <div class="position-relative">
+                        <p><b>Nro. ÓRDEN DE COMPRA: <span>@Html.DisplayFor(model => model.OrdenCompra.idOrden)</span></b></p>
+                        <p><b>FECHA DE REGISTRO: </b><span>@Html.DisplayFor(model => model.fechaRegistro)</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="store-user mt-2">
+                <div class="col-12">
+                    <div class="row bb pb-2">
+                        <div class="col-12 p-0">
+                            <div class="row mt-2">
+                                <div class="col-md-4"><b>PROVEEDOR:</b></div>
+                                <div class="col-md-8">@Html.DisplayFor(model => model.Proveedor.nombre)</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-4"><b>FECHA DE DOCUMENTO:</b></div>
+                                <div class="col-md-8">@Html.DisplayFor(model => model.fechaDocumento)</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-4"><b>TIPO DE DOCUMENTO:</b></div>
+                                <div class="col-md-8">@Html.DisplayFor(model => model.tipoDocumento)</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-4"><b>Nro. DOCUMENTO:</b></div>
+                                <div class="col-lg-8">
+                                    @Html.DisplayFor(model => model.nroDocumento)
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-4"><b>REGISTRADO POR:</b></div>
+                                <div class="col-md-8">@Html.DisplayFor(model => model.Usuario.usuario1)</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-4"><b>OBSERVACIONES:</b></div>
+                                <div class="col-md-8">@Html.DisplayFor(model => model.observacion)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="product-area mt-0">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td><b>Item</b></td>
+                            <td><b>Cód.</b></td>
+                            <td><b>Producto</b></td>
+                            <td><b>Cantidad</b></td>
+                            <td><b>Costo S/.</b></td>
+                            <td><b>Dcto %</b></td>
+                            <td><b>Total S/.</b></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{var num = 1;}
+                        @foreach (var item in Model.DetalleIngreso)
+                        {
+                            <tr>
+                                <td>@num</td>
+                                <td>@item.idProducto</td>
+                                <td>@item.Producto.nombre</td>
+                                <td>@item.cantidad</td>
+                                <td>@item.precioUnidad</td>
+                                <td>@item.descuento</td>
+                                <td>@item.importeTotal</td>
+                            </tr>
+                            num++;
+                        }
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="balance-info">
+                <div class="row">
+                    <div class="col-8"></div>
+                    <div class="col-4">
+                        <table class="table border-0 table-hover">
+                            <tr>
+                                <td>Neto S/.</td>
+                                <td>@Html.DisplayFor(model => model.totalNeto)</td>
+                            </tr>
+                            <tr>
+                                <td>IGV S/.</td>
+                                <td>@Html.DisplayFor(model => model.totalIGV)</td>
+                            </tr>
+                            <tfoot>
+                                <tr>
+                                    <td>Total S/.</td>
+                                    <td>@Html.DisplayFor(model => model.costoTotal)</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <br />
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    function imprime(imp1) {
+        var printContents = document.getElementById('seleccion').innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+</script>

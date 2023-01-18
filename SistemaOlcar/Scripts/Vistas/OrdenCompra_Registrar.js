@@ -69,7 +69,7 @@ $("#addToList").click(function (e) {
         costo = $("#txtCosto").val(),
         descuento = $("#txtDescuento").val(),
         preciocondcto = parseFloat(costo) * parseInt(cantidad) * (parseFloat(descuento) / 100),
-        totalxproducto = parseFloat(costo) * parseInt(cantidad) - preciocondcto;
+        totalxproducto = parseFloat(costo) * parseInt(cantidad) - preciocondcto,
         detailsTableBody = $("#tablaDetalle tbody"),
         nombreProducto = $("#idProducto").val();
 

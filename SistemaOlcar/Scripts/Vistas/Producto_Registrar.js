@@ -178,6 +178,10 @@ function validarFormulario(evento) {
         swal("Falta completar campos", "Ingrese el nombre", "info");
         return;
     }
+    else if (ganancia < 0) {
+        swal("Error", "El precio de venta es menor que el precio de compra", "info");
+        return;
+    }
     else if (stockMinimo.trim() == '') {
         swal("Falta completar campos", "Ingrese el stock mínimo", "info");
         return;
@@ -192,10 +196,6 @@ function validarFormulario(evento) {
     }
     else if (stockMinimo == stockMaximo) {
         swal("Error", "El stock mínimo no puede ser igual que el sock máximo", "info");
-        return;
-    }
-    else if (ganancia < 0) {
-        swal("Error", "El precio de venta es menor que el precio de compra", "info");
         return;
     }
     else {

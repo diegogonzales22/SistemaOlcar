@@ -1,0 +1,21 @@
+﻿@model SistemaOlcar.Models.TableViewModel.TableGmail
+@{
+    ViewBag.Title = "EnviarCorreo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>EnviarCorreo</h2>
+
+@using (Html.BeginForm("EnviarCorreo", "OrdenCompra", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+<div>
+    PARA: @Html.TextBoxFor(model => model.to)
+    <br />
+    ASUNTO: @Html.TextBoxFor(model => model.subject)
+    <br />
+    CUERPO: @Html.TextBoxFor(model => model.body)
+    <br />
+    ADJUNTO: <input type="file" name="documento" />
+</div>
+<input type="submit" value="ENVIAR"/>
+}

@@ -19,7 +19,9 @@ namespace SistemaOlcar.Models.TableViewModel
         public decimal totalIGV { get; set; }
         public DateTime fechaCaducidad { get; set; }
         public string observacion { get; set; }
+        public string fechaAprobacion { get; set; }
         public List<DetalleOrden> DetalleOrden { get; set; }
+
     }
 
     //--------------------------------

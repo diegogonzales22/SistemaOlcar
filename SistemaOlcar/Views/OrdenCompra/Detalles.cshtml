@@ -9,86 +9,108 @@
 <hr />
 <div class="form-control p-3">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="txtFecha"><b>Fecha de Registro:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.fechaRegistro)
         </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="txtFecha"><b>Fecha de Expiración:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.fechaCaducidad)
         </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="txtFecha"><b>Creado por:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.Usuario1.usuario1)
         </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="txtFecha"><b>Situación:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.situacion)
         </div>
     </div>
     <br />
-    @if (Model.fechaAprobacion != null && Model.situacion == "Aprobada")
+    @if (Model.situacion == "Aprobada")
     {
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label for="txtFecha"><b>Fecha de Aprobación:</b></label>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 @Html.DisplayFor(model => model.fechaAprobacion)
             </div>
         </div>
         <br />
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label for="txtFecha"><b>Aprobado por:</b></label>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 @Html.DisplayFor(model => model.Usuario.usuario1)
             </div>
         </div>
         <br />
     }
+    @if (Model.situacion == "Denegada")
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <label for="txtFecha"><b>Fecha de Denegación:</b></label>
+            </div>
+            <div class="col-md-8">
+                @Html.DisplayFor(model => model.fechaAprobacion)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <label for="txtFecha"><b>Denegado por:</b></label>
+            </div>
+            <div class="col-md-8">
+                @Html.DisplayFor(model => model.Usuario.usuario1), @Html.DisplayFor(model => model.Usuario.Rol.nombre)
+            </div>
+        </div>
+        <br />
+    }
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="cboProveedor"><b>Proveedor:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.Proveedor.nombre)
         </div>
     </div>
     <br />
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <label for="cboCondicion"><b>Condición de Pago:</b></label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             @Html.DisplayFor(model => model.Proveedor.condicionPago)
         </div>
     </div>
     <br />
-    @if (Model.observacion != null) {
+    @if (Model.observacion != null)
+    {
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label for="cboCondicion"><b>Observación:</b></label>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 @Html.DisplayFor(model => model.observacion)
             </div>
         </div>

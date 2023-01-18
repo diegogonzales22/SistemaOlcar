@@ -1,0 +1,169 @@
+﻿@model SistemaOlcar.Models.Ingreso
+@{
+    ViewBag.Title = "Editar Recepción de Productos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Recepción de Productos</h2>
+<h4>Nro. de Ingreso: @Html.DisplayFor(model => model.idIngreso)</h4>
+<hr />
+
+<div class="form-control p-3">
+    <a href="@Url.Action("UpdateCabecera", "Ingreso")?id=@Html.DisplayFor(model => model.idIngreso)" class="btn btn-warning">
+        <i style="width:20px; height:20px" data-feather="edit-3"></i>
+        <span>
+            <strong>Editar Cabecera</strong>
+        </span>
+    </a>
+    <br /><br />
+    <div class="row">
+        <div class="col-md-3">
+            <label for="txtFecha"><b>Fecha de Registro:</b></label>
+        </div>
+        <div class="col-md-3">
+            @Html.DisplayFor(model => model.fechaRegistro)
+        </div>
+        <div class="col-md-2">
+            <label for="txtFecha"><b>Registrado por:</b></label>
+        </div>
+        <div class="col-md-3">
+            @Html.DisplayFor(model => model.Usuario.usuario1)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <label for="txtFecha"><b>Fecha de Documento:</b></label>
+        </div>
+        <div class="col-md-7">
+            @Html.DisplayFor(model => model.fechaDocumento)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <label for="txtFecha"><b>Tipo de Documento:</b></label>
+        </div>
+        <div class="col-md-3">
+            @Html.DisplayFor(model => model.tipoDocumento)
+        </div>
+        <div class="col-md-2">
+            <label for="txtFecha"><b>Nro. de Documento:</b></label>
+        </div>
+        <div class="col-md-3">
+            @Html.DisplayFor(model => model.nroDocumento)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <label for="txtFecha"><b>Proveedor:</b></label>
+        </div>
+        <div class="col-md-7">
+            @Html.DisplayFor(model => model.Proveedor.nombre)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <label for="txtFecha"><b>Nro. Órden de Compra:</b></label>
+        </div>
+        <div class="col-md-7">
+            @Html.DisplayFor(model => model.idOrden)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <label for="txtFecha"><b>Observación:</b></label>
+        </div>
+        <div class="col-md-7">
+            @Html.DisplayFor(model => model.observacion)
+        </div>
+    </div>
+    <br />
+    <a href="@Url.Action("AddProducto", "Ingreso")?id=@Html.DisplayFor(model => model.idIngreso)" class="btn btn-success">
+        <i style="width:20px; height:20px" data-feather="plus-circle"></i>
+        <span>
+            <strong>Agregar Productos</strong>
+        </span>
+    </a>
+    <br />
+    <br />
+    <div id="divConceptos">
+        <table class="table" id="tablaDetalle">
+            <thead>
+                <tr>
+                    <th class="table-dark">Item</th>
+                    <th class="table-dark">Código</th>
+                    <th class="table-dark">Nombre</th>
+                    <th class="table-dark">Cantidad</th>
+                    <th class="table-dark">Valor de Venta S/.</th>
+                    <th class="table-dark">Descuento %</th>
+                    <th class="table-dark">Total S/.</th>
+                    <th class="table-dark"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{var num = 1;}
+                @foreach (var item in Model.DetalleIngreso)
+                {
+                    <tr>
+                        <td>@num</td>
+                        <td>@item.idProducto</td>
+                        <td>@item.Producto.nombre</td>
+                        <td>@item.cantidad</td>
+                        <td>@item.precioUnidad</td>
+                        <td>@item.descuento</td>
+                        <td>@item.importeTotal</td>
+                        <td><a onclick="eliminarProducto(@item.idDetalle)" class="btn btn-danger btn-sm"><i data-feather='trash-2'></i></a></td>
+                    </tr>
+                    num++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-md-1">
+            <label for="txtNeto"><strong>Neto S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.totalNeto)
+        </div>
+        <div class="col-md-1">
+            <label for="txtIGV"><strong>IGV S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.totalIGV)
+        </div>
+        <div class="col-md-1">
+            <label for="txtTotal"><strong>Total S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.costoTotal)
+        </div>
+    </div>
+</div>
+<br />
+<a href='@Url.Action("Index")' class="btn btn-danger">Volver</a>
+
+@section scripts{
+    <script>
+
+        function eliminarProducto(id) {
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("DeleteProducto", "Ingreso")/" + id,
+                success: function (data) {
+                    swal("Correcto", "Se eliminó el producto.", "success");
+                    location.reload();
+
+                }
+            });
+        }
+
+    </script>
+}
+

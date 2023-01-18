@@ -31,5 +31,15 @@ namespace SistemaOlcar.Helpers
             }).ToList();
         }
 
+        //Obtiene Órdenes de compra
+        public IEnumerable<SelectListItem> GetOrden()
+        {
+            var data = new OLCAREntities();
+            return data.OrdenCompra.Where(x => x.situacion == "Aprobada").Select(x => new SelectListItem
+            {
+                Text = x.idOrden.ToString(),
+                Value = x.idOrden.ToString()
+            }).ToList();
+        }
     }
 }

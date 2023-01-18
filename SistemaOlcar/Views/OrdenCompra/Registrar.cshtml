@@ -64,9 +64,11 @@
             <div class="col-md-1">
                 <label for="txtProducto">Producto:</label>
             </div>
-            <div class="col-md-6">
-                @*@Html.DropDownList("idProducto", ViewBag.ListaProducto as List<SelectListItem>, "", htmlAttributes: new { @class = "form-control" })*@
+            <div class="col-md-5">
                 <input type="text" class="form-control" id="idProducto" disabled />
+            </div>
+            <div class="col-md-1">
+                <a class="btn btn-info" onclick="historialCompras()"><i data-feather="shopping-cart" style="width:20px; height:20px"></i></a>               
             </div>
         </div>
         <br />
@@ -171,6 +173,38 @@
     </div>
 </div>
 
+@*Modal HISTORIAL DE COMPRAS*@
+<div class="modal fade" id="FormModalCompras" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title text-white" id="exampleModalLabel">Historial de Compras</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-control p-4">
+                    <table id="tablaHistorial" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Nro.INGR.</th>
+                                <th>FECHA</th>
+                                <th>PRODUCTO</th>
+                                <th>CANTIDAD</th>
+                                <th>CON IGV S/.</th>
+                                <th>SIN IGV S/.</th>
+                                <th>DCTO. %</th>
+                                <th>TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
     <script>
 
@@ -252,6 +286,49 @@
             $("#FormModal").modal('hide');
         }
 
+
+        //---MODAL HISTORIAL DE COMPRAS
+        function historialCompras() {
+            var mitabla;
+            var idProducto = $("#txtCodigo").val();
+
+            if (idProducto.trim() == "") {
+                swal("", "Para ver el historial de compras primero debe escoger un producto", "info");
+            }
+            else {
+
+                mitabla = $("#tablaHistorial").DataTable({
+                    "order": [[0, "desc"]],
+                    "autoWidth": false,
+                    "drawCallback": function (settings) {
+                        feather.replace();
+                    },
+                    "ajax": {
+                        "url": '@Url.Action("HistorialCompras", "OrdenCompra")' + '?id=' + idProducto,
+                        "type": "GET",
+                        "dataType": "json"
+                    },
+                    "columns": [
+                        { "data": "idIngreso" },
+                        { "data": "fechaRegistro" },
+                        { "data": "producto" },
+                        { "data": "cantidad" },
+                        { "data": "costoConIGV" },
+                        { "data": "costoSinIGV" },
+                        { "data": "descuento" },
+                        { "data": "importeTotal" }
+
+                    ],
+                    "language": {
+                        "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                    },
+                    "bDestroy": true
+                });
+
+                $('#FormModalCompras').modal('show');
+
+            }
+        }
 
     </script>
 

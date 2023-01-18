@@ -20,18 +20,41 @@
     <table id="tabla" class="display" style="width:100%">
         <thead>
             <tr>
-                <th>No. ÓRDEN</th>
+                <th>Nro.</th>
                 <th>FECHA</th>
                 <th>PROVEEDOR</th>
                 <th>IMPORTE</th>
                 <th>SITUACIÓN</th>
-                <th>ACCIONES</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
 </div>
+
+@*Modal ELIMINAR*@
+<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h4 class="modal-title text-white" id="exampleModalLabel">Eliminar Órden de Compra</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>¿Está seguro que desea eliminar ésta órden de compra?</h4>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success" onclick="DeleteOrderConfirm()">Confirmar</a>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="hiddenOrdenId" />
+</div>
+
 
 @section scripts{
     <script>
@@ -67,16 +90,18 @@
                         } else if (valor == 'Denegada') {
                             return '<span class="badge bg-danger">Denegada</span>'
                         } else if (valor == "Surtida") {
-
+                            return '<span class="badge bg-info">Surtida</span>'
+                        } else if (valor == "Expirada") {
+                            return '<span class="badge bg-dark">Expirada</span>'
                         }
                     }
                 },
                 {
                     "data": "idOrden", "render": function (data) {
-                        return "<a type='button' class='btn btn-primary btn-sm ms-2' href='@Url.Action("Detalles","OrdenCompra")?id=" + data + "'><i data-feather='eye'></i></a>" +
+                        return "<a type='button' class='btn btn-info btn-sm ms-2' href='@Url.Action("Detalles","OrdenCompra")?id=" + data + "'><i data-feather='eye'></i></a>" +
                             "<a type='button' class='btn btn-success btn-sm ms-2' onclick='Imprimir(" + data + ")'><i data-feather='printer'></i></a>" +
                             "<a type='button' class='btn btn-secondary btn-sm ms-2' href='@Url.Action("Editar","OrdenCompra")?id=" + data + "'><i data-feather='edit-2'></i></a>" +
-                            "<a type='button' class='btn btn-danger btn-sm ms-2' href='@Url.Action("Delete","OrdenCompra")?id=" + data + "'><i data-feather='trash'></i></a>"
+                            "<a type='button' class='btn btn-danger btn-sm ms-2' onclick='EliminarOrden(" + data + ")'><i data-feather='trash'></i></a>"
                     },
                     "orderable": false,
                     "searchable": false,
@@ -87,6 +112,46 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
             }
         });
+
+
+        var EliminarOrden = function (id) {
+
+            jQuery.ajax({
+                    url: "@Url.Action("ObtenerOrden", "OrdenCompra")" + "?id=" + id,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (orden) {
+
+                        if (orden.situacion == "Surtida" || orden.situacion == "Aprobada") {
+                            swal("", "No se puede eliminar ésta órden de compra", "info");
+                        }
+                        else {
+                            $("#hiddenOrdenId").val(id);
+                            $("#FormModal").modal('show');
+                        }
+                    }
+                });
+
+
+            //$("#hiddenOrdenId").val(id);
+
+            //$("#FormModal").modal('show');
+        }
+
+        var DeleteOrderConfirm = function () {
+
+            var id = $("#hiddenOrdenId").val();
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Eliminar", "OrdenCompra")/" + id,
+                success: function (result) {
+                    $("#FormModal").modal("hide");
+                    tabladata.ajax.reload();
+                }
+            })
+        }
 
         function Imprimir(id) {
             var texto = "@Url.Action("Documento", "OrdenCompra")" + "?idOrden=" + id;

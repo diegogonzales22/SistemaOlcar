@@ -1,0 +1,242 @@
+﻿@model SistemaOlcar.Models.TableViewModel.TableVenta
+@{
+    ViewBag.Title = "Registrar Venta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Registrar Venta</h2>
+<div class="form-control p-4">
+    @using (Html.BeginForm("Registrar", "Venta", FormMethod.Post, new { id = "formulario" }))
+    {
+
+        <div class="row">
+            <div class="col-md-1">
+                <label for="txtCreacion">Creación:</label>
+            </div>
+            <div class="col-md-4">
+                <label for="txtCreacion">@User.Identity.Name</label>
+            </div>
+            <div class="col-md-1">
+                <label for="txtFecha">Fecha:</label>
+            </div>
+            <div class="col-md-4">
+                <label for="txtFecha">@DateTime.Now</label>
+            </div>
+        </div>
+        <hr />
+        //CLIENTE
+        <h4>Cliente</h4>
+        <div class="row">
+            <div class="col-md-2">
+                <input type="text" class="form-control" id="numeroDocumento" placeholder="Buscar DNI" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" autocomplete="off" />
+            </div>
+            <div class="col-md-1">
+                <a id="buscar" class="btn btn-info"><i data-feather="search"></i></a>
+            </div>
+            <div class="col-md-1">
+                <label>Nombre:</label>
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="nombre" name="nombre" readonly />
+            </div>
+        </div>
+        <hr />
+        //PRODUCTO
+        <div class="row">
+            <h4>Producto</h4>
+            <div class="col-md-2">
+                <label>Código</label>
+                <input type="text" class="form-control" id="txtCodigo" disabled />
+            </div>
+            <div class="col-md-1 p-3">
+                <a class="btn btn-info" onclick="productosModal()"><i data-feather="search"></i></a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <label>Producto</label>
+                <input type="text" class="form-control" id="txtNombre" disabled />
+            </div>
+            <div class="col-md-2">
+                <label>Precio S/.</label>
+                <input type="text" class="form-control" id="txtPrecio" disabled />
+            </div>
+            <div class="col-md-2">
+                <label>Stock</label>
+                <input type="text" class="form-control" id="txtStock" disabled />
+            </div>
+            <div class="col-md-2">
+                <label>Cantidad</label>
+                <input type="text" class="form-control" id="txtCantidad" onKeyPress="return soloNumeros(event)" onKeyUp="pierdeFoco(this)" autocomplete="off"/>
+            </div>
+            <div class="col-md-1 p-2">
+                <a id="addToList" class="btn btn-success"><i data-feather="plus-circle" style="width:20px; height:20px"></i></a>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <hr />
+            <div id="divConceptos">
+                <table class="table" id="tablaDetalle">
+                    <thead>
+                        <tr>
+                            <th class="table-dark">Código</th>
+                            <th class="table-dark">Nombre</th>
+                            <th class="table-dark">Cantidad</th>
+                            <th class="table-dark">Precio S/.</th>
+                            <th class="table-dark">Total S/.</th>
+                            <th class="table-dark"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br />
+
+        <div class="row justify-content-center">
+            <div class="col-md-2">
+                <label><strong>Sub Total</strong></label>
+                @Html.TextBoxFor(model => model.subTotal, "", new { @class = "form-control", @readonly = true })
+            </div>
+            <div class="col-md-2">
+                <label><strong>IGV</strong></label>
+                @Html.TextBoxFor(model => model.igv, "", new { @class = "form-control", @readonly = true })
+            </div>
+            <div class="col-md-2">
+                <label for="txtNeto"><strong>Importe Total</strong></label>
+                @Html.TextBoxFor(model => model.importeTotal, "", new { @class = "form-control", @readonly = true })
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href='@Url.Action("Index", "Home")' class="btn btn-danger">Ir al Inicio</a>
+        </div>
+
+    }
+</div>
+
+@*Modal PRODUCTOS*@
+<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-title text-white" id="exampleModalLabel">Productos</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-control p-4">
+                    <table id="tabla" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>CÓD.</th>
+                                <th>NOMBRE</th>
+                                <th>CÓDIGO EAN</th>
+                                <th>MARCA</th>
+                                <th>PRECIO S/.</th>
+                                <th>STOCK</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+    //Buscar RUC con API
+        $('#buscar').click(function () {
+            dni = $('#numeroDocumento').val();
+            $.ajax({
+                url: "@Url.Action("Obtener", "Venta")?="+dni,
+                type: "POST",
+                data: "dni=" + dni,
+                dataType: "json",
+                statusCode: {
+                    500: function () {
+                        swal("", "No se encontró el dni que busca", "info");
+                        $("#numeroDocumento").val("");
+                        $("#nombre").val("");
+                    }
+                },
+                success: function (p) {
+                    if (p.numeroDocumento == dni) {
+                        $("#nombre").val(p.nombre); //Nombre del cliente
+                    }
+                    else {
+                        console.log("No existe");
+                    }
+                }
+            });
+        });
+
+        //---MODAL PRODUCTOS
+        function productosModal() {
+            var tabladata;
+            tabladata = $("#tabla").DataTable({
+                "autoWidth": false,
+                "drawCallback": function (settings) {
+                    feather.replace();
+                },
+                "ajax": {
+                    "url": '@Url.Action("ProductosActivos", "Venta")',
+                    "type": "GET",
+                    "dataType": "json"
+                },
+                "columns": [
+                    { "data": "idProducto" },
+                    { "data": "nombre"},
+                    { "data": "codigoEAN" },
+                    { "data": "marca" },
+                    { "data": "precioVenta" },
+                    { "data": "stock" },
+                    {
+                        "data": "idProducto", "render": function (data) {
+                            return "<a type='button' class='btn btn-primary btn-sm ms-2' onclick='agregarDesdeModal("+data+")'><i data-feather='check-square'></i></a>"
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "50px"
+                    },
+
+                ],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                },
+                "bDestroy": true
+            });
+
+            $('#FormModal').modal('show');
+        }
+
+        //---AGREGAR PRODUCTO DESDE MODAL
+        function agregarDesdeModal(data) {
+            jQuery.ajax({
+                    url: "@Url.Action("ObtenerProducto","Venta")" + "?idProd=" + data,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        if (data != null) {
+                            $("#txtCodigo").val(data.idProducto);
+                            $("#txtNombre").val(data.nombre);
+                            $("#txtPrecio").val(data.precioVenta);
+                            $("#txtStock").val(data.stock);
+                        }
+                    }
+                });
+            $("#FormModal").modal('hide');
+        }
+
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Vistas/Venta_Registrar.js")" type="text/javascript"></script>
+}

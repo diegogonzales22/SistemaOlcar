@@ -1,0 +1,259 @@
+﻿@model SistemaOlcar.Models.TableViewModel.TableIngreso
+@{
+    ViewBag.Title = "AddProducto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Recepción de Productos | Agregar Productos</h2>
+<h4>Nro. de Ingreso: @Html.DisplayFor(model => model.idIngreso)</h4>
+<hr />
+<div class=" form-control p-4">
+    @using (Html.BeginForm("AddProducto", "Ingreso", FormMethod.Post, new { id = "formulario" }))
+    {
+        @Html.HiddenFor(model => model.idIngreso)
+        @*Detalle de Órden*@
+        <div class="row">
+            <div class="col-m-3">
+                <a class="btn btn-primary" onclick="productosModal()">Agregar Producto</a>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-2">
+                <label for="txtCodigo">Código:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" id="txtCodigo" disabled />
+            </div>
+            <div class="col-md-1">
+                <label for="txtProducto">Producto:</label>
+            </div>
+            <div class="col-md-5">
+                <input type="text" class="form-control" id="idProducto" disabled />
+            </div>
+            <div class="col-md-1">
+                <a class="btn btn-info" onclick="historialCompras()"><i data-feather="shopping-cart" style="width:20px; height:20px"></i></a>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-2">
+                <label for="txtCosto">Valor Venta S/.</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" id="txtCosto" />
+            </div>
+            <div class="col-md-1">
+                <label for="txtCantidad">Dcto %</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" id="txtDescuento" />
+            </div>
+            <div class="col-md-1">
+                <label for="txtCantidad">Cantidad:</label>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" id="txtCantidad" onKeyPress="return soloNumeros(event)" onKeyUp="pierdeFoco(this)" />
+            </div>
+            <div class="col-md-2">
+                <a id="addToList" class="btn btn-success"><i data-feather="plus-circle" style="width:20px; height:20px"></i></a>
+            </div>
+        </div>
+        <br />
+        <div id="divConceptos">
+            <table class="table" id="tablaDetalle">
+                <thead>
+                    <tr>
+                        <th class="table-dark">Código</th>
+                        <th class="table-dark">Nombre</th>
+                        <th class="table-dark">Cantidad</th>
+                        <th class="table-dark">Valor Venta S/.</th>
+                        <th class="table-dark">Descuento %</th>
+                        <th class="table-dark">Total S/.</th>
+                        <th class="table-dark"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <a href="@Url.Action("Editar", "Ingreso")?id=@Html.DisplayFor(model => model.idIngreso)" class="btn btn-danger">Volver</a>
+        </div>
+    }
+</div>
+
+@*Modal PRODUCTOS*@
+<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h4 class="modal-title text-white" id="exampleModalLabel">Productos</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-control p-4">
+                    <table id="tabla" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>CÓD.</th>
+                                <th>NOMBRE</th>
+                                <th>CÓDIGO EAN</th>
+                                <th>MARCA</th>
+                                <th>STOCK</th>
+                                <th>STOCK MÍN.</th>
+                                <th>STOCK MÁX.</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Modal HISTORIAL DE COMPRAS*@
+<div class="modal fade" id="FormModalCompras" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title text-white" id="exampleModalLabel">Historial de Compras</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-control p-4">
+                    <table id="tablaHistorial" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Nro.INGR.</th>
+                                <th>FECHA</th>
+                                <th>PRODUCTO</th>
+                                <th>CANTIDAD</th>
+                                <th>CON IGV S/.</th>
+                                <th>SIN IGV S/.</th>
+                                <th>DCTO. %</th>
+                                <th>TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        //---MODAL PRODUCTOS
+        function productosModal() {
+            var tabladata;
+            tabladata = $("#tabla").DataTable({
+                "autoWidth": false,
+                "drawCallback": function (settings) {
+                    feather.replace();
+                },
+                "ajax": {
+                    "url": '@Url.Action("ProductosActivos", "OrdenCompra")',
+                    "type": "GET",
+                    "dataType": "json"
+                },
+                "columns": [
+                    { "data": "idProducto" },
+                    { "data": "nombre"},
+                    { "data": "codigoEAN" },
+                    { "data": "marca" },
+                    { "data": "stock" },
+                    { "data": "stockMinimo" },
+                    { "data": "stockMaximo" },
+                    {
+                        "data": "idProducto", "render": function (data) {
+                            return "<a type='button' class='btn btn-primary btn-sm ms-2' onclick='agregarDesdeModal("+data+")'><i data-feather='check-square'></i></a>"
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "50px"
+                    },
+
+                ],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                },
+                "bDestroy": true
+            });
+
+            $('#FormModal').modal('show');
+        }
+
+        //---AGREGAR PRODUCTO DESDE MODAL
+        function agregarDesdeModal(data) {
+            jQuery.ajax({
+                    url: "@Url.Action("ObtenerProducto","OrdenCompra")" + "?idProd=" + data,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        if (data != null) {
+                            $("#txtCodigo").val(data.idProducto);
+                            $("#idProducto").val(data.nombre);
+                            $("#txtCosto").val(data.costoSinIGV);
+                        }
+                    }
+                });
+            $("#FormModal").modal('hide');
+        }
+
+
+        //---MODAL HISTORIAL DE COMPRAS
+        function historialCompras() {
+            var mitabla;
+            var idProducto = $("#txtCodigo").val();
+
+            if (idProducto.trim() == "") {
+                swal("", "Para ver el historial de compras primero debe escoger un producto", "info");
+            }
+            else {
+
+                mitabla = $("#tablaHistorial").DataTable({
+                    "order": [[0, "desc"]],
+                    "autoWidth": false,
+                    "drawCallback": function (settings) {
+                        feather.replace();
+                    },
+                    "ajax": {
+                        "url": '@Url.Action("HistorialCompras", "OrdenCompra")' + '?id=' + idProducto,
+                        "type": "GET",
+                        "dataType": "json"
+                    },
+                    "columns": [
+                        { "data": "idIngreso" },
+                        { "data": "fechaRegistro" },
+                        { "data": "producto" },
+                        { "data": "cantidad" },
+                        { "data": "costoConIGV" },
+                        { "data": "costoSinIGV" },
+                        { "data": "descuento" },
+                        { "data": "importeTotal" }
+
+                    ],
+                    "language": {
+                        "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                    },
+                    "bDestroy": true
+                });
+
+                $('#FormModalCompras').modal('show');
+
+            }
+        }
+    </script>
+    <script src="@Url.Content("~/Scripts/Vistas/Ingreso_AddProducto.js")" type="text/javascript"></script>
+}
+

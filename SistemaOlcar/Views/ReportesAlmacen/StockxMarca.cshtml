@@ -1,0 +1,56 @@
+﻿@model IEnumerable<SistemaOlcar.Models.Producto>
+@{
+    ViewBag.Title = "Stock por Marca";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Inventario</h2>
+<hr />
+<input type="button" class="form-control btn-success" onclick="printHTML(seleccion)" value="Imprimir" style="height:30px; width:100px"/>
+<br />
+
+<div class="form-control p-4" id="seleccion">
+    <table class="table">
+        <thread>
+            <tr>
+                <th class="table-secondary">CÓDIGO</th>
+                <th class="table-secondary">PRODUCTO</th>
+                <th class="table-secondary">STOCK</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @item.idProducto
+                </td>
+                <td>
+                    @item.nombre
+                </td>
+                <td>
+                    @item.stock
+                </td>
+            </tr>
+            }
+
+
+        </thread>
+
+    </table>
+
+</div>
+<div class="modal-footer">
+    <a href='@Url.Action("InventarioxMarca")' class="btn btn-primary">Volver</a>
+</div>
+
+@section scripts{
+<script>
+    function printHTML(seleccion) {
+        var printContents = document.getElementById('seleccion').innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+</script>
+}

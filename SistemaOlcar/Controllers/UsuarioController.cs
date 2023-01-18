@@ -14,7 +14,10 @@ namespace SistemaOlcar.Controllers
     public class UsuarioController : Controller
     {
         OLCAREntities db = new OLCAREntities();
+
         // GET: Usuario
+        [Error(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador")]
         public ActionResult Index()
         {
             return View();
@@ -39,6 +42,8 @@ namespace SistemaOlcar.Controllers
             return Json(new { data = oLstUusuario }, JsonRequestBehavior.AllowGet);
         }
 
+        [Error(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador")]
         public ActionResult Crear()
         {
             ViewBag.idRol = new SelectList(db.Rol, "idRol", "nombre");
@@ -107,6 +112,8 @@ namespace SistemaOlcar.Controllers
             return Json(oUsuario, JsonRequestBehavior.AllowGet);
         }
 
+        [Error(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador")]
         public ActionResult Editar(int? id)
         {
             if (id == null)

@@ -6,6 +6,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SistemaOlcar.Models;
+using SistemaOlcar.Models.TableViewModel;
 
 namespace SistemaOlcar.Controllers
 {
@@ -73,6 +74,30 @@ namespace SistemaOlcar.Controllers
                 db.SaveChanges();
             }
             return Json(new { success = true, message = "Se denegó la órden con éxito" }, JsonRequestBehavior.AllowGet);
+        }
+
+        //----DASHBOARD ADMIN
+
+        public JsonResult OrdenesPendientes() //Lista órdenes de compra pendientes
+        {
+            List<TableOrdenCompra> oLstOrden = new List<TableOrdenCompra>();
+            using (OLCAREntities d = new OLCAREntities())
+            {
+                oLstOrden = (from p in d.OrdenCompra
+                             where p.situacion == "Por Aprobar"
+                             select new TableOrdenCompra
+                             {
+                                 idOrden = p.idOrden,
+                                 fechaRegistro = p.fechaRegistro.ToString(),
+                                 proveedor = p.Proveedor.nombre,
+                                 situacion = p.situacion,
+                                 costoTotal = p.costoTotal,
+                                 fechaVencimiento = p.fechaCaducidad.ToString(),
+                                 observacion = p.observacion
+                             }).ToList();
+            }
+
+            return Json(oLstOrden, JsonRequestBehavior.AllowGet);
         }
     }
 }

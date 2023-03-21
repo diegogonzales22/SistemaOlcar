@@ -143,5 +143,10 @@ namespace SistemaOlcar.Controllers
             return View(proveedor);
         }
 
+        public ActionResult ListaProvAdmin()
+        {
+            return View();
+        }
+
     }
 }

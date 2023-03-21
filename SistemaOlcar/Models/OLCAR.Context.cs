@@ -119,5 +119,30 @@ namespace SistemaOlcar.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_RestaStock", idProductoParameter, cantidadParameter);
         }
+    
+        public virtual ObjectResult<SP_RetornaVentas_Result> SP_RetornaVentas()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RetornaVentas_Result>("SP_RetornaVentas");
+        }
+    
+        public virtual ObjectResult<SP_RetornaTopProductos_Result> SP_RetornaTopProductos()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RetornaTopProductos_Result>("SP_RetornaTopProductos");
+        }
+    
+        public virtual ObjectResult<Nullable<decimal>> SP_GananciaDia()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("SP_GananciaDia");
+        }
+    
+        public virtual ObjectResult<Nullable<int>> SP_CantidadProductosDia()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_CantidadProductosDia");
+        }
+    
+        public virtual ObjectResult<Nullable<int>> SP_CantidadVentasDia()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_CantidadVentasDia");
+        }
     }
 }

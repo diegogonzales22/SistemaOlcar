@@ -177,5 +177,26 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="SP_RetornaVentas" FunctionName="OLCARModel.Store.SP_RetornaVentas">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OLCARModel.SP_RetornaVentas_Result">
+          <ScalarProperty Name="anio" ColumnName="anio" />
+          <ScalarProperty Name="mesValor" ColumnName="mesValor" />
+          <ScalarProperty Name="mes" ColumnName="mes" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_RetornaTopProductos" FunctionName="OLCARModel.Store.SP_RetornaTopProductos">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OLCARModel.SP_RetornaTopProductos_Result">
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_GananciaDia" FunctionName="OLCARModel.Store.SP_GananciaDia" />
+    <FunctionImportMapping FunctionImportName="SP_CantidadProductosDia" FunctionName="OLCARModel.Store.SP_CantidadProductosDia" />
+    <FunctionImportMapping FunctionImportName="SP_CantidadVentasDia" FunctionName="OLCARModel.Store.SP_CantidadVentasDia" />
   </EntityContainerMapping>
 </Mapping>

@@ -119,13 +119,17 @@
         </div>
     </div>
     <br />
-    <a href="@Url.Action("AddProducto", "OrdenCompra")?id=@Html.DisplayFor(model => model.idOrden)" class="btn btn-success">
-        <i style="width:20px; height:20px" data-feather="plus-circle"></i>
-        <span>
-            <strong>Agregar Productos</strong>
-        </span>
-    </a>
-    <br /><br />
+    @if (Model.situacion == "Por Aprobar")
+    {
+        <a href="@Url.Action("AddProducto", "OrdenCompra")?id=@Html.DisplayFor(model => model.idOrden)" class="btn btn-success">
+            <i style="width:20px; height:20px" data-feather="plus-circle"></i>
+            <span>
+                <strong>Agregar Productos</strong>
+            </span>
+        </a>
+        <br /><br />
+    }
+
     <div id="divConceptos">
         <table class="table" id="tablaDetalle">
             <thead>
@@ -133,9 +137,10 @@
                     <th class="table-dark">Item</th>
                     <th class="table-dark">Código</th>
                     <th class="table-dark">Nombre</th>
+                    <th class="table-dark">Unidad</th>
                     <th class="table-dark">Cantidad</th>
                     <th class="table-dark">Valor Venta S/.</th>
-                    <th class="table-dark">Descuento %</th>
+                    <th class="table-dark">Dcto. %</th>
                     <th class="table-dark">Total S/.</th>
                     @if (Model.situacion == "Por Aprobar")
                     {
@@ -151,6 +156,7 @@
                         <td>@num</td>
                         <td>@item.idProducto</td>
                         <td>@item.Producto.nombre</td>
+                        <td>@item.Producto.unidadMedida</td>
                         <td>@item.cantidad</td>
                         <td>@item.precioUnidad</td>
                         <td>@item.descuento</td>

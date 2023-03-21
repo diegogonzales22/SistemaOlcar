@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav class="navbar navbar-dark bg-dark">
+    <h4 id="titlealmacen" class="text-white">ÓRDENES DE COMPRAS</h4>
+</nav>
+<div class="row m-1" id="ordenesdiv">
+    @*ORDENES DE COMPRA*@
+</div>
+
+<nav class="navbar navbar-dark bg-dark">
+    <h4 class="text-white">VENTAS DIARIAS</h4>
+</nav>
+<div class="row">
+    <div class="col-lg-12" align="center">
+        <div class="card">
+            @*<h4 class="card-header bg-dark text-white">Ganancias en Ventas: Últimos 4 meses</h4>*@
+            <div class="card-body">
+                <canvas id="myLineChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        jQuery.ajax({
+            url: '@Url.Action("OrdenesPendientes", "OrdenesAdmin")',
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (json) {                
+
+                var ordenesd = document.querySelector("#ordenesdiv");
+
+                if (json.length != 0) {
+
+                    for (var i = 0; i < json.length; i++) {
+
+                        var div = document.createElement("div");
+                        ordenesd.appendChild(div);
+                        div.classList.add("col-lg-4");
+
+                        var card = document.createElement("div");
+                        div.appendChild(card);
+                        card.classList.add("card");
+
+                        var titulo = document.createElement("h5");
+                        card.appendChild(titulo);
+                        titulo.append("ÓRDEN DE COMPRA Nro. " + json[i].idOrden + "");
+                        titulo.classList.add("card-header", "bg-info", "text-white");
+
+                        var cardBody = document.createElement("div");
+                        card.appendChild(cardBody);
+                        cardBody.classList.add("card-body");
+
+                        var ul = document.createElement("ul");
+                        cardBody.appendChild(ul);
+                        ul.classList.add("list-group", "list-group-flush");
+
+                        var li1 = document.createElement("li");
+                        ul.appendChild(li1);
+                        li1.classList.add("list-group-item");
+
+                        var li2 = document.createElement("li");
+                        ul.appendChild(li2);
+                        li2.classList.add("list-group-item");
+
+                        var li3 = document.createElement("li");
+                        ul.appendChild(li3);
+                        li3.classList.add("list-group-item");
+
+                        var li4 = document.createElement("li");
+                        ul.appendChild(li4);
+                        li4.classList.add("list-group-item");
+
+                        var li5 = document.createElement("li");
+                        ul.appendChild(li5);
+                        li5.classList.add("list-group-item");
+
+                        var li6 = document.createElement("li");
+                        ul.appendChild(li6);
+                        li6.classList.add("list-group-item");
+
+                        li1.append("FECHA REGISTRO: " + json[i].fechaRegistro);
+                        li2.append("PROVEEDOR: " + json[i].proveedor);
+                        li3.append("SITUACIÓN: " + json[i].situacion);
+                        li4.append("COSTO TOTAL: " + "S/." + json[i].costoTotal);
+                        li5.append("FECHA DE CADUCIDAD: " + json[i].fechaVencimiento);
+
+                        if (json[i].observacion != null) {
+                            li6.append("OBSERVACIÓN: " + json[i].observacion);
+                        }
+                        else {
+                            li6.append("OBSERVACIÓN: Ninguna");
+                        }
+                    }
+                }
+                else {
+                    var span = document.createElement("span");
+                    span.classList.add("bg-white","text-dark", "m-1", "p-1");
+                    var msg = document.createTextNode("NO HAY PENDIENTES");
+                    ordenesd.appendChild(span);
+                    span.append(msg);
+                }
+
+            }
+        });
+
+    </script>
+}
+
+

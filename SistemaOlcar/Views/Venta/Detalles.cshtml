@@ -1,0 +1,133 @@
+﻿@model SistemaOlcar.Models.Venta
+
+@{
+    ViewBag.Title = "Detalles de Venta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Venta Nro. @Html.DisplayFor(model => model.idVenta)</h2>
+<div class="form-control p-4">
+    <h4><b>Datos de Registro</b></h4>
+    <div class="row">
+        <div class="col-md-1">
+            <label>Creación:</label>
+        </div>
+        <div class="col-md-2">
+            <label>@Html.DisplayFor(model => model.Usuario.usuario1)</label>
+        </div>
+        <div class="col-md-1">
+            <label>Fecha:</label>
+        </div>
+        <div class="col-md-3">
+            <label>@Html.DisplayFor(model => model.fechaRegistro)</label>
+        </div>
+        <div class="col-md-1">
+            <label>Estado:</label>
+        </div>
+        <div class="col-md-3">
+            @if (Model.estado == true)
+            {
+                <label>Emitida</label>
+            }
+            else
+            {
+                <label>Anulada</label>
+            }
+        </div>
+    </div>
+    <hr />
+
+    <h4><b>Cliente</b></h4>
+    <div class="row">
+        <div class="col-md-1">
+            <label>DNI:</label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.numeroDocumento)
+        </div>
+        <div class="col-md-1">
+            <label>Nombre:</label>
+        </div>
+        <div class="col-md-6">
+            @Html.DisplayFor(model => model.nombre)
+        </div>
+    </div>
+    <hr />
+    <h4><b>Productos</b></h4>
+    <div class="form-horizontal">
+        <div id="divConceptos">
+            <table class="table" id="tablaDetalle">
+                <thead>
+                    <tr>
+                        <th class="table-dark">Item</th>
+                        <th class="table-dark">Código</th>
+                        <th class="table-dark">Nombre</th>
+                        <th class="table-dark">Unidad</th>
+                        <th class="table-dark">Cantidad</th>
+                        <th class="table-dark">Precio S/.</th>
+                        <th class="table-dark">Total S/.</th>
+                        <th class="table-dark"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{var num = 1;}
+                    @foreach (var item in Model.DetalleVenta)
+                    {
+                        <tr>
+                            <td>@num</td>
+                            <td>@item.idProducto</td>
+                            <td>@item.Producto.nombre</td>
+                            <td>@item.Producto.unidadMedida</td>
+                            <td>@item.cantidad</td>
+                            <td>@item.precioUnidad</td>
+                            <td>@item.importeTotal</td>
+                        </tr>
+                        num++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+
+    <div class="row justify-content-center">
+        <div class="col-md-1">
+            <label for="txtNeto"><strong>Neto S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.subTotal)
+        </div>
+        <div class="col-md-1">
+            <label for="txtIGV"><strong>IGV S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.igv)
+        </div>
+        <div class="col-md-1">
+            <label for="txtTotal"><strong>Total S/.</strong></label>
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.importeTotal)
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <input type="button" class="form-control btn-success" onclick="Imprimir(@Html.DisplayFor(model => model.idVenta))" value="Imprimir" style="height:30px; width:100px" />
+        <a href='@Url.Action("ListarVentas", "Venta")' class="btn btn-primary">Ver Lista de Ventas</a>
+    </div>
+
+</div>
+
+@section scripts{
+    <script>
+    function Imprimir(id) {
+        var texto = "@Url.Action("Ticket", "Venta")" + "?id=" + id;
+
+        // Open the page in a new tab or window
+        var w = window.open(texto,"Ticket", "width=650,height=500");
+        w.onload = function () {
+            w.print();
+        }
+    }
+    </script>
+}

@@ -39,9 +39,25 @@ namespace SistemaOlcar.Controllers
                     }
                     else
                     {
-                        FormsAuthentication.SetAuthCookie(oUser.usuario1, false);
-                        Session["Usuario"] = oUser;
-                        return RedirectToAction("Index", "Home");
+                        if (oUser.idRol == 1) //Administrador
+                        {
+                            FormsAuthentication.SetAuthCookie(oUser.usuario1, false);
+                            Session["Usuario"] = oUser;
+                            return RedirectToAction("DashboardAdmin", "Home");
+                        }
+                        else if (oUser.idRol == 2) //Cajero
+                        {
+                            FormsAuthentication.SetAuthCookie(oUser.usuario1, false);
+                            Session["Usuario"] = oUser;
+                            return RedirectToAction("DashboardCajero", "Home");
+                        }
+                        else //Operario de almacén
+                        {
+                            FormsAuthentication.SetAuthCookie(oUser.usuario1, false);
+                            Session["Usuario"] = oUser;
+                            return RedirectToAction("Index", "Home");
+                        }
+                        
                     }
                     
                 }

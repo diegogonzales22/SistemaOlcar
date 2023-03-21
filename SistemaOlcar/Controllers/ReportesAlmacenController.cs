@@ -26,7 +26,7 @@ namespace SistemaOlcar.Controllers
             {
                 d.Configuration.ProxyCreationEnabled = true;
                 oLstMarca = (from p in d.MarcaProducto
-                             where p.estado == true
+                             //where p.estado == true
                              select new TableMarcaProducto
                              {
                                  idMarca = p.idMarca,
@@ -43,6 +43,76 @@ namespace SistemaOlcar.Controllers
                                                 x.estado == true).OrderBy(x => x.nombre);
 
             return View(inventario.ToList());
+        }
+
+        public ActionResult ListaProductos() //Lista de productos activos, inactivos y todos
+        {
+            return View();
+        }
+
+        public JsonResult ProductosActivos() //Listar Productos Activos
+        {
+            List<TableProducto> oLstProducto = new List<TableProducto>();
+            using (OLCAREntities d = new OLCAREntities())
+            {
+                d.Configuration.ProxyCreationEnabled = false;
+                oLstProducto = (from p in d.Producto
+                                where p.estado == true
+                                orderby p.idProducto ascending
+                                select new TableProducto
+                                {
+                                    idProducto = p.idProducto,
+                                    nombre = p.nombre,
+                                    unidad = p.unidadMedida,
+                                    codigoEAN = p.codigoEAN,
+                                    precioVenta = (decimal)p.precioVenta,
+                                    marca = p.MarcaProducto.nombre
+                                }).ToList();
+            }
+            return Json(oLstProducto, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ProductosInactivos() //Listar Productos Inactivos
+        {
+            List<TableProducto> oLstProducto = new List<TableProducto>();
+            using (OLCAREntities d = new OLCAREntities())
+            {
+                d.Configuration.ProxyCreationEnabled = false;
+                oLstProducto = (from p in d.Producto
+                                where p.estado == false
+                                orderby p.idProducto ascending
+                                select new TableProducto
+                                {
+                                    idProducto = p.idProducto,
+                                    nombre = p.nombre,
+                                    unidad = p.unidadMedida,
+                                    codigoEAN = p.codigoEAN,
+                                    precioVenta = (decimal)p.precioVenta,
+                                    marca = p.MarcaProducto.nombre
+                                }).ToList();
+            }
+            return Json(oLstProducto, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ProductosTodos() //Listar Productos Todos
+        {
+            List<TableProducto> oLstProducto = new List<TableProducto>();
+            using (OLCAREntities d = new OLCAREntities())
+            {
+                d.Configuration.ProxyCreationEnabled = false;
+                oLstProducto = (from p in d.Producto
+                                orderby p.idProducto ascending
+                                select new TableProducto
+                                {
+                                    idProducto = p.idProducto,
+                                    nombre = p.nombre,
+                                    unidad = p.unidadMedida,
+                                    codigoEAN = p.codigoEAN,
+                                    precioVenta = (decimal)p.precioVenta,
+                                    marca = p.MarcaProducto.nombre
+                                }).ToList();
+            }
+            return Json(oLstProducto, JsonRequestBehavior.AllowGet);
         }
 
     }

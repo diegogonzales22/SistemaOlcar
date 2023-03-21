@@ -191,6 +191,12 @@
     <Compile Include="Models\SP_Login_Result.cs">
       <DependentUpon>OLCAR.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SP_RetornaTopProductos_Result.cs">
+      <DependentUpon>OLCAR.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_RetornaVentas_Result.cs">
+      <DependentUpon>OLCAR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TableViewModel\TableGmail.cs" />
     <Compile Include="Models\TableViewModel\TableIngreso.cs" />
     <Compile Include="Models\TableViewModel\TableMarcaProducto.cs" />
@@ -387,6 +393,7 @@
     <Content Include="Content\DataTables\swf\flashExport.swf" />
     <Content Include="Content\Estilos\login.css" />
     <Content Include="Content\Estilos\orden_compra.css" />
+    <Content Include="Content\Estilos\ticket_venta.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\Imagenes\cargar-foto.jpg" />
@@ -494,6 +501,8 @@
       <DependentUpon>OLCAR.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
+    <Content Include="Scripts\chart.js" />
+    <Content Include="Scripts\chart.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap4.js" />
@@ -604,8 +613,6 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Proveedor\Index.cshtml" />
     <Content Include="Views\Proveedor\Registrar.cshtml" />
@@ -646,6 +653,15 @@
     <Content Include="Views\ReportesAlmacen\InventarioxMarca.cshtml" />
     <Content Include="Views\ReportesAlmacen\StockxMarca.cshtml" />
     <Content Include="Views\Venta\Registrar.cshtml" />
+    <Content Include="Views\Venta\ListarVentas.cshtml" />
+    <Content Include="Views\Venta\Detalles.cshtml" />
+    <Content Include="Views\Venta\Ticket.cshtml" />
+    <Content Include="Views\ReportesAlmacen\ListaProductos.cshtml" />
+    <Content Include="Views\Home\DashboardCajero.cshtml" />
+    <Content Include="Views\Venta\ListarProductos.cshtml" />
+    <Content Include="Views\Home\DashboardAdmin.cshtml" />
+    <Content Include="Views\Producto\ListaProdAdmin.cshtml" />
+    <Content Include="Views\Proveedor\ListaProvAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

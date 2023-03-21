@@ -1,0 +1,79 @@
+﻿@model SistemaOlcar.Models.Venta
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/Estilos/ticket_venta.css">
+</head>
+<body>
+    <div class="ticket">
+        <img src="~/Content/Imagenes/logo_olcar.jpg" alt="Logotipo">
+        <p class="centrado">
+            OLCAR S.A.C
+            <br>RUC: 20562652524
+            <br>Cal. Esperanza Nro. 150, Miraflores - Lima
+            <br><br><b>COMPROBANTE DE PAGO</b>
+            <br>Nro. Venta: @Html.DisplayFor(model => model.idVenta)
+            <br>Fecha de emisión: @Html.DisplayFor(model => model.fechaRegistro)
+            <br>DNI del Cliente: @Html.DisplayFor(model => model.numeroDocumento)
+            <br>Nombre del Cliente: @Html.DisplayFor(model => model.nombre)
+            <br>Cajero: @Html.DisplayFor(model => model.Usuario.usuario1)
+            <br>Estado:
+            @if (true)
+            {
+                <span>Emitida</span>
+            }
+            else
+            {
+                <span>Anulada</span>
+            }
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th class="item centrado">#</th>
+                    <th class="producto centrado">PRODUCTO</th>
+                    <th class="cantidad centrado">CANT.</th>
+                    <th class="precio centrado">PRECIO UNIT. S/.</th>
+                    <th class="importeTotal centrado">TOTAL S/.</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{var num = 1;}
+                @foreach (var item in Model.DetalleVenta)
+                {
+                    <tr>
+                        <td class="item centrado borde">@num</td>
+                        <td class="producto borde">@item.Producto.nombre</td>
+                        <td class="cantidad centrado borde">@item.cantidad</td>
+                        <td class="precio borde" align="right">@item.precioUnidad</td>
+                        <td class="importeTotal borde" align="right">@item.importeTotal</td>
+                    </tr>
+                    num++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" align="right" class="borde"><b>SUBTOTAL S/.&nbsp;</b></td>
+                    <td class="borde" align="right">@Html.DisplayFor(model => model.subTotal)</td>
+                </tr>
+                <tr>
+                    <td colspan="4" align="right"><b>IGV S/.&nbsp;</b></td>
+                    <td align="right">@Html.DisplayFor(model => model.igv)</td>
+                </tr>
+                <tr>
+                    <td colspan="4" align="right"><b>TOTAL S/.&nbsp;</b></td>
+                    <td align="right">@Html.DisplayFor(model => model.importeTotal)</td>
+                </tr>
+            </tfoot>
+        </table>
+        <p class="centrado">
+            ¡GRACIAS POR SU COMPRA!
+            <br>www.olcar.com.pe
+        </p>
+    </div>
+</body>
+</html>

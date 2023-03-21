@@ -28,7 +28,7 @@
         <h4>Cliente</h4>
         <div class="row">
             <div class="col-md-2">
-                <input type="text" class="form-control" id="numeroDocumento" placeholder="Buscar DNI" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" autocomplete="off" />
+                <input type="text" class="form-control" id="numeroDocumento" name="numeroDocumento" placeholder="Buscar DNI" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" autocomplete="off" />
             </div>
             <div class="col-md-1">
                 <a id="buscar" class="btn btn-info"><i data-feather="search"></i></a>
@@ -53,9 +53,13 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5">
+            <div class="col-md-3">
                 <label>Producto</label>
                 <input type="text" class="form-control" id="txtNombre" disabled />
+            </div>
+            <div class="col-md-2">
+                <label>Unidad</label>
+                <input type="text" class="form-control" id="txtUnidad" disabled />
             </div>
             <div class="col-md-2">
                 <label>Precio S/.</label>
@@ -67,7 +71,7 @@
             </div>
             <div class="col-md-2">
                 <label>Cantidad</label>
-                <input type="text" class="form-control" id="txtCantidad" onKeyPress="return soloNumeros(event)" onKeyUp="pierdeFoco(this)" autocomplete="off"/>
+                <input type="text" class="form-control" id="txtCantidad" onKeyPress="return soloNumeros(event)" onKeyUp="pierdeFoco(this)" autocomplete="off" />
             </div>
             <div class="col-md-1 p-2">
                 <a id="addToList" class="btn btn-success"><i data-feather="plus-circle" style="width:20px; height:20px"></i></a>
@@ -81,6 +85,7 @@
                         <tr>
                             <th class="table-dark">Código</th>
                             <th class="table-dark">Nombre</th>
+                            <th class="table-dark">Unidad</th>
                             <th class="table-dark">Cantidad</th>
                             <th class="table-dark">Precio S/.</th>
                             <th class="table-dark">Total S/.</th>
@@ -132,6 +137,7 @@
                             <tr>
                                 <th>CÓD.</th>
                                 <th>NOMBRE</th>
+                                <th>UNIDAD</th>
                                 <th>CÓDIGO EAN</th>
                                 <th>MARCA</th>
                                 <th>PRECIO S/.</th>
@@ -192,7 +198,8 @@
                 },
                 "columns": [
                     { "data": "idProducto" },
-                    { "data": "nombre"},
+                    { "data": "nombre" },
+                    { "data": "unidadMedida" },
                     { "data": "codigoEAN" },
                     { "data": "marca" },
                     { "data": "precioVenta" },
@@ -228,6 +235,7 @@
                         if (data != null) {
                             $("#txtCodigo").val(data.idProducto);
                             $("#txtNombre").val(data.nombre);
+                            $("#txtUnidad").val(data.unidadMedida);
                             $("#txtPrecio").val(data.precioVenta);
                             $("#txtStock").val(data.stock);
                         }

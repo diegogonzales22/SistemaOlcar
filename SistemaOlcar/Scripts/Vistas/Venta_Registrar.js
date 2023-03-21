@@ -1,4 +1,5 @@
-﻿//Validar que el primer número no sea 0 en el campo cantidad
+﻿
+//Validar que el primer número no sea 0 en el campo cantidad
 function pierdeFoco(e) {
     var valor = e.value.replace(/^0*/, '');
     e.value = valor;
@@ -18,6 +19,7 @@ $("#addToList").click(function (e) {
     //Variables visibles
     var idProducto = $("#txtCodigo").val(), //obtiene el valor
         nombreProducto = $("#txtNombre").val(),
+        unidadProducto = $("#txtUnidad").val(),
         cantidad = $("#txtCantidad").val(),
         precio = $("#txtPrecio").val(),
         stock = $("#txtStock").val(),
@@ -48,6 +50,7 @@ $("#addToList").click(function (e) {
         '<tr>' + indexInput + //input tipo hidden
         '<td>' + productoInput + '</td> ' +
         '<td>' + nombreProducto + '</td>' +
+        '<td>' + unidadProducto + '</td>' +
         '<td>' + cantidadInput + '</td>' +
         '<td>' + precioInput + '</td>' +
         '<td>' + totalxproducto.toFixed(2) + '</td>' +
@@ -81,19 +84,19 @@ function validarFormulario(evento) {
         return;
     }
     if (dni.trim() == "" || nombreCliente.trim() == "") {
-        alert("Escoja un cliente");
+        swal("", "Escoja un cliente", "info");
         return;
     }
     if ($('#tablaDetalle > tbody  > tr').length == 0) {
-        alert("No hay productos agregados en la tabla");
+        swal("", "No hay productos agregados en la tabla", "info");
         return;
     }
     else if (importeTotal == "") {
-        alert("No hay importe total");
+        swal("", "No hay importe total", "info");
         return;
     }
     else {
-        alert("Venta registrada");
+        swal("", "Venta registrada", "success");
         this.submit();
     }
 }
@@ -102,6 +105,7 @@ function validarFormulario(evento) {
 function clearItem() {
     $("#txtCodigo").val('');
     $("#txtNombre").val('');
+    $("#txtUnidad").val('');
     $("#txtPrecio").val('');
     $("#txtCantidad").val('');
     $("#txtStock").val('');
@@ -125,7 +129,7 @@ function calcularPrecios() {
     var sumaNetos = 0.0; //total de netos
     var total = 0.0;
     $('#tablaDetalle > tbody  > tr').each(function () {
-        var importetotal = parseFloat($(this).find("td").eq(4).html());
+        var importetotal = parseFloat($(this).find("td").eq(5).html());
         sumaNetos = sumaNetos + importetotal;
     });
     igv = parseFloat(sumaNetos) * 0.18;

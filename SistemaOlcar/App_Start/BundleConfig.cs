@@ -35,7 +35,8 @@ namespace SistemaOlcar
                        "~/Scripts/DataTables/dataTables.responsive.js",
                        "~/Scripts/jquery.dataTables.min.js",
                         "~/Scripts/sweetalert.min.js",
-                        "~/Scripts/jquery-ui-1.13.2.min.js"
+                        "~/Scripts/jquery-ui-1.13.2.min.js",
+                        "~/Scripts/chart.min.js"
                        //"~/Scripts/select2.min.js"//agregado
                        ));
         }

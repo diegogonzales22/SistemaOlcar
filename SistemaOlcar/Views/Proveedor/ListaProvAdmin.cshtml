@@ -1,0 +1,122 @@
+﻿@model SistemaOlcar.Models.Proveedor
+
+@{
+    ViewBag.Title = "Proveedores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Proveedores</h2>
+<hr />
+<div class="form-control p-4">
+    <table id="tabla" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>CÓD.</th>
+                <th>No. DOCUMENTO</th>
+                <th>NOMBRE</th>
+                <th>ESTADO</th>
+                <th>ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+@*Modal DETALLES*@
+<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h2 class="modal-title text-white" id="exampleModalLabel">Proveedor</h2>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("Details")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var tabladata;
+        tabladata = $("#tabla").DataTable({
+                "drawCallback": function (settings) {
+                    feather.replace();
+                },
+                "ajax": {
+                    "url": '@Url.Action("Listar", "Proveedor")',
+                    "type": "GET",
+                    "dataType": "json"
+                },
+                "columns": [
+                    { "data": "idProveedor" },
+                    { "data": "numeroDocumento" },
+                    { "data": "nombre" },
+                    {
+                        "data": "activo", "render": function (valor) {
+                            if (valor) {
+                                return '<span class="badge bg-success">Activo</span>'
+                            } else {
+                                return '<span class="badge bg-danger">Inactivo</span>'
+                            }
+                        }
+                    },
+                    {
+                        "data": "idProveedor", "render": function (data) {
+                            return "<a type='button' onclick='abrirModal(" + data +")' class='btn btn-primary btn-sm ms-2' id='btn-detalles'><i data-feather='eye'></i></a>"
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        //"width": "90px"
+                    },
+
+                ],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                }
+        });
+
+        //Abrir modal
+        function abrirModal($idProveedor) {
+
+            $("#txtIdProveedor").val($idProveedor);
+            if ($idProveedor != 0) {
+
+                jQuery.ajax({
+                    url: "@Url.Action("Details","Proveedor")" + "?idProveedor=" + $idProveedor,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        if (data != null) {
+
+                            $("#txtCodigo").val(data.idProveedor);
+                            $("#txtDocumento").val(data.numeroDocumento);
+                            $("#txtNombre").val(data.nombre);
+                            $("#txtDireccion").val(data.direccion);
+                            $("#txtDepartamento").val(data.departamento);
+                            $("#txtProvincia").val(data.provincia);
+                            $("#txtDistrito").val(data.distrito);
+                            $("#txtTelefono").val(data.telefono);
+                            $("#txtEmail").val(data.email);
+                            $("#txtCondicion").val(data.condicionPago);
+                            $("#txtEstado").val(data.activo == true ? "Activo" : "Inactivo");
+                        }
+
+                    }
+                });
+            }
+            $('#FormModal').modal('show');
+        }
+
+    </script>
+}
+
+
+

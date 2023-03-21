@@ -151,7 +151,14 @@
         </div>
         <br />
         <div class="form-group">
-            <a href='@Url.Action("Index")' class="btn btn-danger">Volver</a>
+            @if(User.IsInRole("Administrador")){ //Administrador
+            <a href='@Url.Action("ListaProdAdmin", "Producto")' class="btn btn-danger">Volver</a>
+            }
+            else //Almacenero
+            {
+                <a href='@Url.Action("Index", "Producto")' class="btn btn-danger">Volver</a>
+            }
+            
         </div>
     </div>
 </div>

@@ -4,41 +4,38 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Inventario</h2>
-<hr />
-<input type="button" class="form-control btn-success" onclick="printHTML(seleccion)" value="Imprimir" style="height:30px; width:100px"/>
-<br />
+<div id="seleccion">
+    <h2>Inventario</h2>
+    <hr />
+    <div class="form-control p-4">
+        <table class="table">
+            <thread>
+                <tr>
+                    <th class="table-secondary">CÓDIGO</th>
+                    <th class="table-secondary">PRODUCTO</th>
+                    <th class="table-secondary">STOCK</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.idProducto
+                        </td>
+                        <td>
+                            @item.nombre
+                        </td>
+                        <td>
+                            @item.stock
+                        </td>
+                    </tr>
+                }
+            </thread>
 
-<div class="form-control p-4" id="seleccion">
-    <table class="table">
-        <thread>
-            <tr>
-                <th class="table-secondary">CÓDIGO</th>
-                <th class="table-secondary">PRODUCTO</th>
-                <th class="table-secondary">STOCK</th>
-            </tr>
-            @foreach (var item in Model)
-            {
-            <tr>
-                <td>
-                    @item.idProducto
-                </td>
-                <td>
-                    @item.nombre
-                </td>
-                <td>
-                    @item.stock
-                </td>
-            </tr>
-            }
-
-
-        </thread>
-
-    </table>
-
+        </table>
+    </div>
 </div>
 <div class="modal-footer">
+    <input type="button" class="form-control btn-success" onclick="printHTML(seleccion)" value="Imprimir" style="height:30px; width:100px" />
     <a href='@Url.Action("InventarioxMarca")' class="btn btn-primary">Volver</a>
 </div>
 

@@ -198,6 +198,11 @@ namespace SistemaOlcar.Controllers
             var foto = db.Producto.Where(x => x.idProducto == id).FirstOrDefault();
             return File(foto.imagen, "image/jpeg");
         }
+
+        public ActionResult ListaProdAdmin()
+        {
+            return View();
+        }
     }
 
 }

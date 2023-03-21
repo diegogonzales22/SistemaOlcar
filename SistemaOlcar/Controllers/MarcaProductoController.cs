@@ -52,7 +52,6 @@ namespace SistemaOlcar.Controllers
         [HttpPost]
         public JsonResult Guardar(MarcaProducto oMarca) //Registra o edita una marca de producto
         {
-
             bool respuesta = true;
             try
             {
@@ -70,13 +69,14 @@ namespace SistemaOlcar.Controllers
                     using (OLCAREntities db = new OLCAREntities())
                     {
                         MarcaProducto tempMarca = (from p in db.MarcaProducto
-                                                   where p.idMarca == oMarca.idMarca
-                                                   select p).FirstOrDefault();
+                                                    where p.idMarca == oMarca.idMarca
+                                                    select p).FirstOrDefault();
 
                         tempMarca.nombre = oMarca.nombre;
                         tempMarca.estado = oMarca.estado;
 
                         db.SaveChanges();
+                        
                     }
 
                 }

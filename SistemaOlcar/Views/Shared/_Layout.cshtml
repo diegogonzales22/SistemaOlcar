@@ -7,34 +7,37 @@
     <title>@ViewBag.Title - Olcar</title>
     @Styles.Render("~/Content/css")
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="~/Content/Imagenes/logo_olcar.jpg"/>
 </head>
 <body>
     <div class="wrapper">
         <nav id="sidebar" class="sidebar js-sidebar">
             <div class="sidebar-content js-simplebar">
-                <a class="sidebar-brand" href="index.html">
+                <span class="sidebar-brand">
                     <span class="align-middle">OLCAR</span>
-                </a>
+                </span>
                 @if (User.Identity.IsAuthenticated)
                 {
             <ul class="sidebar-nav">
-                <li class="sidebar-header">
-                    Perfil
-                </li>
 
-                <li class="sidebar-item active">
-                    <a class="sidebar-link" href="index.html">
-                        <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="@Url.Action("Logout", "Acceso")">
-                        <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Cerrar Sesión</span>
-                    </a>
-                </li>
                 @if (User.IsInRole("Administrador"))
                 {
+                    <li class="sidebar-header">
+                        Perfil
+                    </li>
+
+                    <li class="sidebar-item active">
+                        <a class="sidebar-link" href="@Url.Action("DashboardAdmin", "Home")">
+                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("Logout", "Acceso")">
+                            <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Cerrar Sesión</span>
+                        </a>
+                    </li>
+
                     <li class="sidebar-header">
                         Gestión
                     </li>
@@ -50,6 +53,18 @@
                     </li>
 
                     <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("ListaProdAdmin", "Producto")">
+                            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Productos</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("ListaProvAdmin", "Proveedor")">
+                            <i class="align-middle" data-feather="truck"></i> <span class="align-middle">Proveedores</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
                         <a class="sidebar-link" href="@Url.Action("Index", "OrdenesAdmin")">
                             <i class="align-middle" data-feather="file"></i> <span class="align-middle">Órdenes de Compra</span>
                         </a>
@@ -59,6 +74,22 @@
                 @if (User.IsInRole("Cajero"))
                 {
                     <li class="sidebar-header">
+                        Perfil
+                    </li>
+
+                    <li class="sidebar-item active">
+                        <a class="sidebar-link" href="@Url.Action("DashboardCajero", "Home")">
+                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("Logout", "Acceso")">
+                            <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Cerrar Sesión</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-header">
                         Venta
                     </li>
 
@@ -67,10 +98,42 @@
                             <i class="align-middle" data-feather="monitor"></i> <span class="align-middle">Registrar Venta</span>
                         </a>
                     </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("ListarVentas", "Venta")">
+                            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Ventas Realizadas</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-header">
+                        Productos
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("ListarProductos", "Venta")">
+                            <i class="align-middle" data-feather="box"></i> <span class="align-middle">Artículos</span>
+                        </a>
+                    </li>
                 }
 
                 @if (User.IsInRole("Operario de Almacén"))
                 {
+                    <li class="sidebar-header">
+                        Perfil
+                    </li>
+
+                    <li class="sidebar-item active">
+                        <a class="sidebar-link" href="@Url.Action("DashboardCajero", "Home")">
+                            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("Logout", "Acceso")">
+                            <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Cerrar Sesión</span>
+                        </a>
+                    </li>
+
                     <li class="sidebar-header">
                         Logística
                     </li>
@@ -124,6 +187,12 @@
                     </li>
 
                     <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("ListaProductos", "ReportesAlmacen")">
+                            <i class="align-middle" data-feather="list"></i> <span class="align-middle">Lista de Productos</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
                         <a class="sidebar-link" href="@Url.Action("InventarioxMarca", "ReportesAlmacen")">
                             <i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Inventario por Marca</span>
                         </a>
@@ -144,7 +213,7 @@
                     <ul class="navbar-nav navbar-align">
                         <li class="nav-item dropdown">
                                 @*<img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="Charles Hall" />*@
-                            <span class="text-dark">Usuario: @User.Identity.Name</span>
+                            <h4 class="text-dark">Usuario: @User.Identity.Name</h4>
                         </li>
                     </ul>
                 </div>

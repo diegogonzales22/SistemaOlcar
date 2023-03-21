@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Ventas Realizadas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Ventas Realizadas</h2>
+<hr />
+
+<div class="form-control p-4">
+    <table id="tabla" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Nro. VENTA.</th>
+                <th>FECHA</th>
+                <th>DNI CLIENTE</th>
+                <th>IMPORTE TOTAL</th>
+                <th>ESTADO</th>
+                <th>ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+    var tabladata;
+        tabladata = $("#tabla").DataTable({
+                order: [[0, 'desc']],
+                "drawCallback": function (settings) {
+                    feather.replace();
+                },
+                "ajax": {
+                    "url": '@Url.Action("MisVentas", "Venta")',
+                    "type": "GET",
+                    "dataType": "json"
+                },
+                "columns": [
+                    { "data": "idVenta" },
+                    { "data": "fechaRegistro" },
+                    { "data": "numeroDocumento" },
+                    {
+                        "data": "importeTotal", "render": function (data, type, row) {
+                            // esto es lo que se va a renderizar como html
+                            return `S/. ${row.importeTotal}`;
+                        }
+                    },
+                    {
+                        "data": "estado", "render": function (valor) {
+                            if (valor) {
+                                return '<span class="badge bg-success">Emitido</span>'
+                            } else {
+                                return '<span class="badge bg-danger">Anulado</span>'
+                            }
+                        }
+                    },
+                    {
+                        "data": "idVenta", "render": function (data) {
+                            return "<a type='button' href='@Url.Action("Detalles","Venta")?id=" + data + "' class='btn btn-primary btn-sm ms-2' id='btn-detalles'><i data-feather='eye'></i></a>"
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        //"width": "150px"
+                    },
+
+                ],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                }
+        });
+    </script>
+}

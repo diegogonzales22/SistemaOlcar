@@ -120,6 +120,11 @@
       <End Role="Usuario" EntitySet="Usuario" />
       <End Role="Venta" EntitySet="Venta" />
     </AssociationSet>
+    <FunctionImport Name="SP_RetornaVentas" ReturnType="Collection(OLCARModel.SP_RetornaVentas_Result)" />
+    <FunctionImport Name="SP_RetornaTopProductos" ReturnType="Collection(OLCARModel.SP_RetornaTopProductos_Result)" />
+    <FunctionImport Name="SP_GananciaDia" ReturnType="Collection(Decimal)" />
+    <FunctionImport Name="SP_CantidadProductosDia" ReturnType="Collection(Int32)" />
+    <FunctionImport Name="SP_CantidadVentasDia" ReturnType="Collection(Int32)" />
   </EntityContainer>
   <EntityType Name="Proveedor">
     <Key>
@@ -491,4 +496,14 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <ComplexType Name="SP_RetornaVentas_Result">
+    <Property Type="Int32" Name="anio" Nullable="true" />
+    <Property Type="Int32" Name="mesValor" Nullable="true" />
+    <Property Type="String" Name="mes" Nullable="true" MaxLength="30" />
+    <Property Type="Decimal" Name="total" Nullable="true" Precision="38" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="SP_RetornaTopProductos_Result">
+    <Property Type="String" Name="nombre" Nullable="false" MaxLength="250" />
+    <Property Type="Int32" Name="cantidad" Nullable="true" />
+  </ComplexType>
 </Schema>

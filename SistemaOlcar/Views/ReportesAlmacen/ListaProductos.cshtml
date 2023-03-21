@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewBag.Title = "Lista de Productos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista de Productos</h2>
+<hr />
+<div class="form-control p-4">
+    <div class="row">
+        <div class="col-md-3">
+            <span>Ver Productos:</span>
+            <select class="btn btn-info" id="productos">
+                <option disabled selected></option>
+                <option value="1">Activos</option>
+                <option value="2">Inactivos</option>
+                <option value="3">Todos</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="button" class="form-control btn-success" onclick="printHTML()" value="Imprimir" style="height:30px; width:100px" />
+        </div>
+    </div>
+</div>
+
+<div class="form-control p-4" id="contenedor">
+    <h3 id="titulo"></h3>
+    <table class="table" id="tabla">
+        <thead>
+            <tr>
+                @*MARCA*@
+                <th class="table-dark">CÓDIGO</th>
+                <th class="table-dark">PRODUCTO</th>
+                <th class="table-dark">UNIDAD</th>
+                <th class="table-dark">MARCA</th>
+                <th class="table-dark">CÓDIGO EAN</th>
+                <th class="table-dark">PRECIO VENTA</th>
+            </tr>
+        </thead>
+        <tbody id="tablabody">
+        </tbody>
+    </table>
+</div>
+
+
+@section scripts{
+    <script>
+    $("#productos").change(function () {
+
+        let tbody = document.querySelector('#tablabody');
+        tbody.innerHTML = '';
+        let titulo = document.querySelector('#titulo');
+
+        //Productos activos
+        if (document.getElementById('productos').value == "1") {
+
+            titulo.innerHTML = 'Productos Activos';
+
+            let root = '@Url.Action("ProductosActivos", "ReportesAlmacen")';
+
+            $.getJSON(root,
+                function (json) {
+                    var tr;
+                    //Append each row to html table
+                    for (var i = 0; i < json.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td>" + json[i].idProducto + "</td>");
+                        tr.append("<td>" + json[i].nombre + "</td>");
+                        tr.append("<td>" + json[i].unidad + "</td>");
+                        tr.append("<td>" + json[i].marca + "</td>");
+                        tr.append("<td>" + json[i].codigoEAN + "</td>");
+                        tr.append("<td>" + "S/."+ json[i].precioVenta + "</td>");
+                        $('#tablabody').append(tr);
+                    }
+                });
+
+        }
+        else if (document.getElementById('productos').value == "2") {
+
+            titulo.innerHTML = 'Productos Inactivos';
+
+            let root = '@Url.Action("ProductosInactivos", "ReportesAlmacen")';
+
+            $.getJSON(root,
+                function (json) {
+                    var tr;
+                    //Append each row to html table
+                    for (var i = 0; i < json.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td>" + json[i].idProducto + "</td>");
+                        tr.append("<td>" + json[i].nombre + "</td>");
+                        tr.append("<td>" + json[i].unidad + "</td>");
+                        tr.append("<td>" + json[i].marca + "</td>");
+                        tr.append("<td>" + json[i].codigoEAN + "</td>");
+                        tr.append("<td>" + "S/."+ json[i].precioVenta + "</td>");
+                        $('#tablabody').append(tr);
+                    }
+                });
+        }
+        else {
+            titulo.innerHTML = 'Todos los Productos';
+
+            let root = '@Url.Action("ProductosTodos", "ReportesAlmacen")';
+
+            $.getJSON(root,
+                function (json) {
+                    var tr;
+                    //Append each row to html table
+                    for (var i = 0; i < json.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td>" + json[i].idProducto + "</td>");
+                        tr.append("<td>" + json[i].nombre + "</td>");
+                        tr.append("<td>" + json[i].unidad + "</td>");
+                        tr.append("<td>" + json[i].marca + "</td>");
+                        tr.append("<td>" + json[i].codigoEAN + "</td>");
+                        tr.append("<td>" + "S/."+ json[i].precioVenta + "</td>");
+                        $('#tablabody').append(tr);
+                    }
+                });
+        }
+    });
+
+    function printHTML() {
+        window.print();
+    }
+    </script>
+}

@@ -1,0 +1,430 @@
+﻿--------------SCRIPT BASE DE DATOS SISTEMA OLCAR-------------------
+
+CREATE DATABASE OLCAR
+GO
+USE OLCAR
+GO
+-----------TABLAS-----------
+CREATE TABLE Rol(
+	idRol int identity primary key,
+	nombre varchar(200) not null
+)
+GO
+CREATE TABLE Usuario(
+	idUsuario int identity primary key,
+	usuario varchar(50) not null,
+	contraseña varchar(max) not null,
+	idRol int references Rol(idRol) not null,
+	estado bit not null
+)
+GO
+CREATE TABLE Cliente(
+	idCliente int primary key identity,
+	tipoDocumento varchar(50) not null, --dni o carnet de extranjeria
+	numeroDocumento int not null,
+	nombres varchar(200) not null,
+	apellidoPaterno varchar(200) not null,
+	apellidoMaterno varchar(200) not null,
+	telefono varchar(50) not null,
+	correo varchar(200) not null
+)
+GO
+CREATE TABLE Proveedor(
+	idProveedor int primary key identity,
+	nombre varchar(100) not null,
+	activo bit not null,
+	numeroDocumento varchar(50) not null,
+	direccion varchar(100),
+	departamento varchar(100),
+	provincia varchar(100),
+	distrito varchar(100),
+	telefono varchar(50),
+	email varchar(100),
+	condicionPago varchar(200) not null
+)
+GO
+CREATE TABLE MarcaProducto(
+	idMarca int identity primary key,
+	nombre varchar(100) not null,
+	estado bit not null
+)
+GO
+CREATE TABLE Ubicacion(
+	idUbicacion int identity primary key,
+	descripcion varchar(100) not null,
+	estado bit not null
+)
+GO
+CREATE TABLE Producto(
+	idProducto int identity primary key,
+	nombre varchar(250) not null,
+	fechaCreacion datetime not null,
+	estado bit not null,
+	idMarca int references MarcaProducto(idMarca) not null,
+	categoria varchar(50) not null,
+	idUbicacion int references Ubicacion(idUbicacion) not null,
+	unidadMedida varchar (50) not null,
+	codigoEAN varchar(50) null,
+	costo decimal(18,2) null,
+	costoSinIGV decimal(18,2) null,
+	precioVenta decimal(18,2) null,
+	ganancia decimal(18,2) null,
+	stockMinimo int not null,
+	stockMaximo int not null,
+	stock bigint not null,
+	imagen varbinary(max)
+)
+GO
+CREATE TABLE OrdenCompra(
+	idOrden int primary key identity(1,1),
+	fechaRegistro datetime not null,
+	creadoPor int references Usuario(idUsuario) not null,
+	idProveedor int references Proveedor(idProveedor) not null,
+	situacion varchar(100) not null,
+	totalNeto decimal(18,2) not null,
+	totalIGV decimal(18,2) not null,
+	costoTotal decimal(18,2) not null,
+	fechaAprobacion datetime default null,
+	aprobadoPor int references Usuario(idUsuario) default null,
+	fechaCaducidad datetime not null,
+	observacion text
+)
+GO
+CREATE TABLE DetalleOrden(
+	idDetalleOrden int primary key identity (1,1),
+	idOrden int references OrdenCompra(idOrden) not null,
+	idProducto int references Producto(idProducto) not null,
+	cantidad int not null,
+	precioUnidad decimal(18,2) not null,
+	descuento decimal(18,2) not null,
+	importeTotal decimal(18,2) not null,
+)
+GO
+CREATE TABLE Ingreso(
+	idIngreso int identity(1,1) primary key,
+	fechaRegistro datetime not null,
+	creadorPor int references Usuario(idUsuario) not null,
+	tipoDocumento varchar(100) not null,
+	nroDocumento varchar(100) not null,
+	fechaDocumento datetime not null,
+	idOrden int references OrdenCompra(idOrden) not null,
+	idProveedor int references Proveedor(idProveedor) not null,
+	totalNeto decimal(18,2) not null,
+	totalIGV decimal(18,2) not null,
+	costoTotal decimal(18,2) not null,
+	observacion text
+)
+
+GO
+CREATE TABLE DetalleIngreso(
+	idDetalle int primary key identity(1,1),
+	idIngreso int references Ingreso(idIngreso),
+	idProducto int references Producto(idProducto),
+	fecha datetime not null,
+	cantidad int not null,
+	precioUnidad decimal(18,2) not null,
+	descuento decimal(18,2) not null,
+	importeTotal decimal(18,2) not null,
+)
+GO
+CREATE TABLE Venta (
+	idVenta int identity primary key,
+	fechaRegistro datetime not null,
+	estado bit not null, --anulada o emitido
+	idUsuario int references Usuario(idUsuario) not null,
+	numeroDocumento varchar(50) not null,
+	nombre varchar(50) not null, --cliente
+	subTotal decimal(18,2) not null,
+	igv decimal(18,2) not null,
+	importeTotal decimal(18,2) not null,
+)
+GO
+CREATE TABLE DetalleVenta(
+	idDetalleVenta int identity primary key,
+	idVenta int references Venta(idVenta) not null, 
+	fechaRegistro datetime not null,
+	idProducto int references Producto(idProducto) not null, 
+	cantidad int not null,
+	precioUnidad decimal(18,2) not null,
+	importeTotal decimal(18,2) not null,
+)
+GO
+-----------PROCEDIMIENTOS ALMACENADOS-----------------
+
+-----ACTUALIZA COSTO NETO
+CREATE PROC usp_UpdateCostoNeto
+	@idOrden int
+AS 
+BEGIN 
+	UPDATE OrdenCompra
+	SET totalNeto = tabla2agregada.suma
+	FROM OrdenCompra t1 
+    JOIN (SELECT t1.idOrden, SUM(t2.importeTotal) suma
+            FROM OrdenCompra t1, DetalleOrden t2
+            WHERE t1.idOrden = t2.idOrden
+            GROUP BY t1.idOrden) tabla2agregada
+			ON t1.idOrden = tabla2agregada.idOrden
+			WHERE t1.idOrden = @idOrden
+END
+-----FIN SP
+
+GO
+
+-----ACTUALIZA TOTAL IGV
+CREATE PROC usp_UpdateIGV
+	@idOrden int
+AS 
+BEGIN 
+	UPDATE OrdenCompra
+	SET totalIGV = tabla2agregada.suma
+	FROM OrdenCompra t1 
+    JOIN (SELECT t1.idOrden, SUM(t2.importeTotal)*1.18-SUM(t2.importeTotal) suma
+            FROM OrdenCompra t1, DetalleOrden t2
+            WHERE t1.idOrden = t2.idOrden
+            GROUP BY t1.idOrden) tabla2agregada
+			ON t1.idOrden = tabla2agregada.idOrden
+			WHERE t1.idOrden = @idOrden
+END
+-----FIN SP
+
+GO
+
+----ACTUALIZA COSTO TOTAL
+CREATE PROC usp_UpdateCostoTotal
+	@idOrden int
+AS 
+BEGIN 
+	UPDATE OrdenCompra
+	SET costoTotal = tabla2agregada.suma
+	FROM OrdenCompra t1 
+    JOIN (SELECT t1.idOrden, SUM(t2.importeTotal)*1.18 suma
+            FROM OrdenCompra t1, DetalleOrden t2
+            WHERE t1.idOrden = t2.idOrden
+            GROUP BY t1.idOrden) tabla2agregada
+			ON t1.idOrden = tabla2agregada.idOrden
+			WHERE t1.idOrden = @idOrden
+END
+----FIN SP
+
+GO
+
+-----CUS INGRESO DE PRODUCTOS
+CREATE PROC usp_ActualizarCostoNeto
+	@idIngreso int
+AS 
+BEGIN 
+	UPDATE Ingreso
+	SET totalNeto = tabla2agregada.suma
+	FROM Ingreso t1 
+    JOIN (SELECT t1.idIngreso, SUM(t2.importeTotal) suma
+            FROM Ingreso t1, DetalleIngreso t2
+            WHERE t1.idIngreso = t2.idIngreso
+            GROUP BY t1.idIngreso) tabla2agregada
+			ON t1.idIngreso = tabla2agregada.idIngreso
+			WHERE t1.idIngreso = @idIngreso
+END
+
+GO
+
+CREATE PROC usp_ActualizarIGV
+	@idIngreso int
+AS 
+BEGIN 
+	UPDATE Ingreso
+	SET totalIGV = tabla2agregada.suma
+	FROM Ingreso t1 
+    JOIN (SELECT t1.idIngreso, SUM(t2.importeTotal)*1.18-SUM(t2.importeTotal) suma
+            FROM Ingreso t1, DetalleIngreso t2
+            WHERE t1.idIngreso = t2.idIngreso
+            GROUP BY t1.idIngreso) tabla2agregada
+			ON t1.idIngreso = tabla2agregada.idIngreso
+			WHERE t1.idIngreso = @idIngreso
+END
+
+GO
+
+CREATE PROC usp_ActualizarCostoTotal
+	@idIngreso int
+AS 
+BEGIN 
+	UPDATE Ingreso
+	SET costoTotal = tabla2agregada.suma
+	FROM Ingreso t1 
+    JOIN (SELECT t1.idIngreso, SUM(t2.importeTotal)*1.18 suma
+            FROM Ingreso t1, DetalleIngreso t2
+            WHERE t1.idIngreso = t2.idIngreso
+            GROUP BY t1.idIngreso) tabla2agregada
+			ON t1.idIngreso = tabla2agregada.idIngreso
+			WHERE t1.idIngreso = @idIngreso
+END
+
+GO
+
+---INGRESA STOCK
+CREATE PROCEDURE SP_IngresaStock
+(
+	@idProducto int, 
+    @cantidad int 
+)
+AS
+BEGIN
+	UPDATE Producto SET 
+	stock = (stock + @cantidad)
+	WHERE idProducto = @idProducto
+END
+---FIN SP
+
+GO
+
+---DISMINUYE STOCK
+CREATE PROCEDURE SP_RestaStock
+(
+	@idProducto int, 
+    	@cantidad int 
+)
+AS
+BEGIN
+	UPDATE Producto SET 
+	stock = (stock - @cantidad)
+	WHERE idProducto = @idProducto
+END
+--FIN SP
+
+GO
+
+--RETORNA GANANCIAS DE LOS ÚLTIMOS 4 MESES
+CREATE PROCEDURE SP_RetornaVentas
+AS
+BEGIN
+	declare @fecha_maxima datetime;
+	declare @fecha_minima datetime;
+
+	set @fecha_maxima = (select MAX(fechaRegistro) from Venta);
+
+	set @fecha_minima = DATEADD(MONTH, -4, @fecha_maxima);
+	set @fecha_minima = DATEADD(DAY, -(day(@fecha_minima) - 1), @fecha_minima);
+
+	select YEAR(fechaRegistro) as anio, MONTH(fechaRegistro) as mesValor, DATENAME(MONTH, fechaRegistro) as mes, SUM(importeTotal) as total from Venta
+	where fechaRegistro between @fecha_minima and @fecha_maxima
+	group by YEAR(fechaRegistro), MONTH(fechaRegistro), DATENAME(MONTH, fechaRegistro)
+	order by YEAR(fechaRegistro), MONTH(fechaRegistro) asc;
+END
+--FIN SP
+
+GO
+
+--RETORNA PRODUCTOS MÁS VENDIDOS: ÚLTIMOS 2 MESES
+CREATE PROCEDURE SP_RetornaTopProductos
+AS
+BEGIN
+	declare @fecha_maxima datetime;
+	declare @fecha_minima datetime;
+
+	set @fecha_maxima = (select MAX(fechaRegistro) from Venta);
+
+	set @fecha_minima = DATEADD(MONTH, -2, @fecha_maxima);
+	set @fecha_minima = DATEADD(DAY, -(day(@fecha_minima) - 1), @fecha_minima);
+
+	select top 4 p.nombre, SUM(d.cantidad) cantidad from Venta v
+	inner join DetalleVenta d on d.idVenta = v.idVenta
+	inner join Producto p on d.idProducto = p.idProducto
+	where v.fechaRegistro between @fecha_minima and @fecha_maxima
+	group by p.nombre
+	order by SUM(d.cantidad) desc;
+END
+--FIN SP
+
+GO
+
+--RETORNA GANANCIA DIARIA
+CREATE PROCEDURE SP_GananciaDia
+AS
+BEGIN
+	declare @fechaMin date;
+	declare @fechaMax datetime;
+	set @fechaMin = CAST( GETDATE() AS Date );
+	set @fechaMax = (select GETDATE());
+
+	select SUM(importeTotal) total from Venta
+	where fechaRegistro between @fechaMin and @fechaMax; 
+END
+--FIN SP
+
+GO
+
+--CANTIDAD DE VENTAS
+CREATE PROCEDURE SP_CantidadVentasDia
+AS
+BEGIN
+	declare @fechaMin date;
+	declare @fechaMax datetime;
+	set @fechaMin = CAST( GETDATE() AS Date );
+	set @fechaMax = (select GETDATE());
+
+	select COUNT(*) cantidad from Venta
+	where fechaRegistro between @fechaMin and @fechaMax; 
+END
+--FIN SP
+
+GO
+
+--CANTIDAD DE PRODUCTOS VENDIDOS EN EL DIA
+CREATE PROCEDURE SP_CantidadProductosDia
+AS
+BEGIN
+	declare @fechaMin date;
+	declare @fechaMax datetime;
+	set @fechaMin = CAST( GETDATE() AS Date );
+	set @fechaMax = (select GETDATE());
+
+	select SUM(cantidad) cantidad from DetalleVenta
+	where fechaRegistro between @fechaMin and @fechaMax; 
+END
+--FIN SP
+
+GO
+
+--RETORNA GANANCIAS DE LOS ÚLTIMOS 30 DIAS
+CREATE PROCEDURE SP_RetornaGananciasDiarias
+AS
+BEGIN
+	select top 30 CONVERT(varchar, fechaRegistro, 103) as fecha, CONVERT(date, fechaRegistro, 103) as fechaDate , SUM(importeTotal) as total from Venta
+	group by CONVERT(varchar, fechaRegistro, 103), CONVERT(date, fechaRegistro, 103)
+	order by CONVERT(date, fechaRegistro, 103) asc;
+END
+--FIN SP
+
+GO
+
+--RETORNA CANTIDAD DE STOCK TOTAL
+CREATE PROCEDURE SP_CantidadStockTotal
+AS
+BEGIN
+	SELECT SUM(stock) as cantidad FROM PRODUCTO
+END
+--FIN SP
+
+GO
+
+--------JOB SQL-----------
+
+--Actualiza la situación de la órden de compra cuando expira
+update OrdenCompra
+set situacion = 'Expirada'
+where situacion = 'Por Aprobar' AND fechaCaducidad <= GETDATE()
+
+GO
+
+-----INSERTAR LOTES DE PRUEBA
+
+--TABLA ROL
+insert into Rol (nombre) values ('Administrador')
+insert into Rol (nombre) values ('Cajero')
+insert into Rol (nombre) values ('Operario de Almacén')
+
+GO
+
+insert into Usuario (usuario, contraseña, idRol, estado) values
+('CMORALES', '1234', 1, 1),
+('MLUNA', '1234', 2, 1),
+('DGONZALES', '1234', 3, 1)

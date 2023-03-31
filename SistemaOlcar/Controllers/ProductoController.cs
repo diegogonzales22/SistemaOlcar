@@ -14,7 +14,10 @@ namespace SistemaOlcar.Controllers
     public class ProductoController : Controller
     {
         OLCAREntities db = new OLCAREntities();
+
         // GET: Producto
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Index()
         {
             return View();
@@ -41,6 +44,8 @@ namespace SistemaOlcar.Controllers
             return Json(new { data = oLstProducto }, JsonRequestBehavior.AllowGet);
         }
 
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Registrar() //GET: Producto
         {
             ViewBag.idMarca = new SelectList(db.MarcaProducto.Where(x => x.estado == true).OrderBy(x => x.nombre), "idMarca", "nombre");
@@ -95,6 +100,8 @@ namespace SistemaOlcar.Controllers
         }
 
         //Detalles de Producto
+        [Error(Roles = "Administrador,Operario de Almacén")]
+        [Authorize(Roles = "Administrador,Operario de Almacén")]
         public ActionResult Detalles(int? id)
         {
             if (id == null)
@@ -110,6 +117,8 @@ namespace SistemaOlcar.Controllers
         }
 
         //GET: PRODUCTO
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Editar(int? id)
         {
             if (id == null)
@@ -154,6 +163,8 @@ namespace SistemaOlcar.Controllers
         }
 
         //GET: EDITAR IMAGEN
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult UpdateImagen(int? id)
         {
             if (id == null)
@@ -199,9 +210,24 @@ namespace SistemaOlcar.Controllers
             return File(foto.imagen, "image/jpeg");
         }
 
+        [Error(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador")]
         public ActionResult ListaProdAdmin()
         {
             return View();
+        }
+
+        public JsonResult CantidadProductosAlmacen() //Stock total de productos
+        {
+            return Json(db.SP_CantidadStockTotal(), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CostoProductosAlmacen() //Costo total de productos en almacen
+        {
+            var costo = (from p in db.Producto
+                         select p.costo).Sum();
+
+            return Json(costo, JsonRequestBehavior.AllowGet);
         }
     }
 

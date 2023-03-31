@@ -187,6 +187,18 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_GananciaDia" FunctionName="OLCARModel.Store.SP_GananciaDia" />
+    <FunctionImportMapping FunctionImportName="SP_CantidadProductosDia" FunctionName="OLCARModel.Store.SP_CantidadProductosDia" />
+    <FunctionImportMapping FunctionImportName="SP_CantidadVentasDia" FunctionName="OLCARModel.Store.SP_CantidadVentasDia" />
+    <FunctionImportMapping FunctionImportName="SP_RetornaGananciasDiarias" FunctionName="OLCARModel.Store.SP_RetornaGananciasDiarias">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OLCARModel.SP_RetornaGananciasDiarias_Result">
+          <ScalarProperty Name="fecha" ColumnName="fecha" />
+          <ScalarProperty Name="fechaDate" ColumnName="fechaDate" />
+          <ScalarProperty Name="total" ColumnName="total" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="SP_RetornaTopProductos" FunctionName="OLCARModel.Store.SP_RetornaTopProductos">
       <ResultMapping>
         <ComplexTypeMapping TypeName="OLCARModel.SP_RetornaTopProductos_Result">
@@ -195,8 +207,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="SP_GananciaDia" FunctionName="OLCARModel.Store.SP_GananciaDia" />
-    <FunctionImportMapping FunctionImportName="SP_CantidadProductosDia" FunctionName="OLCARModel.Store.SP_CantidadProductosDia" />
-    <FunctionImportMapping FunctionImportName="SP_CantidadVentasDia" FunctionName="OLCARModel.Store.SP_CantidadVentasDia" />
+    <FunctionImportMapping FunctionImportName="SP_CantidadStockTotal" FunctionName="OLCARModel.Store.SP_CantidadStockTotal" />
   </EntityContainerMapping>
 </Mapping>

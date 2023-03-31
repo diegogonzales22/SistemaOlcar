@@ -13,6 +13,8 @@ namespace SistemaOlcar.Controllers
 {
     public class ProveedorController : Controller
     {
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Index() //Inicio
         {
             return View();
@@ -30,6 +32,8 @@ namespace SistemaOlcar.Controllers
             return Json(new { data = oLstProveedor }, JsonRequestBehavior.AllowGet);
         }
 
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Registrar() //GET: Proveedor
         {
             return View();
@@ -97,6 +101,8 @@ namespace SistemaOlcar.Controllers
             return Json(oProveedor, JsonRequestBehavior.AllowGet);
         }
 
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Editar(int? id)
         {
             using (OLCAREntities db = new OLCAREntities())
@@ -143,6 +149,8 @@ namespace SistemaOlcar.Controllers
             return View(proveedor);
         }
 
+        [Error(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador")]
         public ActionResult ListaProvAdmin()
         {
             return View();

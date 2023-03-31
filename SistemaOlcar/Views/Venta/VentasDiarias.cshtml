@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "Reporte de Ventas diarias";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12" align="center">
+        <div class="card">
+            <h4 class="card-header bg-dark text-white">Ventas diarias: Últimos 30 días</h4>
+            <div class="card-body">
+                <canvas id="myLineChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        //GANANCIAS DE LOS ÚLTIMOS 30 DÍAS
+        jQuery.ajax({
+            url: "@Url.Action("ReporteGananciasDiarias", "Home")",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                let arrayFecha = [];
+                let arrayTotal = [];
+
+                for (var i = 0; i < data.length; i++) {
+                    arrayFecha.push(data[i].fecha);
+                    arrayTotal.push(data[i].total);
+                }
+
+                let lineChart = document.querySelector("#myLineChart");
+
+                const xValues = arrayFecha;
+                const yValues = arrayTotal;
+
+                new Chart(lineChart, {
+                    type: "line",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                            label: "Total S/.",
+                            fill: false,
+                            lineTension: 0,
+                            backgroundColor: "blue",
+                            borderColor: "rgba(0,0,255,0.4)",
+                            data: yValues
+                        }]
+                    },
+                    options: {
+                        legend: { display: false },
+                    }
+                });
+
+            }
+        });
+
+    </script>
+}

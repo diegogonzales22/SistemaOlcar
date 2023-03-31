@@ -33,28 +33,6 @@
     </table>
 </div>
 
-@*Modal ELIMINAR*@
-<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-dark">
-                <h4 class="modal-title text-white" id="exampleModalLabel">Eliminar Ingreso</h4>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h4>¿Está seguro que desea eliminar éste ingreso?</h4>
-
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="btn btn-success" onclick="DeleteIngresoConfirm()">Confirmar</a>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <input type="hidden" id="hiddenIngresoId" />
-</div>
-
 @section scripts{
     <script>
 
@@ -72,7 +50,7 @@
             },
             "columns": [
                 { "data": "idIngreso" },
-                { "data": "fechaRegistro" },
+                { "data": "fechaRegistro"},
                 { "data": "proveedor" },
                 { "data": "nroOrden" },
                 { "data": "nroDocumento" },
@@ -85,8 +63,7 @@
                 {
                     "data": "idIngreso", "render": function (data) {
                         return "<a type='button' class='btn btn-info btn-sm ms-2' href='@Url.Action("Detalle","Ingreso")?id=" + data + "'><i data-feather='eye'></i></a>" +
-                            "<a type='button' class='btn btn-secondary btn-sm ms-2' href='@Url.Action("Editar","Ingreso")?id=" + data + "'><i data-feather='edit-2'></i></a>" +
-                            "<a type='button' class='btn btn-danger btn-sm ms-2' onclick='EliminarIngreso(" + data + ")'><i data-feather='trash'></i></a>"
+                            "<a type='button' class='btn btn-secondary btn-sm ms-2' href='@Url.Action("Editar","Ingreso")?id=" + data + "'><i data-feather='edit-2'></i></a>"
                     },
                     "orderable": false,
                     "searchable": false,
@@ -97,45 +74,6 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
             }
         });
-
-        var EliminarIngreso = function (id) {
-
-            //jQuery.ajax({
-                    @*url: "@Url.Action("ObtenerOrden", "OrdenCompra")" + "?id=" + id,
-                    type: "GET",
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (orden) {
-
-                        if (orden.situacion == "Surtida" || orden.situacion == "Aprobada") {
-                            swal("", "No se puede eliminar ésta órden de compra", "info");
-                        }
-                        else {
-                            $("#hiddenIngresoId").val(id);
-                            $("#FormModal").modal('show');
-                        }
-                    }
-                });*@
-
-
-            $("#hiddenIngresoId").val(id);
-
-            $("#FormModal").modal('show');
-        }
-
-        var DeleteIngresoConfirm = function () {
-
-            var id = $("#hiddenIngresoId").val();
-
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("Eliminar", "Ingreso")/" + id,
-                success: function (result) {
-                    $("#FormModal").modal("hide");
-                    tabladata.ajax.reload();
-                }
-            })
-        }
 
     </script>
 }

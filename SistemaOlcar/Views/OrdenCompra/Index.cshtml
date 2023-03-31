@@ -99,13 +99,12 @@
                 {
                     "data": "idOrden", "render": function (data) {
                         return "<a type='button' class='btn btn-info btn-sm ms-2' href='@Url.Action("Detalles","OrdenCompra")?id=" + data + "'><i data-feather='eye'></i></a>" +
-                            "<a type='button' class='btn btn-success btn-sm ms-2' onclick='Imprimir(" + data + ")'><i data-feather='printer'></i></a>" +
                             "<a type='button' class='btn btn-secondary btn-sm ms-2' href='@Url.Action("Editar","OrdenCompra")?id=" + data + "'><i data-feather='edit-2'></i></a>" +
                             "<a type='button' class='btn btn-danger btn-sm ms-2' onclick='EliminarOrden(" + data + ")'><i data-feather='trash'></i></a>"
                     },
                     "orderable": false,
                     "searchable": false,
-                    //"width": "150px"
+                    "width": "150px"
                 },
             ],
             "language": {
@@ -132,11 +131,6 @@
                         }
                     }
                 });
-
-
-            //$("#hiddenOrdenId").val(id);
-
-            //$("#FormModal").modal('show');
         }
 
         var DeleteOrderConfirm = function () {

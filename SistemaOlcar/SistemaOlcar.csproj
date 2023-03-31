@@ -191,6 +191,9 @@
     <Compile Include="Models\SP_Login_Result.cs">
       <DependentUpon>OLCAR.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SP_RetornaGananciasDiarias_Result.cs">
+      <DependentUpon>OLCAR.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SP_RetornaTopProductos_Result.cs">
       <DependentUpon>OLCAR.tt</DependentUpon>
     </Compile>
@@ -457,6 +460,7 @@
       <DependentUpon>OLCAR.edmx</DependentUpon>
       <LastGenOutput>OLCAR.cs</LastGenOutput>
     </Content>
+    <Content Include="Models\ScriptBD.txt" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -662,6 +666,8 @@
     <Content Include="Views\Home\DashboardAdmin.cshtml" />
     <Content Include="Views\Producto\ListaProdAdmin.cshtml" />
     <Content Include="Views\Proveedor\ListaProvAdmin.cshtml" />
+    <Content Include="Views\Venta\VentasDiarias.cshtml" />
+    <Content Include="Views\Home\DashboardAlmacen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

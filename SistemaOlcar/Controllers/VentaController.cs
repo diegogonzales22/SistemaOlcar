@@ -17,6 +17,8 @@ namespace SistemaOlcar.Controllers
         OLCAREntities db = new OLCAREntities();
         private static Usuario SesionUsuario;
 
+        [Error(Roles = "Administrador,Cajero")]
+        [Authorize(Roles = "Administrador,Cajero")]
         public ActionResult ListarVentas()
         {
             return View();
@@ -41,6 +43,8 @@ namespace SistemaOlcar.Controllers
             return Json(new { data = oLstOrden }, JsonRequestBehavior.AllowGet);
         }
 
+        [Error(Roles = "Cajero")]
+        [Authorize(Roles = "Cajero")]
         public ActionResult Registrar() //Registrar una venta
         {
             if (Session["Usuario"] != null)
@@ -94,6 +98,8 @@ namespace SistemaOlcar.Controllers
             }
         }
 
+        [Error(Roles = "Administrador,Cajero")]
+        [Authorize(Roles = "Administrador,Cajero")]
         public ActionResult Detalles(int? id)
         {
             if (id == null)
@@ -108,6 +114,8 @@ namespace SistemaOlcar.Controllers
             return View(venta);
         }
 
+        [Error(Roles = "Administrador,Cajero")]
+        [Authorize(Roles = "Administrador,Cajero")]
         public ActionResult Ticket(int id = 0)
         {
             //Buscar la venta
@@ -130,6 +138,8 @@ namespace SistemaOlcar.Controllers
             return Json(oVenta, JsonRequestBehavior.AllowGet);
         }
 
+        [Error(Roles = "Cajero")]
+        [Authorize(Roles = "Cajero")]
         public ActionResult ListarProductos()
         {
             return View();
@@ -194,6 +204,13 @@ namespace SistemaOlcar.Controllers
             }
 
             return Json(oProducto, JsonRequestBehavior.AllowGet);
+        }
+
+        [Error(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador")]
+        public ActionResult VentasDiarias()
+        {
+            return View();
         }
 
     }

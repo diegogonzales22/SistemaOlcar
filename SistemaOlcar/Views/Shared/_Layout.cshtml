@@ -18,6 +18,7 @@
                 </span>
                 @if (User.Identity.IsAuthenticated)
                 {
+
             <ul class="sidebar-nav">
 
                 @if (User.IsInRole("Administrador"))
@@ -69,6 +70,43 @@
                             <i class="align-middle" data-feather="file"></i> <span class="align-middle">Órdenes de Compra</span>
                         </a>
                     </li>
+
+                    <li class="sidebar-header">
+                        Venta
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("ListarVentas", "Venta")">
+                            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Ventas Realizadas</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-header">
+                        Reportes del Almacén
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("ListaProductos", "ReportesAlmacen")">
+                            <i class="align-middle" data-feather="list"></i> <span class="align-middle">Lista de Productos</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("InventarioxMarca", "ReportesAlmacen")">
+                            <i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Inventario por Marca</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-header">
+                        Reportes de Ventas
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="@Url.Action("VentasDiarias", "Venta")">
+                            <i class="align-middle" data-feather="bar-chart"></i> <span class="align-middle">Ventas Diarias</span>
+                        </a>
+                    </li>
+
                 }
 
                 @if (User.IsInRole("Cajero"))
@@ -123,7 +161,7 @@
                     </li>
 
                     <li class="sidebar-item active">
-                        <a class="sidebar-link" href="@Url.Action("DashboardCajero", "Home")">
+                        <a class="sidebar-link" href="@Url.Action("DashboardAlmacen", "Home")">
                             <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
                         </a>
                     </li>

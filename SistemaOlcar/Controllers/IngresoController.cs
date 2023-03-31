@@ -18,6 +18,8 @@ namespace SistemaOlcar.Controllers
         static Utilitario help = new Utilitario();
 
         // GET: Ingreso
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Index()
         {
             return View();
@@ -146,6 +148,8 @@ namespace SistemaOlcar.Controllers
             }
         }
 
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Detalle(int? id)
         {
             if (id == null)
@@ -160,6 +164,8 @@ namespace SistemaOlcar.Controllers
             return View(ingreso);
         }
 
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Documento(int id = 0) //Generar documento
         {
             //Buscar la orden de compra
@@ -182,6 +188,8 @@ namespace SistemaOlcar.Controllers
             return View(ingreso);
         }
 
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult UpdateCabecera(int? id) //Editar cabecera - GET
         {
             if (id == null)
@@ -203,9 +211,7 @@ namespace SistemaOlcar.Controllers
         {
             if (ModelState.IsValid)
             {
-                //ingreso.OrdenCompra.situacion = "Surtida";
                 db.Entry(ingreso).State = EntityState.Modified;
-                //ingreso.OrdenCompra.situacion = "Surtida";
                 db.SaveChanges();
                 return RedirectToAction("Editar", new { id = ingreso.idIngreso });
             }
@@ -214,6 +220,8 @@ namespace SistemaOlcar.Controllers
         }
 
         // GET: Ingreso/ EDITAR - Agregar productos al ingreso
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult AddProducto(int? id)
         {
             if (id == null)
@@ -292,38 +300,6 @@ namespace SistemaOlcar.Controllers
             db.SP_RestaStock(idProd, detalleAEliminar.cantidad);
             db.SaveChanges();
 
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost] // POST: Ingreso/Eliminar Ingreso/
-        public ActionResult Eliminar(int id)
-        {
-            
-            //Encontramos todos los registros que queremos eliminar
-            var ing = db.Ingreso.SingleOrDefault(a => a.idIngreso == id);
-            var detalleAEliminar = ing.DetalleIngreso.Where(t => t.idIngreso == id);
-
-            Models.DetalleIngreso detalleProducto = db.DetalleIngreso.Find(id);
-
-            //for (int i = 0; i < length; i++)
-            //{
-
-            //}
-
-            foreach (var oD in detalleAEliminar)
-            {    
-                //Disminuye el stock
-                db.SP_RestaStock(detalleProducto.idProducto, detalleProducto.cantidad);
-            }
-            db.SaveChanges();
-
-            //Cambia de estado de la órden de compra
-
-
-            //Eliminarlos de un sólo golpe
-            db.DetalleIngreso.RemoveRange(detalleAEliminar);
-            db.Ingreso.Remove(ing);
-            db.SaveChanges();
             return Json(new { success = true }, JsonRequestBehavior.AllowGet);
         }
     }

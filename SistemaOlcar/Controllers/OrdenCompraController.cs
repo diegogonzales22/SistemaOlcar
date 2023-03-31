@@ -20,6 +20,8 @@ namespace SistemaOlcar.Controllers
         static Utilitario help = new Utilitario();
 
         // GET: OrdenCompra
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Index() //Inicio
         {
             return View();
@@ -135,6 +137,8 @@ namespace SistemaOlcar.Controllers
             return Json(orden, JsonRequestBehavior.AllowGet);
         }
 
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Registrar() //GET Orden de compra
         {
             if (Session["Usuario"] != null)
@@ -191,6 +195,8 @@ namespace SistemaOlcar.Controllers
             }
         }
 
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Detalles(int? id) //Detalles
         {
             if (id == null)
@@ -205,6 +211,8 @@ namespace SistemaOlcar.Controllers
             return View(ordenCompra);
         }
 
+        [Error(Roles = "Administrador,Operario de Almacén")]
+        [Authorize(Roles = "Administrador,Operario de Almacén")]
         public ActionResult Documento(int idOrden = 0) //Generar documento
         {
             //Buscar la orden de compra
@@ -213,6 +221,8 @@ namespace SistemaOlcar.Controllers
             return View(ordenCompra);
         }
 
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Editar(int? id) //Editar - Menú
         {
             if (id == null)
@@ -227,6 +237,8 @@ namespace SistemaOlcar.Controllers
             return View(ordenCompra);
         }
 
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult UpdateCabecera(int? id) //Editar cabecera - GET
         {
             if (id == null)
@@ -285,6 +297,8 @@ namespace SistemaOlcar.Controllers
         }
 
         // GET: OrdenCompra/ EDITAR - Agregar productos a la orden
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult AddProducto(int? id)
         {
             if (id == null)

@@ -354,6 +354,7 @@
           </ReferentialConstraint>
         </Association>
         <Function Name="SP_CantidadProductosDia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_CantidadStockTotal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_CantidadVentasDia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_GananciaDia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_IngresaStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -364,6 +365,7 @@
           <Parameter Name="idProducto" Type="int" Mode="In" />
           <Parameter Name="cantidad" Type="int" Mode="In" />
         </Function>
+        <Function Name="SP_RetornaGananciasDiarias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_RetornaTopProductos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_RetornaVentas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="usp_ActualizarCostoNeto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -587,10 +589,12 @@
             <End Role="Venta" EntitySet="Venta" />
           </AssociationSet>
           <FunctionImport Name="SP_RetornaVentas" ReturnType="Collection(OLCARModel.SP_RetornaVentas_Result)" />
-          <FunctionImport Name="SP_RetornaTopProductos" ReturnType="Collection(OLCARModel.SP_RetornaTopProductos_Result)" />
           <FunctionImport Name="SP_GananciaDia" ReturnType="Collection(Decimal)" />
           <FunctionImport Name="SP_CantidadProductosDia" ReturnType="Collection(Int32)" />
           <FunctionImport Name="SP_CantidadVentasDia" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="SP_RetornaGananciasDiarias" ReturnType="Collection(OLCARModel.SP_RetornaGananciasDiarias_Result)" />
+          <FunctionImport Name="SP_RetornaTopProductos" ReturnType="Collection(OLCARModel.SP_RetornaTopProductos_Result)" />
+          <FunctionImport Name="SP_CantidadStockTotal" ReturnType="Collection(Int64)" />
           </EntityContainer>
         <EntityType Name="Proveedor">
           <Key>
@@ -968,6 +972,11 @@
           <Property Type="String" Name="mes" Nullable="true" MaxLength="30" />
           <Property Type="Decimal" Name="total" Nullable="true" Precision="38" Scale="2" />
         </ComplexType>
+        <ComplexType Name="SP_RetornaGananciasDiarias_Result">
+          <Property Type="String" Name="fecha" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="fechaDate" Nullable="true" />
+          <Property Type="Decimal" Name="total" Nullable="true" Precision="38" Scale="2" />
+        </ComplexType>
         <ComplexType Name="SP_RetornaTopProductos_Result">
           <Property Type="String" Name="nombre" Nullable="false" MaxLength="250" />
           <Property Type="Int32" Name="cantidad" Nullable="true" />
@@ -1164,6 +1173,18 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GananciaDia" FunctionName="OLCARModel.Store.SP_GananciaDia" />
+          <FunctionImportMapping FunctionImportName="SP_CantidadProductosDia" FunctionName="OLCARModel.Store.SP_CantidadProductosDia" />
+          <FunctionImportMapping FunctionImportName="SP_CantidadVentasDia" FunctionName="OLCARModel.Store.SP_CantidadVentasDia" />
+          <FunctionImportMapping FunctionImportName="SP_RetornaGananciasDiarias" FunctionName="OLCARModel.Store.SP_RetornaGananciasDiarias">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OLCARModel.SP_RetornaGananciasDiarias_Result">
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="fechaDate" ColumnName="fechaDate" />
+                <ScalarProperty Name="total" ColumnName="total" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_RetornaTopProductos" FunctionName="OLCARModel.Store.SP_RetornaTopProductos">
             <ResultMapping>
               <ComplexTypeMapping TypeName="OLCARModel.SP_RetornaTopProductos_Result">
@@ -1172,9 +1193,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_GananciaDia" FunctionName="OLCARModel.Store.SP_GananciaDia" />
-          <FunctionImportMapping FunctionImportName="SP_CantidadProductosDia" FunctionName="OLCARModel.Store.SP_CantidadProductosDia" />
-          <FunctionImportMapping FunctionImportName="SP_CantidadVentasDia" FunctionName="OLCARModel.Store.SP_CantidadVentasDia" />
+          <FunctionImportMapping FunctionImportName="SP_CantidadStockTotal" FunctionName="OLCARModel.Store.SP_CantidadStockTotal" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -172,5 +172,20 @@
     </div>
 </div>
 <div class="modal-footer">
+    <input type="button" class="form-control btn-success" onclick="Imprimir(@Html.DisplayFor(model => model.idOrden))" value="Imprimir" style="height:30px; width:100px" />
     <a href='@Url.Action("Index")' class="btn btn-primary">Volver</a>
 </div>
+
+@section scripts{
+    <script>
+    function Imprimir(id) {
+        var texto = "@Url.Action("Documento", "OrdenCompra")" + "?idOrden=" + id;
+
+        // Open the page in a new tab or window
+        var w = window.open(texto);
+        w.onload = function () {
+            w.print();
+        }
+    }
+    </script>
+}

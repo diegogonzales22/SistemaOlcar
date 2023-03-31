@@ -5,21 +5,54 @@
 }
 
 <nav class="navbar navbar-dark bg-dark">
-    <h4 id="titlealmacen" class="text-white">ÓRDENES DE COMPRAS</h4>
+    <h4 id="titlealmacen" class="text-white">Órdenes de Compra</h4>
 </nav>
 <div class="row m-1" id="ordenesdiv">
     @*ORDENES DE COMPRA*@
 </div>
 
-<nav class="navbar navbar-dark bg-dark">
-    <h4 class="text-white">VENTAS DIARIAS</h4>
-</nav>
 <div class="row">
-    <div class="col-lg-12" align="center">
+    <div class="col-lg-4" align="center">
         <div class="card">
-            @*<h4 class="card-header bg-dark text-white">Ganancias en Ventas: Últimos 4 meses</h4>*@
+            <h4 class="card-header bg-dark text-white">Ganancias de Hoy @DateTime.Now.ToShortDateString() </h4>
             <div class="card-body">
-                <canvas id="myLineChart"></canvas>
+                <h4 id="miGanancia"></h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4" align="center">
+        <div class="card">
+            <h4 class="card-header bg-dark text-white">Cantidad de Ventas</h4>
+            <div class="card-body">
+                <h4 id="cantidadVentas"></h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4" align="center">
+        <div class="card">
+            <h4 class="card-header bg-dark text-white">Cantidad de Productos vendidos </h4>
+            <div class="card-body">
+                <h4 id="cantidadProdVendidos"></h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-6" align="center">
+        <div class="card">
+            <h4 class="card-header bg-dark text-white">Ganancias en Ventas: Últimos 4 meses</h4>
+            <div class="card-body">
+                <canvas id="myBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6" align="center">
+        <div class="card">
+            <h4 class="card-header bg-dark text-white">Productos más vendidos: Últimos 2 meses</h4>
+            <div class="card-body">
+                <canvas id="myPieChart"></canvas>
             </div>
         </div>
     </div>
@@ -28,12 +61,47 @@
 @section scripts{
     <script>
 
+        //TOP 5 PRODUCTOS MÁS VENDIDOS: 2 MESES
+        jQuery.ajax({
+            url: "@Url.Action("TopProductosVendidos", "Home")",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                let arrayNombre = [];
+                let arrayCantidad = [];
+
+                for (var i = 0; i < data.length; i++) {
+                    arrayNombre.push(data[i].nombre);
+                    arrayCantidad.push(data[i].cantidad);
+                }
+
+                let pieBar = document.querySelector("#myPieChart");
+
+                let graficoPie = new Chart(pieBar, {
+                    type: 'pie',
+                    data: {
+                        labels: arrayNombre,
+                        datasets: [
+                            {
+                                backgroundColor: ["#b0ffc0", "#E0B0FF", "#ffb0bf","#fcf264"],
+                                data: arrayCantidad
+                            }
+                        ]
+                    },
+                });
+            }
+        });
+
+
+        //ORDENES DE COMPRAS
         jQuery.ajax({
             url: '@Url.Action("OrdenesPendientes", "OrdenesAdmin")',
             type: "GET",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            success: function (json) {                
+            success: function (json) {
 
                 var ordenesd = document.querySelector("#ordenesdiv");
 
@@ -52,7 +120,7 @@
                         var titulo = document.createElement("h5");
                         card.appendChild(titulo);
                         titulo.append("ÓRDEN DE COMPRA Nro. " + json[i].idOrden + "");
-                        titulo.classList.add("card-header", "bg-info", "text-white");
+                        titulo.classList.add("card-header", "bg-primary", "text-white");
 
                         var cardBody = document.createElement("div");
                         card.appendChild(cardBody);
@@ -108,6 +176,103 @@
                     span.append(msg);
                 }
 
+            }
+        });
+
+        //Ganancia del día
+        jQuery.ajax({
+            url: "@Url.Action("RetornaGananciaDia", "Home")",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                let gananciaDiaria = document.querySelector("#miGanancia");
+
+                if (data[0] != null) {
+                    gananciaDiaria.innerHTML = "S/. " + data[0];
+                }
+                else {
+                    gananciaDiaria.innerHTML = "S/. 0"
+                }
+
+            }
+        });
+
+        //Cantidad de Ventas al dia
+        jQuery.ajax({
+            url: "@Url.Action("RetornaCantidadVentas", "Home")",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                let cant = document.querySelector("#cantidadVentas");
+
+                if (data[0] != null) {
+                    cant.innerHTML = data[0];
+                }
+                else {
+                    cant.innerHTML = "No hay ventas"
+                }
+
+            }
+        });
+
+        //Cantidad de productos vendidos al dia
+        jQuery.ajax({
+            url: "@Url.Action("RetornaCantProdVendidos", "Home")",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                let cant = document.querySelector("#cantidadProdVendidos");
+
+                if (data[0] != null) {
+                    cant.innerHTML = data[0];
+                }
+                else {
+                    cant.innerHTML = "0"
+                }
+
+            }
+        });
+
+        //GANANCIAS MENSUALES: 4 MESES
+        jQuery.ajax({
+            url: "@Url.Action("ReporteVentas", "Home")",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                let arrayMeses = [];
+                let arrayTotal = [];
+
+                for (var i = 0; i < data.length; i++) {
+                    arrayMeses.push(data[i].mes);
+                    arrayTotal.push(data[i].total);
+                }
+
+                let controlBar = document.querySelector("#myBarChart");
+
+                let graficoBar = new Chart(controlBar, {
+                    type: 'bar',
+                    data: {
+                        labels: arrayMeses,
+                        datasets: [
+                            {
+                                label: "Total S/.",
+                                backgroundColor: "rgba(0, 0, 255, 0.4)",
+                                data: arrayTotal,
+                                borderRadius: 6,
+                                borderColor: "blue",
+                                borderWidth: 1,
+                            }
+                        ]
+                    }
+                });
             }
         });
 

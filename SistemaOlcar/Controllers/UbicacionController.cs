@@ -11,6 +11,8 @@ namespace SistemaOlcar.Controllers
     public class UbicacionController : Controller
     {
         // GET: Ubicacion
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Index()
         {
             return View();

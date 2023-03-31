@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-4" align="center">
+        <div class="card">
+            <h4 class="card-header bg-dark text-white">Cantidad de Productos vendidos</h4>
+            <div class="card-body">
+                <h3 id="cantidadProdVendidos"></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4" align="center">
+        <div class="card">
+            <h4 class="card-header bg-dark text-white">Stock Total de Productos</h4>
+            <div class="card-body">
+                <h3 id="cantidadProdAlmacen"></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4" align="center">
+        <div class="card">
+            <h4 class="card-header bg-dark text-white">Costo Total de Productos</h4>
+            <div class="card-body">
+                <h3 id="costoProdAlmacen"></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6" align="center">
+        <div class="card">
+            <h4 class="card-header bg-dark text-white">Productos más vendidos: Últimos 2 meses</h4>
+            <div class="card-body">
+                <canvas id="myPieChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <script>
+        //TOP 5 PRODUCTOS MÁS VENDIDOS: 2 MESES
+        jQuery.ajax({
+            url: "@Url.Action("TopProductosVendidos", "Home")",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                let arrayNombre = [];
+                let arrayCantidad = [];
+
+                for (var i = 0; i < data.length; i++) {
+                    arrayNombre.push(data[i].nombre);
+                    arrayCantidad.push(data[i].cantidad);
+                }
+
+                let pieBar = document.querySelector("#myPieChart");
+
+                let graficoPie = new Chart(pieBar, {
+                    type: 'pie',
+                    data: {
+                        labels: arrayNombre,
+                        datasets: [
+                            {
+                                backgroundColor: ["#b0ffc0", "#E0B0FF", "#ffb0bf","#fcf264"],
+                                data: arrayCantidad
+                            }
+                        ]
+                    },
+                });
+            }
+        });
+
+        //Cantidad de productos vendidos al dia
+        jQuery.ajax({
+            url: "@Url.Action("RetornaCantProdVendidos", "Home")",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                let cant = document.querySelector("#cantidadProdVendidos");
+
+                if (data[0] != null) {
+                    cant.innerHTML = data[0];
+                }
+                else {
+                    cant.innerHTML = "0"
+                }
+
+            }
+        });
+
+        //Cantidad de productos en almacén
+        jQuery.ajax({
+            url: "@Url.Action("CantidadProductosAlmacen", "Producto")",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                let cant = document.querySelector("#cantidadProdAlmacen");
+
+                if (data[0] != null) {
+                    cant.innerHTML = data[0]+" UN.";
+                }
+                else {
+                    cant.innerHTML = "0 UN."
+                }
+
+            }
+        });
+
+        //Costo total de productos en almacén
+        jQuery.ajax({
+            url: "@Url.Action("CostoProductosAlmacen", "Producto")",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                let cant = document.querySelector("#costoProdAlmacen");
+
+
+                if (data != null) {
+                    cant.innerHTML = "S/."+ data;
+                }
+                else {
+                    cant.innerHTML = "S/.0"
+                }
+
+            }
+        });
+
+    </script>
+}

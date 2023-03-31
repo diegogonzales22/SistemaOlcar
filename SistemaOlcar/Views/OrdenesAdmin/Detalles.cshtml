@@ -198,47 +198,128 @@
 <br />
 @if (Model.situacion == "Aprobada")
 {
-    <a onclick="denegarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-danger">Denegar</a>
+    <a onclick="DenegarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-danger">Denegar</a>
 }
 @if (Model.situacion == "Denegada")
 {
-    <a onclick="aprobarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-success">Aprobar</a>
+    <a onclick="AprobarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-success">Aprobar</a>
 }
 @if (Model.situacion == "Por Aprobar")
 {
-    <a onclick="aprobarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-success">Aprobar</a>
-    <a onclick="denegarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-danger">Denegar</a>
+    <a onclick="AprobarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-success">Aprobar</a>
+    <a onclick="DenegarOrden(@Html.DisplayFor(model => model.idOrden))" class="btn btn-danger">Denegar</a>
 }
 <a href='@Url.Action("Index")' class="btn btn-primary">Volver</a>
+
+@*Modal APROBAR ORDEN DE COMPRA*@
+<div class="modal fade" id="FormModalA" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h4 class="modal-title text-white" id="exampleModalLabel">Eliminar Órden de Compra</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>¿Está seguro que quiere aprobar ésta órden de compra?</h4>
+            </div>
+            <div class="modal-footer">
+
+                <a href="#" class="btn btn-success" onclick="AprobarOrderConfirm()">Confirmar</a>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="hiddenOrdenId" />
+</div>
+
+@*Modal DENEGAR ORDEN DE COMPRA*@
+<div class="modal fade" id="FormModalD" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h4 class="modal-title text-white" id="exampleModalLabel">Eliminar Órden de Compra</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>¿Está seguro que quiere denegar ésta órden de compra?</h4>
+            </div>
+            <div class="modal-footer">
+
+                <a href="#" class="btn btn-success" onclick="DenegarOrderConfirm()">Confirmar</a>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="hiddenOrdenId" />
+</div>
 
 @section scripts{
     <script>
 
-        function aprobarOrden(id) {
-            if (confirm("¿Está seguro que quiere aprobar ésta órden de compra?")) {
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.Action("AprobarOrden", "OrdenesAdmin")/" + id,
-                    success: function (data) {
-                        swal("Correcto", "Se aprobó la órden de compra.", "success");
-                        location.reload();
+        var AprobarOrden = function (id) {
+
+            jQuery.ajax({
+                url: "@Url.Action("ObtenerOrden", "OrdenCompra")" + "?id=" + id,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (orden) {
+
+                    $("#hiddenOrdenId").val(id);
+                    $("#FormModalA").modal('show');
+
                     }
                 });
-            }
         }
 
-        function denegarOrden(id) {
-            if (confirm("¿Está seguro que quiere denegar ésta órden de compra?")) {
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.Action("DenegarOrden", "OrdenesAdmin")/" + id,
-                    success: function (data) {
-                        swal("Correcto", "Se denegó la órden de compra.", "success");
-                        event.preventDefault;
-                        location.reload();
+        var AprobarOrderConfirm = function () {
+
+            var id = $("#hiddenOrdenId").val();
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AprobarOrden", "OrdenesAdmin")/" + id,
+                success: function (result) {
+                    $("#FormModalA").modal("hide");
+                    swal("Correcto", "Se aprobó la órden de compra.", "success");
+                    location.reload();
+                }
+            })
+        }
+
+        var DenegarOrden = function (id) {
+
+            jQuery.ajax({
+                url: "@Url.Action("ObtenerOrden", "OrdenCompra")" + "?id=" + id,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (orden) {
+
+                    $("#hiddenOrdenId").val(id);
+                    $("#FormModalD").modal('show');
+
                     }
                 });
-            }
+        }
+
+        var DenegarOrderConfirm = function () {
+
+            var id = $("#hiddenOrdenId").val();
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("DenegarOrden", "OrdenesAdmin")/" + id,
+                success: function (result) {
+                    $("#FormModalD").modal("hide");
+                    swal("Correcto", "Se denegó la órden de compra.", "success");
+                    location.reload();
+                }
+            })
         }
 
     </script>

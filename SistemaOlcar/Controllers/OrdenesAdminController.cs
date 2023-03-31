@@ -77,7 +77,6 @@ namespace SistemaOlcar.Controllers
         }
 
         //----DASHBOARD ADMIN
-
         public JsonResult OrdenesPendientes() //Lista órdenes de compra pendientes
         {
             List<TableOrdenCompra> oLstOrden = new List<TableOrdenCompra>();
@@ -96,7 +95,6 @@ namespace SistemaOlcar.Controllers
                                  observacion = p.observacion
                              }).ToList();
             }
-
             return Json(oLstOrden, JsonRequestBehavior.AllowGet);
         }
     }

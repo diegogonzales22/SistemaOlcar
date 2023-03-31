@@ -13,7 +13,8 @@ namespace SistemaOlcar.Controllers
     {
         private OLCAREntities db = new OLCAREntities();
 
-
+        [Error(Roles = "Administrador,Operario de Almacén")]
+        [Authorize(Roles = "Administrador,Operario de Almacén")]
         public ActionResult InventarioxMarca()
         {
             return View();
@@ -37,6 +38,8 @@ namespace SistemaOlcar.Controllers
             return Json(new { data = oLstMarca }, JsonRequestBehavior.AllowGet);
         }
 
+        [Error(Roles = "Administrador,Operario de Almacén")]
+        [Authorize(Roles = "Administrador,Operario de Almacén")]
         public ActionResult StockxMarca(int id)
         {
             var inventario = db.Producto.Where(x => x.MarcaProducto.idMarca == id && 
@@ -45,6 +48,8 @@ namespace SistemaOlcar.Controllers
             return View(inventario.ToList());
         }
 
+        [Error(Roles = "Administrador,Operario de Almacén")]
+        [Authorize(Roles = "Administrador,Operario de Almacén")]
         public ActionResult ListaProductos() //Lista de productos activos, inactivos y todos
         {
             return View();

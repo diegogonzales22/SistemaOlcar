@@ -55,7 +55,7 @@ namespace SistemaOlcar.Controllers
                         {
                             FormsAuthentication.SetAuthCookie(oUser.usuario1, false);
                             Session["Usuario"] = oUser;
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("DashboardAlmacen", "Home");
                         }
                         
                     }

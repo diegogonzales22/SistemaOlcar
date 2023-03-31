@@ -125,11 +125,6 @@ namespace SistemaOlcar.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RetornaVentas_Result>("SP_RetornaVentas");
         }
     
-        public virtual ObjectResult<SP_RetornaTopProductos_Result> SP_RetornaTopProductos()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RetornaTopProductos_Result>("SP_RetornaTopProductos");
-        }
-    
         public virtual ObjectResult<Nullable<decimal>> SP_GananciaDia()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<decimal>>("SP_GananciaDia");
@@ -143,6 +138,21 @@ namespace SistemaOlcar.Models
         public virtual ObjectResult<Nullable<int>> SP_CantidadVentasDia()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_CantidadVentasDia");
+        }
+    
+        public virtual ObjectResult<SP_RetornaGananciasDiarias_Result> SP_RetornaGananciasDiarias()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RetornaGananciasDiarias_Result>("SP_RetornaGananciasDiarias");
+        }
+    
+        public virtual ObjectResult<SP_RetornaTopProductos_Result> SP_RetornaTopProductos()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_RetornaTopProductos_Result>("SP_RetornaTopProductos");
+        }
+    
+        public virtual ObjectResult<Nullable<long>> SP_CantidadStockTotal()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("SP_CantidadStockTotal");
         }
     }
 }

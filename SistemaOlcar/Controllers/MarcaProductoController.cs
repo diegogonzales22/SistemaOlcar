@@ -12,6 +12,8 @@ namespace SistemaOlcar.Controllers
     public class MarcaProductoController : Controller
     {
         // GET: MarcaProducto
+        [Error(Roles = "Operario de Almacén")]
+        [Authorize(Roles = "Operario de Almacén")]
         public ActionResult Index()
         {
             return View();
@@ -78,7 +80,6 @@ namespace SistemaOlcar.Controllers
                         db.SaveChanges();
                         
                     }
-
                 }
             }
             catch
